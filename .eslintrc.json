@@ -13,7 +13,7 @@
   },
   "plugins": ["react"],
   "rules": {
-    "react-hooks/rules-of-hooks": "error",
+    // "react-hooks/rules-of-hooks": "error",
     "no-debugger": 0,
     "no-alert": 0,
     "no-unused-vars": 1,
@@ -37,7 +37,7 @@
       }
     ],
     "no-console": ["error", { "allow": ["warn", "error"] }],
-    "import/prefer-default-export": 1,
+    "import/prefer-default-export": 0,
     "import": 0,
     "func-names": 0,
     "space-before-function-paren": 0,
@@ -71,20 +71,20 @@
         "allowTemplateLiterals": true
       }
     ],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "'${trailing_comma_pref}'",
-        "singleQuote": true,
-        "printWidth": "${max_len_val}"
-      }
-    ],
-    "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "warn",
-      {
-        "aspects": ["invalidHref"]
-      }
-    ]
+    // "prettier/prettier": [
+    //   "error",
+    //   {
+    //     "trailingComma": "'${trailing_comma_pref}'",
+    //     "singleQuote": true,
+    //     "printWidth": "${max_len_val}"
+    //   }
+    // ],
+    "jsx-a11y/href-no-hash": "off"
+    // "jsx-a11y/anchor-is-valid": [
+    //   "warn",
+    //   {
+    //     "aspects": ["invalidHref"]
+    //   }
+    // ]
   }
 }

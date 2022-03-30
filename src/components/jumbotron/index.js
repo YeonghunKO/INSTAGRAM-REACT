@@ -1,5 +1,3 @@
-// /* eslint-disable */
-// web
 import React from 'react';
 
 function Jumbotron() {
