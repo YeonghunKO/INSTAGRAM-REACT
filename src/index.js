@@ -4,11 +4,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import FirebaseContext from './context/firebase';
 import { firebase, FieldValue } from './lib/firebase';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
-  <FirebaseContext.Provider value={{ firebase, FieldValue }}>
-    <App />
-  </FirebaseContext.Provider>,
+  <Router>
+    <FirebaseContext.Provider value={{ firebase, FieldValue }}>
+      <App />
+    </FirebaseContext.Provider>
+  </Router>,
   document.getElementById('root')
 );
 

@@ -1,10 +1,16 @@
-import Jumbotron from './components/jumbotron';
-import { useContext } from 'react';
-import FirebaseContext from './context/firebase';
+import { lazy, Suspense } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import * as ROUTES from './constants/routes';
+
+const Login = lazy(() => import('./pages/Login'));
 
 function App() {
-  const fire = useContext(FirebaseContext);
-  // console.log(fire);
-  return <Jumbotron />;
+  return (
+    <Suspense fallback={<p>...Loading</p>}>
+      <Routes>
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+      </Routes>
+    </Suspense>
+  );
 }
 export default App;
