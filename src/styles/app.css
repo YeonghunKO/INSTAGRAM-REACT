@@ -444,9 +444,20 @@ Ensure the default browser behavior of the `hidden` attribute.
     max-width: 1536px;
   }
 }
+.m-8 {
+  margin: 2rem;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
+}
+.my-4 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .mb-4 {
   margin-bottom: 1rem;
@@ -487,6 +498,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-5 {
   height: 1.25rem;
 }
+.h-3\/4 {
+  height: 75%;
+}
+.h-4\/5 {
+  height: 80%;
+}
 .w-3\/5 {
   width: 60%;
 }
@@ -499,8 +516,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-6\/12 {
   width: 50%;
 }
+.w-4\/5 {
+  width: 80%;
+}
 .max-w-screen-md {
   max-width: 768px;
+}
+.max-w-screen-lg {
+  max-width: 1024px;
 }
 .flex-col {
   flex-direction: column;

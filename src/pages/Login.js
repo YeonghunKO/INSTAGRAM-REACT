@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login(props) {
   const { firebase } = useContext(FirebaseContext);
@@ -13,8 +14,17 @@ function Login(props) {
 
   const isInvalid = password === '' || emailAddress === '';
 
-  const handleLogin = e => {
-    e.preventDefault();
+  const handleLogin = async event => {
+    event.preventDefault();
+    try {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, emailAddress, password);
+      navigate(ROUTES.DASHBOARD);
+    } catch (error) {
+      setEmailAddress('');
+      setPassword('');
+      setError("Sorry Couldn't find users");
+    }
   };
 
   useEffect(() => {
@@ -23,7 +33,7 @@ function Login(props) {
 
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
-      <div className="flex w-3/5 h-5/6">
+      <div className="flex w-3/5 m-8 ">
         <img src="/images/iphone-with-profile.jpg" alt="Iphone Login picture" />
       </div>
       <div className="flex flex-col w-2/5">
@@ -43,6 +53,7 @@ function Login(props) {
               placeholder="Email address"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2 outline-none"
               onChange={({ target }) => setEmailAddress(target.value)}
+              value={emailAddress}
             />
             <input
               aria-label="Enter your password"
@@ -50,6 +61,7 @@ function Login(props) {
               placeholder="Email password"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2 outline-none"
               onChange={({ target }) => setPassword(target.value)}
+              value={password}
             />
             <button
               disabled={isInvalid}
