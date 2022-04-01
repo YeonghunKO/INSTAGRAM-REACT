@@ -5,6 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import FirebaseContext from './context/firebase';
 import { firebase, FieldValue } from './lib/firebase';
 import { BrowserRouter as Router } from 'react-router-dom';
+import './styles/app.css';
 
 ReactDOM.render(
   <Router>
