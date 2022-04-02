@@ -1,11 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login(props) {
-  const { firebase } = useContext(FirebaseContext);
   const navigate = useNavigate();
 
   const [emailAddress, setEmailAddress] = useState('');
@@ -33,7 +31,7 @@ function Login(props) {
 
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
-      <div className="flex w-3/5 m-8 ">
+      <div className="flex w-3/5 m-3 ">
         <img src="/images/iphone-with-profile.jpg" alt="Iphone Login picture" />
       </div>
       <div className="flex flex-col w-2/5">

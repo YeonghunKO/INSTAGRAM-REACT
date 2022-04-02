@@ -28,7 +28,7 @@ const db = getFirestore();
 
 // seedDatabase(db, addDoc, collection);
 
-export { firebase, FieldValue };
+export { firebase, FieldValue, db };
 
 // const addData = async data => {
 //   await addDoc(collection(db, 'cities'), data);
