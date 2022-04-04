@@ -15,6 +15,19 @@ import { doesUsernameExist } from '../services/firebase';
 function Signup(props) {
   const navigate = useNavigate();
 
+  // const auth = getAuth();
+  // const user = auth.currentUser;
+
+  // if (user !== null) {
+  //   user.providerData.forEach(profile => {
+  //     console.log('Sign-in provider: ' + profile.providerId);
+  //     console.log('  Provider-specific UID: ' + profile.uid);
+  //     console.log('  Name: ' + profile.displayName);
+  //     console.log('  Email: ' + profile.email);
+  //     console.log('  Photo URL: ' + profile.photoURL);
+  //   });
+  // }
+
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
