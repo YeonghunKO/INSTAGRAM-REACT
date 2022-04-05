@@ -11,28 +11,17 @@ import {
 import { db } from '../lib/firebase';
 
 import { doesUsernameExist } from '../services/firebase';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function Signup(props) {
   const navigate = useNavigate();
-
-  // const auth = getAuth();
-  // const user = auth.currentUser;
-
-  // if (user !== null) {
-  //   user.providerData.forEach(profile => {
-  //     console.log('Sign-in provider: ' + profile.providerId);
-  //     console.log('  Provider-specific UID: ' + profile.uid);
-  //     console.log('  Name: ' + profile.displayName);
-  //     console.log('  Email: ' + profile.email);
-  //     console.log('  Photo URL: ' + profile.photoURL);
-  //   });
-  // }
 
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [profileFile, setProfileFile] = useState('');
 
   const isInvalid =
     username === '' ||
@@ -42,11 +31,21 @@ function Signup(props) {
 
   const handleSignup = async event => {
     event.preventDefault();
+
     if (await doesUsernameExist(username)) {
       setUsername('');
       setError('user is already taken');
     } else {
       try {
+        const storage = getStorage();
+        const storageRef = ref(storage, `userProfilePicture/${username}`);
+        const urlStorageRef = ref(
+          storage,
+          `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
+        );
+        await uploadBytes(storageRef, profileFile);
+
+        const photoURL = await getDownloadURL(urlStorageRef);
         const auth = getAuth();
         const createdUserResult = await createUserWithEmailAndPassword(
           auth,
@@ -55,6 +54,7 @@ function Signup(props) {
         );
         await updateProfile(auth.currentUser, {
           displayName: username,
+          photoURL,
         });
 
         const newUsers = {
@@ -65,6 +65,7 @@ function Signup(props) {
           following: ['2'],
           followers: [],
           dateCreated: Date.now(),
+          photoURL,
         };
         await addDoc(collection(db, 'users'), newUsers);
         navigate(ROUTES.DASHBOARD);
@@ -129,6 +130,29 @@ function Signup(props) {
               onChange={({ target }) => setPassword(target.value)}
               value={password}
             />
+            <div className="flex mb-2">
+              <input
+                className="inline-block h-2 py-5 middle border border-gray-primary rounded width-3/4 outline-none"
+                value={profileFile.name}
+                readOnly
+                placeholder="Add your profile picture"
+              />
+              <label
+                className="inline-block py-2.5 px-5 text-gray-background middle border border-gray-primary rounded bg-black-faded h-11 ml-2.5 "
+                htmlFor="file"
+              >
+                Search
+              </label>
+              <input
+                id="file"
+                type="file"
+                onChange={({ target }) => {
+                  setProfileFile(target.files[0]);
+                }}
+                className="absolute w-0 h-0 p-0 overflow-hidden border-0"
+                accept="image/png image/jpg"
+              />
+            </div>
             <button
               disabled={isInvalid}
               type="submit"

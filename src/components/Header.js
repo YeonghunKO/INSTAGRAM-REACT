@@ -10,9 +10,9 @@ import {
   USER_PROFILE_IMAGE,
 } from '../constants/path';
 
+// hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header() {
   const { user: loggedInUser } = useContext(UserContext);
-
   const navigate = useNavigate();
   const onClickHeaderHandle = () => {
     const auth = getAuth();
@@ -83,7 +83,7 @@ function Header() {
                     <Link to={`/p/${loggedInUser?.displayName}`}>
                       <img
                         className="rounded-full h-8 w-8 flex"
-                        src={USER_PROFILE_IMAGE(loggedInUser?.displayName)}
+                        src={loggedInUser?.photoURL}
                         alt={`${loggedInUser?.displayName} profile`}
                         onError={evt => {
                           evt.target.src = DEFAULT_IMAGE_PATH;
@@ -98,11 +98,13 @@ function Header() {
                 <Link to={ROUTES.LOGIN}>
                   <button
                     type="button"
-                    className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
+                    className="bg-blue-medium hover:bg-opacity-70 transition-all font-bold text-sm rounded text-white w-20 h-8"
                   >
                     Log In
                   </button>
-                  <button className="font-bold text-sm rounded text-blue-medium w-20 h-8">
+                </Link>
+                <Link to={ROUTES.SIGN_UP}>
+                  <button className="font-bold text-sm rounded text-blue-medium hover:text-opacity-70 transition-all w-20 h-8">
                     Sign Up
                   </button>
                 </Link>
