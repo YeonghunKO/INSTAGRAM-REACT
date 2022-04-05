@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app';
 import {
   FieldValue,
   getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  setDoc,
-  getDocFromCache,
+  // collection,
+  // doc,
+  // addDoc,
+  // getDoc,
+  // setDoc,
+  // getDocFromCache,
 } from 'firebase/firestore';
 import 'firebase/auth';
 
