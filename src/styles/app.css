@@ -447,6 +447,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .absolute {
   position: absolute;
 }
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
+.col-span-1 {
+  grid-column: span 1 / span 1;
+}
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
 .m-3 {
   margin: 0.75rem;
 }
@@ -478,8 +487,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ml-2 {
   margin-left: 0.5rem;
 }
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
 .inline-block {
   display: inline-block;
+}
+.inline {
+  display: inline;
 }
 .flex {
   display: flex;
@@ -532,6 +547,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-0 {
   width: 0px;
 }
+.w-16 {
+  width: 4rem;
+}
+.w-10 {
+  width: 2.5rem;
+}
+.w-12 {
+  width: 3rem;
+}
+.w-11 {
+  width: 2.75rem;
+}
 .max-w-screen-lg {
   max-width: 1024px;
 }
@@ -543,6 +570,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .flex-col {
   flex-direction: column;
@@ -558,6 +588,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-4 {
   gap: 1rem;
+}
+.self-center {
+  align-self: center;
 }
 .overflow-hidden {
   overflow: hidden;

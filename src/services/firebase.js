@@ -12,4 +12,12 @@ async function doesUsernameExist(username) {
   return userData.length > 0;
 }
 
-export { doesUsernameExist };
+async function getUserByUid(id) {
+  const user = query(collection(db, 'users'), where('userId', '==', id));
+
+  const snapShot = await getDocs(user);
+  const userData = snapShot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
+  return userData;
+}
+
+export { doesUsernameExist, getUserByUid };

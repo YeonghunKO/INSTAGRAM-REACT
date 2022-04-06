@@ -4,11 +4,7 @@ import { getAuth, signOut } from 'firebase/auth';
 
 import UserContext from '../context/currentUser';
 import * as ROUTES from '../constants/routes';
-import {
-  DEFAULT_IMAGE_PATH,
-  INSTAGRAM_LOGO,
-  USER_PROFILE_IMAGE,
-} from '../constants/path';
+import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header() {
