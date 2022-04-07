@@ -447,9 +447,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .absolute {
   position: absolute;
 }
-.col-span-2 {
-  grid-column: span 2 / span 2;
-}
 .col-span-1 {
   grid-column: span 1 / span 1;
 }
@@ -526,6 +523,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-0 {
   height: 0px;
 }
+.h-5 {
+  height: 1.25rem;
+}
+.h-9 {
+  height: 2.25rem;
+}
+.h-12 {
+  height: 3rem;
+}
 .w-full {
   width: 100%;
 }
@@ -547,14 +553,20 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-0 {
   width: 0px;
 }
-.w-16 {
-  width: 4rem;
+.w-12 {
+  width: 3rem;
 }
 .w-10 {
   width: 2.5rem;
 }
-.w-12 {
-  width: 3rem;
+.w-2 {
+  width: 0.5rem;
+}
+.w-5 {
+  width: 1.25rem;
+}
+.w-9 {
+  width: 2.25rem;
 }
 .w-11 {
   width: 2.75rem;
@@ -600,6 +612,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .rounded {
   border-radius: 0.25rem;
+}
+.rounded-3xl {
+  border-radius: 1.5rem;
 }
 .border {
   border-width: 1px;
