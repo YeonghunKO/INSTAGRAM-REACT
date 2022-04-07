@@ -1,6 +1,5 @@
 import { initializeApp } from 'firebase/app';
 import {
-  FieldValue,
   getFirestore,
   // collection,
   // doc,
@@ -29,4 +28,4 @@ const db = getFirestore();
 // Once init the seedData to firebase, it should be turned off.
 // seedDatabase(db, addDoc, collection);
 
-export { firebase, FieldValue, db };
+export { firebase, db };
