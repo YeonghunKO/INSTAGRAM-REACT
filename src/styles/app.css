@@ -453,6 +453,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
+.col-span-2 {
+  grid-column: span 2 / span 2;
+}
 .m-3 {
   margin: 0.75rem;
 }
@@ -570,6 +573,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-11 {
   width: 2.75rem;
+}
+.w-16 {
+  width: 4rem;
 }
 .max-w-screen-lg {
   max-width: 1024px;

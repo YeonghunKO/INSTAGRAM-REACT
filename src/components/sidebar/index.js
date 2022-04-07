@@ -20,7 +20,11 @@ function Sidebar() {
   return (
     <div className="p-4">
       <User username={username} fullName={fullName} photoURL={photoURL} />
-      <Suggestion />
+      <Suggestion
+        loggedInUserId={userId}
+        following={following}
+        loggedInUserDocId={docId}
+      />
     </div>
   );
 }

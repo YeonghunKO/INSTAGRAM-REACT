@@ -40,5 +40,5 @@ export default User;
 User.propTypes = {
   username: PropTypes.string,
   fullName: PropTypes.string,
-  photoUrl: PropTypes.string,
+  photoURL: PropTypes.string,
 };
