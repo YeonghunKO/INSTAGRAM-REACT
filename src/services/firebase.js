@@ -49,14 +49,25 @@ async function updateLoggedInUserFollowing(
   profileId,
   isFollowingProfile
 ) {
-  const suggestedProfileRef = doc(db, 'users', '7Ma6MjyJxIbSuUxR0Niq');
-  await updateDoc(suggestedProfileRef, { following: arrayRemove('second') });
+  const suggestedProfileRef = doc(db, 'users', loggedInUserDocId);
+  await updateDoc(suggestedProfileRef, {
+    following: isFollowingProfile
+      ? arrayRemove(profileId)
+      : arrayUnion(profileId),
+  });
 }
 async function updateFollowedFollowers(
   profileDocId,
   loggedInUserDocId,
   isFollowingProfile
-) {}
+) {
+  const suggestedProfileRef = doc(db, 'users', profileDocId);
+  await updateDoc(suggestedProfileRef, {
+    followers: isFollowingProfile
+      ? arrayRemove(loggedInUserDocId)
+      : arrayUnion(loggedInUserDocId),
+  });
+}
 
 export {
   doesUsernameExist,
