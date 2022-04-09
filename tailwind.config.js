@@ -4,6 +4,7 @@ module.exports = {
     fill: theme => ({
       red: theme('colors.red.primary'),
     }),
+
     colors: {
       white: '#ffffff',
       blue: {
@@ -20,6 +21,12 @@ module.exports = {
       },
       red: {
         primary: '#ed4956',
+      },
+    },
+
+    extend: {
+      fontSize: {
+        xxm: '12px',
       },
     },
   },

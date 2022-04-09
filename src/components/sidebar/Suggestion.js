@@ -34,7 +34,7 @@ function Suggestions({ loggedInUserId, following, loggedInUserDocId }) {
     profiles.length > 0 && (
       <div className="rounded flex flex-col">
         <div className="text-sm flex items-center justify-between mb-2">
-          <div className="mt-4 grid gap-5 w-10/12">
+          <div className="mt-4 grid gap-5 w-full">
             {profiles.map(profile => (
               <SuggestedProfile
                 key={profile.docId}

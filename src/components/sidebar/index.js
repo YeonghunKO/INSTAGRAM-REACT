@@ -6,7 +6,7 @@ import useUser from '../../hooks/useUser';
 
 function Sidebar() {
   const { user } = useContext(UserContext);
-  const userData = useUser(user.uid);
+  const userData = useUser(user?.uid);
   const {
     activeUser: {
       docId = '',
@@ -17,9 +17,11 @@ function Sidebar() {
       photoURL,
     } = {},
   } = userData;
+
   return (
     <div className="p-4">
       <User username={username} fullName={fullName} photoURL={photoURL} />
+      <div className="font-semibold text-gray-base">Suggestions for you</div>
       <Suggestion
         loggedInUserId={userId}
         following={following}
