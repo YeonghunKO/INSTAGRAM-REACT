@@ -52,8 +52,8 @@ async function updateLoggedInUserFollowing(
   const suggestedProfileRef = doc(db, 'users', loggedInUserDocId);
   await updateDoc(suggestedProfileRef, {
     following: isFollowingProfile
-      ? arrayRemove(profileId)
-      : arrayUnion(profileId),
+      ? arrayUnion(profileId)
+      : arrayRemove(profileId),
   });
 }
 async function updateFollowedFollowers(
@@ -69,10 +69,37 @@ async function updateFollowedFollowers(
   });
 }
 
+async function getPhotos(userId, following) {
+  // [2,3]
+  const result = query(
+    collection(db, 'photos'),
+    where('userId', 'in', following)
+  );
+  const snapShot = await getDocs(result);
+  const followingUserPhotos = snapShot.docs.map(photo => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  const photosWithUserDetails = await Promise.all(
+    followingUserPhotos.map(async photo => {
+      let userLikedPhoto = false;
+      if (photo.likes.includes(userId)) {
+        userLikedPhoto = true;
+      }
+      const user = await getUserByUid(photo.userId);
+      const { username, photoURL } = user[0];
+      return { username, userPhotoUrl: photoURL, ...photo, userLikedPhoto };
+    })
+  );
+  return photosWithUserDetails;
+}
+
 export {
   doesUsernameExist,
   getUserByUid,
   getSuggestedProfiles,
   updateLoggedInUserFollowing,
   updateFollowedFollowers,
+  getPhotos,
 };

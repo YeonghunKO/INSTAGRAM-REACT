@@ -17,7 +17,7 @@ function SuggestedProfile({
   const [followed, setFollowed] = useState(false);
   async function handleFollowUser() {
     setFollowed(true);
-    updateLoggedInUserFollowing(loggedInUserDocId, profileId, false);
+    updateLoggedInUserFollowing(loggedInUserDocId, profileId, true);
     updateFollowedFollowers(profileId, loggedInUserDocId, false);
   }
   return (

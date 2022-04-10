@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import FirebaseContext from './context/firebase';
-import { firebase } from './lib/firebase';
+import { firebase, db } from './lib/firebase';
 import { BrowserRouter as Router } from 'react-router-dom';
 import './styles/app.css';
 
 ReactDOM.render(
   <Router>
-    <FirebaseContext.Provider value={{ firebase }}>
+    <FirebaseContext.Provider value={{ firebase, db }}>
       <App />
     </FirebaseContext.Provider>
   </Router>,
