@@ -1,7 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed&display=swap');
 body {
   background-color: #fafafa;
+  font-family: 'Barlow Condensed', sans-serif;
 }

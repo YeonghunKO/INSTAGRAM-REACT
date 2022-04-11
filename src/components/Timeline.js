@@ -7,9 +7,9 @@ import usePhotos from '../hooks/usePhotos';
 
 function Timeline() {
   const { user } = useContext(userContext);
-  const { activeUser: { following } = {} } = useUser(user.uid);
-  const { photos } = usePhotos(user.uid, following);
-  // console.log(photos);
+  const { activeUser: { following } = {} } = useUser(user?.uid);
+  const { photos } = usePhotos(user?.uid, following);
+
   return (
     <div className="col-span-2">
       {!photos ? (

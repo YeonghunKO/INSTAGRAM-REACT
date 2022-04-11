@@ -28,8 +28,8 @@ function User({ username, fullName, photoURL }) {
         />
       </div>
       <div className="col-span-3">
-        <p className="font-black text-sm">{username}</p>
-        <p className="text-xxm font-medium">{fullName}</p>
+        <p className="font-black text-lg">{username}</p>
+        <p className="text-xxs font-medium">{fullName}</p>
       </div>
     </Link>
   );
