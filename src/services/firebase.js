@@ -51,9 +51,11 @@ async function updateLoggedInUserFollowing(
 ) {
   const suggestedProfileRef = doc(db, 'users', loggedInUserDocId);
   await updateDoc(suggestedProfileRef, {
+    // if isFollowingProfile is false, It means I want to follow
+    // because I clicked Follow, while isFollowingProfile is false.
     following: isFollowingProfile
-      ? arrayUnion(profileId)
-      : arrayRemove(profileId),
+      ? arrayRemove(profileId)
+      : arrayUnion(profileId),
   });
 }
 async function updateFollowedFollowers(

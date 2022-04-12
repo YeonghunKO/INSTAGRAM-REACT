@@ -41,7 +41,7 @@ function Suggestions({ loggedInUserId, following, loggedInUserDocId }) {
                 username={profile.username}
                 profileId={profile.userId}
                 photoURL={profile.photoURL}
-                userId={profile.userId}
+                userId={loggedInUserId}
                 loggedInUserDocId={loggedInUserDocId}
               />
             ))}

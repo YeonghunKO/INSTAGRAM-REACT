@@ -9,10 +9,9 @@ function Timeline() {
   const { user } = useContext(userContext);
   const { activeUser: { following } = {} } = useUser(user?.uid);
   const { photos } = usePhotos(user?.uid, following);
-
   return (
     <div className="col-span-2">
-      {!photos ? (
+      {!photos && !following ? (
         Array.from({ length: 4 }, (v, i) => 0).map((_, ind) => (
           <Instagram key={ind} />
         ))

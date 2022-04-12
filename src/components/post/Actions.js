@@ -15,7 +15,6 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
 
   const handleToggleLiked = async () => {
     setToggleLiked(prevToggleLiked => !prevToggleLiked);
-
     setLikes(prevLikes => (toggleLiked ? prevLikes - 1 : prevLikes + 1));
 
     const suggestedProfileRef = doc(db, 'photos', docId);
