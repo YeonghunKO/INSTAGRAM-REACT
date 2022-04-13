@@ -1,5 +1,5 @@
 /* eslint-disable  */
-export async function seedDatabase(db, addDoc, collection) {
+export async function seedDatabase(db, addDoc, setDoc, doc, collection) {
   const users = [
     {
       userId: 'sS173TzGO4T0cqPfimKcbao6DFj2',
@@ -41,7 +41,8 @@ export async function seedDatabase(db, addDoc, collection) {
 
   // eslint-disable-next-line prefer-const
   for (let k = 0; k < users.length; k++) {
-    await addDoc(collection(db, 'users'), users[k]);
+    const userRef = doc(db, 'users', users[k].username);
+    await setDoc(userRef, users[k], { merge: true });
   }
 
   // eslint-disable-next-line prefer-const
