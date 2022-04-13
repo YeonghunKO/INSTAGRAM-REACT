@@ -27,6 +27,18 @@ async function getUserByUid(id) {
 
   const snapShot = await getDocs(user);
   const userData = snapShot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
+
+  return userData;
+}
+
+async function getUserByUsername(username) {
+  const user = query(
+    collection(db, 'users'),
+    where('username', '==', username)
+  );
+
+  const snapShot = await getDocs(user);
+  const userData = snapShot.docs.map(doc => ({ ...doc.data(), docId: doc.id }));
   return userData;
 }
 
@@ -60,18 +72,18 @@ async function updateLoggedInUserFollowing(
 }
 async function updateFollowedFollowers(
   profileDocId,
-  loggedInUserDocId,
+  loggedInUserId,
   isFollowingProfile
 ) {
   const suggestedProfileRef = doc(db, 'users', profileDocId);
   await updateDoc(suggestedProfileRef, {
     followers: isFollowingProfile
-      ? arrayRemove(loggedInUserDocId)
-      : arrayUnion(loggedInUserDocId),
+      ? arrayRemove(loggedInUserId)
+      : arrayUnion(loggedInUserId),
   });
 }
 
-async function getPhotos(userId, following) {
+async function getFollowingPhotos(userId, following) {
   // [2,3]
   const result = query(
     collection(db, 'photos'),
@@ -97,11 +109,55 @@ async function getPhotos(userId, following) {
   return photosWithUserDetails;
 }
 
+async function getUserPhotosByUserId(userId) {
+  const result = query(collection(db, 'photos'), where('userId', '==', userId));
+  const snapShot = await getDocs(result);
+  const userPhotos = snapShot.docs.map(photo => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+  return userPhotos;
+}
+
+async function isUserFollowingProfile(username, profileUserId) {
+  const result = query(
+    collection(db, 'users'),
+    where('username', '==', username),
+    where('following', 'array-contains', profileUserId)
+  );
+  const snapShot = await getDocs(result);
+  const [response = {}] = snapShot.docs.map(photo => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  return response.userId;
+}
+//activeUser.docId,profileDocId,profileUserId,activeUser.userId
+async function toggleFollow(
+  userDocId,
+  profileDocId,
+  profileUserId,
+  userId,
+  isFollowingProfile
+) {
+  await updateLoggedInUserFollowing(
+    userDocId,
+    profileUserId,
+    isFollowingProfile
+  );
+  await updateFollowedFollowers(profileDocId, userId, isFollowingProfile);
+}
+
 export {
   doesUsernameExist,
   getUserByUid,
+  getUserByUsername,
   getSuggestedProfiles,
   updateLoggedInUserFollowing,
   updateFollowedFollowers,
-  getPhotos,
+  getFollowingPhotos,
+  getUserPhotosByUserId,
+  isUserFollowingProfile,
+  toggleFollow,
 };
