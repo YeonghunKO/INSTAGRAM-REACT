@@ -26,9 +26,10 @@ function App() {
               </ProtectedRoute>
             }
           />
-          ;
-          <Route path={ROUTES.LOGIN} element={<Login />} />;
+
+          <Route path={ROUTES.LOGIN} element={<Login />} />
           <Route path={ROUTES.SIGN_UP} element={<Signup />} />
+          <Route path={ROUTES.PROFILE} element={<Profile />} />
           <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
         </Routes>
       </Suspense>
