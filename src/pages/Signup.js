@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, setDoc, doc } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -21,7 +21,7 @@ function Signup(props) {
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [profileFile, setProfileFile] = useState('');
+  const [profileFile, setProfileFile] = useState({ name: '' });
 
   const isInvalid =
     username === '' ||
@@ -67,7 +67,8 @@ function Signup(props) {
           dateCreated: Date.now(),
           photoURL,
         };
-        await addDoc(collection(db, 'users'), newUsers);
+        const userRef = doc(db, 'users', username);
+        await setDoc(userRef, newUsers, { merge: true });
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
         setEmailAddress('');
@@ -130,15 +131,15 @@ function Signup(props) {
               onChange={({ target }) => setPassword(target.value)}
               value={password}
             />
-            <div className="flex mb-2">
+            <div className="flex justify-between mb-2">
               <input
-                className="inline-block h-2 py-5 middle border border-gray-primary rounded width-3/4 outline-none"
+                className="inline-block h-2 p-5 middle border border-gray-primary rounded w-full outline-none"
                 value={profileFile.name}
                 readOnly
                 placeholder="Add your profile picture"
               />
               <label
-                className="inline-block py-2.5 px-5 text-gray-background middle border border-gray-primary rounded bg-black-faded h-11 ml-2.5 "
+                className="inline-block py-2.5 px-5 text-gray-background middle border border-gray-primary rounded bg-blue-medium cursor-pointer h-11 ml-2.5 "
                 htmlFor="file"
               >
                 Search
