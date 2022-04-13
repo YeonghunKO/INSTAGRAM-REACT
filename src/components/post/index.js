@@ -43,7 +43,7 @@ function Post({ photoObj }) {
 
 export default Post;
 
-Post.propType = {
+Post.propTypes = {
   photoObj: PropTypes.shape({
     username: PropTypes.string.isRequired,
     imageSrc: PropTypes.string.isRequired,
