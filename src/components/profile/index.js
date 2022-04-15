@@ -1,8 +1,10 @@
 import PropTypes from 'prop-types';
 
-import { userReducer, useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 import Header from './header';
 import { getUserPhotosByUserId } from '../../services/firebase';
+
+import Photos from './photos';
 
 function UserProfile({ user }) {
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });
@@ -41,6 +43,8 @@ function UserProfile({ user }) {
         followersCount={followersCount}
         setFollowerCount={dispatch}
       />
+
+      <Photos photos={photosCollection} />
     </>
   );
 }

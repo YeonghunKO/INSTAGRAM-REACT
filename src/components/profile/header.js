@@ -29,7 +29,6 @@ function Header({
 
   const handelToggleFollow = async () => {
     setIsFollowingProfile(prevIsFollowing => !prevIsFollowing);
-    // console.log(isFollowingProfile);
     setFollowerCount({
       followersCount: isFollowingProfile
         ? followersCount - 1
