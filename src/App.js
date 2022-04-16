@@ -6,6 +6,8 @@ import useAuthListner from './hooks/useAuthListener';
 
 import ProtectedRoute from './helpers/ProtectedRoute';
 
+import ReactLoader from './components/Loader';
+
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -16,7 +18,7 @@ function App() {
   const { user } = useAuthListner();
   return (
     <UserContext.Provider value={{ user }}>
-      <Suspense fallback={<p>...Loading</p>}>
+      <Suspense fallback={<ReactLoader />}>
         <Routes>
           <Route
             path={ROUTES.DASHBOARD}

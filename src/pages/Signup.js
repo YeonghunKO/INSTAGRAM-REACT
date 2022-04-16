@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
-import { collection, addDoc, setDoc, doc } from 'firebase/firestore';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -10,10 +9,14 @@ import {
 
 import { db } from '../lib/firebase';
 
+import { doc, setDoc } from 'firebase/firestore';
+
 import { doesUsernameExist } from '../services/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-function Signup(props) {
+import ReactLoader from '../components/Loader';
+
+function Signup() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState('');
@@ -22,6 +25,7 @@ function Signup(props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [profileFile, setProfileFile] = useState({ name: '' });
+  const [isLoading, setIsLoading] = useState(false);
 
   const isInvalid =
     username === '' ||
@@ -37,6 +41,7 @@ function Signup(props) {
       setError('user is already taken');
     } else {
       try {
+        setIsLoading(true);
         const storage = getStorage();
         const storageRef = ref(storage, `userProfilePicture/${username}`);
         const urlStorageRef = ref(
@@ -69,6 +74,7 @@ function Signup(props) {
         };
         const userRef = doc(db, 'users', username);
         await setDoc(userRef, newUsers, { merge: true });
+
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
         setEmailAddress('');
@@ -85,6 +91,7 @@ function Signup(props) {
 
   return (
     <div className="container flex mx-auto max-w-screen-md items-center h-screen">
+      {isLoading && <ReactLoader />}
       <div className="flex w-3/5 m-3 ">
         <img src="/images/iphone-with-profile.jpg" alt="Iphone Login picture" />
       </div>
