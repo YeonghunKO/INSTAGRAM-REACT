@@ -1,12 +1,10 @@
 import { useContext } from 'react';
-import UserContext from '../../context/currentUser';
 import User from './User';
 import Suggestion from './Suggestion';
-import useUser from '../../hooks/useUser';
+
+import loggedInUserContext from '../../context/loggedInUser';
 
 function Sidebar() {
-  const { user } = useContext(UserContext);
-  const userData = useUser(user?.uid);
   const {
     activeUser: {
       docId = '',
@@ -16,7 +14,7 @@ function Sidebar() {
       following,
       photoURL,
     } = {},
-  } = userData;
+  } = useContext(loggedInUserContext);
 
   return (
     <div className="p-4">

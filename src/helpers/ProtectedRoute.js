@@ -7,7 +7,7 @@ function ProtectedRoute({ user, children }) {
   if (!user) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
-  return children;
+  return React.cloneElement(children, { user });
 }
 
 export default ProtectedRoute;

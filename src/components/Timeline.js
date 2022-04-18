@@ -1,14 +1,15 @@
 import { useContext } from 'react';
 import { Instagram } from 'react-content-loader';
-import userContext from '../context/currentUser';
 import Post from '../components/post';
-import useUser from '../hooks/useUser';
 import usePhotos from '../hooks/usePhotos';
 
+import loggedInUserContext from '../context/loggedInUser';
+
 function Timeline() {
-  const { user } = useContext(userContext);
-  const { activeUser: { following } = {} } = useUser(user?.uid);
-  const { photos } = usePhotos(user?.uid, following);
+  const { activeUser: { following, userId } = {} } =
+    useContext(loggedInUserContext);
+
+  const { photos } = usePhotos(userId, following);
   return (
     <div className="col-span-2">
       {!photos && !following ? (

@@ -34,7 +34,7 @@ function App() {
           <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
         </Routes>
       </Suspense>
-    </UserContext.Provider>
+    </UserContext.Provider> 
   );
 }
 export default App;
