@@ -459,9 +459,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .z-10 {
   z-index: 10;
 }
-.-z-10 {
-  z-index: -10;
-}
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
@@ -580,15 +577,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-12 {
   height: 3rem;
 }
-.h-96 {
-  height: 24rem;
-}
-.h-5\/6 {
-  height: 83.333333%;
-}
-.max-h-96 {
-  max-height: 24rem;
-}
 .w-full {
   width: 100%;
 }
@@ -706,14 +694,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-black-faded {
   background-color: #00000059;
 }
-.bg-black-light {
-  --tw-bg-opacity: 1;
-  background-color: rgb(38 38 38 / var(--tw-bg-opacity));
-}
-.bg-gray-primary {
-  --tw-bg-opacity: 1;
-  background-color: rgb(219 219 219 / var(--tw-bg-opacity));
-}
 .fill-red {
   fill: #ed4956;
 }
@@ -782,13 +762,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
-.text-xs {
-  font-size: 0.75rem;
-  line-height: 1rem;
-}
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .text-lg {
   font-size: 1.125rem;
