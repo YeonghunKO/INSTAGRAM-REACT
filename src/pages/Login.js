@@ -15,9 +15,10 @@ function Login(props) {
   const handleLogin = async event => {
     event.preventDefault();
     try {
-      const auth = getAuth();
-      await signInWithEmailAndPassword(auth, emailAddress, password);
-      navigate(ROUTES.DASHBOARD);
+      const auth = getAuth(); //
+      console.log(auth);
+      // await signInWithEmailAndPassword(auth, emailAddress, password);
+      // navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setEmailAddress('');
       setPassword('');
