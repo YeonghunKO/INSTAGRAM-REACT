@@ -44,8 +44,12 @@ function Login(props) {
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
-          {error && <p className="mb-4 text-s text-red-primary">{error}</p>}
-          <form onSubmit={handleLogin} method="POST">
+          {error && (
+            <p data-testid="error" className="mb-4 text-s text-red-primary">
+              {error}
+            </p>
+          )}
+          <form data-testid="login" onSubmit={handleLogin} method="POST">
             <input
               aria-label="Enter your email address"
               type="text"
