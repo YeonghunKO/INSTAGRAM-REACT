@@ -16,9 +16,9 @@ function Login(props) {
     event.preventDefault();
     try {
       const auth = getAuth(); //
-      console.log(auth);
-      // await signInWithEmailAndPassword(auth, emailAddress, password);
-      // navigate(ROUTES.DASHBOARD);
+      // console.log(auth);
+      await signInWithEmailAndPassword(auth, emailAddress, password);
+      navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setEmailAddress('');
       setPassword('');
