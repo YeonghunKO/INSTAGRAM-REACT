@@ -50,6 +50,9 @@
     "coverageReporters": [
       "html",
       "text"
+    ],
+    "watchPathIgnorePatterns": [
+      "src/__tests__/pages/login.test.js"
     ]
   },
   "browserslist": {

@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  render,
-  fireEvent,
-  waitFor,
-  act,
-  screen,
-  queryAllByTestId,
-  queryAllByPlaceholderText,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
 import Login from '../../pages/Login';
 import * as ROUTES from '../../constants/routes';
