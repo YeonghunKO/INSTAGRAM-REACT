@@ -59,7 +59,7 @@ function Signup() {
         );
         await updateProfile(auth.currentUser, {
           displayName: username,
-          photoURL,
+          photoURL, //{}
         });
 
         const newUsers = {
@@ -105,7 +105,7 @@ function Signup() {
             />
           </h1>
           {error && <p className="mb-4 text-s text-red-primary">{error}</p>}
-          <form onSubmit={handleSignup} method="POST">
+          <form onSubmit={handleSignup} method="POST" data-testid="sign-up">
             <input
               aria-label="Enter your username"
               type="text"
@@ -152,6 +152,7 @@ function Signup() {
                 Search
               </label>
               <input
+                data-testid="profile-picture"
                 id="file"
                 type="file"
                 onChange={({ target }) => {

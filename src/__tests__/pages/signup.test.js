@@ -46,20 +46,24 @@ describe('sign up', () => {
   it('renders the sign up page with a form submission and signs a user up', async () => {
     getStorage.mockImplementation(() => ({
       storage: 'storage',
-      currentUser: { currentUser: 'YEONGHUN KO' },
     }));
     ref.mockImplementation(() => ({ ref: 'ref' }));
     uploadBytes.mockImplementation(() =>
       Promise.resolve('successfully uploadBytes')
     );
 
-    getAuth.mockImplementation(() => ({ username: 'YEONGHUN KO' }));
+    getAuth.mockImplementation(() => ({
+      username: 'YEONGHUN KO',
+      currentUser: { username: 'YEONGHUN KO' },
+    }));
     createUserWithEmailAndPassword.mockImplementation(() =>
       Promise.resolve('successfully created user')
     );
     updateProfile.mockImplementation(() =>
       Promise.resolve('successfully update Profile')
     );
+
+    getDownloadURL.mockImplementation(() => ({ url: 'url.com' }));
 
     // db.mockImplementation(() => ({ db: 'db' }));
 
@@ -93,7 +97,6 @@ describe('sign up', () => {
       await fireEvent.change(inputFileEle, {
         target: { files: [{ profile: 'profile.png' }] },
       });
-      //   await userEvent.upload(inputFileEle, file);
 
       fireEvent.submit(getByTestId('sign-up'));
 
@@ -105,7 +108,6 @@ describe('sign up', () => {
         expect(ref).toHaveBeenCalledWith(
           {
             storage: 'storage',
-            currentUser: { currentUser: 'YEONGHUN KO' },
           },
           'userProfilePicture/Sinkyo'
         );
@@ -113,14 +115,17 @@ describe('sign up', () => {
 
         expect(createUserWithEmailAndPassword).toHaveBeenCalled();
         expect(createUserWithEmailAndPassword).toHaveBeenCalledWith(
-          { username: 'YEONGHUN KO' },
+          {
+            username: 'YEONGHUN KO',
+            currentUser: { username: 'YEONGHUN KO' },
+          },
           'yhko1988@gmail.com',
           'password'
         );
 
         expect(inputFileEle.files[0]).toEqual({ profile: 'profile.png' });
 
-        // expect(updateProfile).toHaveBeenCalledWith();
+        expect(updateProfile).toHaveBeenCalledWith();
 
         // expect(doc).toHaveBeenCalled();
 
