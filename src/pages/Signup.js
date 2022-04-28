@@ -78,6 +78,7 @@ function Signup() {
 
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
+        setUsername('');
         setEmailAddress('');
         setPassword('');
         setFullName('');
@@ -105,7 +106,11 @@ function Signup() {
               className="mt-2 w-6/12 mb-4"
             />
           </h1>
-          {error && <p className="mb-4 text-s text-red-primary">{error}</p>}
+          {error && (
+            <p data-testid="error" className="mb-4 text-s text-red-primary">
+              {error}
+            </p>
+          )}
           <form onSubmit={handleSignup} method="POST" data-testid="sign-up">
             <input
               aria-label="Enter your username"

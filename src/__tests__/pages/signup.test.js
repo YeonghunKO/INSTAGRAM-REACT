@@ -38,11 +38,8 @@ describe('sign up', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+
   it('renders the sign up page with a form submission and signs a user up', async () => {
-    // BrowserRouter.mockImplementation(props => {
-    //   return 'broswer';
-    // });
-    // useNavigate.mockImplementation(() => {});
     getStorage.mockImplementation(() => ({
       storage: 'storage',
     }));
@@ -67,8 +64,6 @@ describe('sign up', () => {
     doc.mockImplementation(() => ({ doc: 'doc' }));
 
     setDoc.mockImplementation(() => Promise.resolve('successfully doc set'));
-
-    // useNavigate.mockImplementation(() => jest.fn());
 
     const { getByTestId, getByPlaceholderText, queryByTestId } = render(
       <BrowserRouter>
@@ -134,6 +129,104 @@ describe('sign up', () => {
         expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
 
         expect(getByPlaceholderText('username').value).toBe('Sinkyo');
+        expect(getByPlaceholderText('fullname').value).toBe('YEONGHUN KO');
+        expect(getByPlaceholderText('Email address').value).toBe(
+          'yhko1988@gmail.com'
+        );
+        expect(getByPlaceholderText('Email password').value).toBe('password');
+        expect(queryByTestId('error')).toBeFalsy();
+      });
+    });
+  });
+
+  it('renders the sign up page but username already exists', async () => {
+    const { getByTestId, getByPlaceholderText, queryByTestId } = render(
+      <BrowserRouter>
+        <SignUp />
+      </BrowserRouter>
+    );
+
+    doesUsernameExist.mockImplementation(() => Promise.resolve(true));
+
+    await act(async () => {
+      await fireEvent.change(getByPlaceholderText('username'), {
+        target: { value: 'Sinkyo' },
+      });
+      await fireEvent.change(getByPlaceholderText('fullname'), {
+        target: { value: 'YEONGHUN KO' },
+      });
+      await fireEvent.change(getByPlaceholderText('Email address'), {
+        target: { value: 'yhko1988@gmail.com' },
+      });
+      await fireEvent.change(getByPlaceholderText('Email password'), {
+        target: { value: 'password' },
+      });
+
+      const inputFileEle = getByTestId('profile-picture');
+
+      await fireEvent.change(inputFileEle, {
+        target: { files: [{ profile: 'profile.png' }] },
+      });
+
+      fireEvent.submit(getByTestId('sign-up'));
+      expect(document.title).toEqual('Sign up - Instagram');
+      expect(doesUsernameExist).toHaveBeenCalled();
+      expect(doesUsernameExist).toHaveBeenCalledWith('Sinkyo');
+
+      await waitFor(async () => {
+        expect(mockUseNavigate).not.toHaveBeenCalled();
+
+        expect(getByPlaceholderText('username').value).toBe('');
+        expect(queryByTestId('error')).toBeTruthy();
+      });
+    });
+  });
+
+  it('renders the sign up page but an error is thrown', async () => {
+    updateProfile.mockImplementation(() =>
+      Promise.reject(new Error('unsuccessful update profile'))
+    );
+
+    const { getByTestId, getByPlaceholderText, queryByTestId } = render(
+      <BrowserRouter>
+        <SignUp />
+      </BrowserRouter>
+    );
+
+    doesUsernameExist.mockImplementation(() => Promise.resolve(false));
+
+    await act(async () => {
+      await fireEvent.change(getByPlaceholderText('username'), {
+        target: { value: 'Sinkyo' },
+      });
+      await fireEvent.change(getByPlaceholderText('fullname'), {
+        target: { value: 'YEONGHUN KO' },
+      });
+      await fireEvent.change(getByPlaceholderText('Email address'), {
+        target: { value: 'yhko1988@gmail.com' },
+      });
+      await fireEvent.change(getByPlaceholderText('Email password'), {
+        target: { value: 'password' },
+      });
+
+      const inputFileEle = getByTestId('profile-picture');
+
+      await fireEvent.change(inputFileEle, {
+        target: { files: [{ profile: 'profile.png' }] },
+      });
+
+      fireEvent.submit(getByTestId('sign-up'));
+      expect(document.title).toEqual('Sign up - Instagram');
+      expect(doesUsernameExist).toHaveBeenCalled();
+      expect(doesUsernameExist).toHaveBeenCalledWith('Sinkyo');
+
+      await waitFor(async () => {
+        expect(mockUseNavigate).not.toHaveBeenCalled();
+        expect(getByPlaceholderText('username').value).toBe('');
+        expect(getByPlaceholderText('fullname').value).toBe('');
+        expect(getByPlaceholderText('Email address').value).toBe('');
+        expect(getByPlaceholderText('Email password').value).toBe('');
+        expect(queryByTestId('error')).toBeTruthy();
       });
     });
   });
