@@ -1,14 +1,8 @@
-import {
-  render,
-  fireEvent,
-  waitFor,
-  act,
-  createEvent,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, act } from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 
-import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import { BrowserRouter, useNavigate } from 'react-router-dom';
 import SignUp from '../../pages/Signup';
 import * as ROUTES from '../../constants/routes';
 
@@ -19,31 +13,36 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
-import { db } from '../../lib/firebase';
-
 import { doc, setDoc } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { wait } from '@testing-library/user-event/dist/utils';
+
+const mockUseNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
+  useNavigate: () => mockUseNavigate,
 }));
 
 jest.mock('../../services/firebase');
+
+jest.mock('../../lib/firebase', () => ({
+  db: { db: 'db' },
+}));
 
 jest.mock('firebase/auth');
 jest.mock('firebase/firestore');
 jest.mock('firebase/storage');
 
 describe('sign up', () => {
-  let file;
   beforeEach(() => {
     jest.clearAllMocks();
-    file = new File([], 'profilePicture.png', { type: 'image/png' });
   });
   it('renders the sign up page with a form submission and signs a user up', async () => {
+    // BrowserRouter.mockImplementation(props => {
+    //   return 'broswer';
+    // });
+    // useNavigate.mockImplementation(() => {});
     getStorage.mockImplementation(() => ({
       storage: 'storage',
     }));
@@ -57,7 +56,7 @@ describe('sign up', () => {
       currentUser: { username: 'YEONGHUN KO' },
     }));
     createUserWithEmailAndPassword.mockImplementation(() =>
-      Promise.resolve('successfully created user')
+      Promise.resolve({ user: { uid: 'uid' } })
     );
     updateProfile.mockImplementation(() =>
       Promise.resolve('successfully update Profile')
@@ -65,15 +64,16 @@ describe('sign up', () => {
 
     getDownloadURL.mockImplementation(() => ({ url: 'url.com' }));
 
-    // db.mockImplementation(() => ({ db: 'db' }));
-
     doc.mockImplementation(() => ({ doc: 'doc' }));
+
     setDoc.mockImplementation(() => Promise.resolve('successfully doc set'));
 
+    // useNavigate.mockImplementation(() => jest.fn());
+
     const { getByTestId, getByPlaceholderText, queryByTestId } = render(
-      <Router>
+      <BrowserRouter>
         <SignUp />
-      </Router>
+      </BrowserRouter>
     );
 
     doesUsernameExist.mockImplementation(() => Promise.resolve(false));
@@ -99,12 +99,11 @@ describe('sign up', () => {
       });
 
       fireEvent.submit(getByTestId('sign-up'));
+      expect(document.title).toEqual('Sign up - Instagram');
+      expect(doesUsernameExist).toHaveBeenCalled();
+      expect(doesUsernameExist).toHaveBeenCalledWith('Sinkyo');
 
       await waitFor(async () => {
-        expect(document.title).toEqual('Sign up - Instagram');
-        expect(doesUsernameExist).toHaveBeenCalled();
-        expect(doesUsernameExist).toHaveBeenCalledWith('Sinkyo');
-
         expect(ref).toHaveBeenCalledWith(
           {
             storage: 'storage',
@@ -125,16 +124,16 @@ describe('sign up', () => {
 
         expect(inputFileEle.files[0]).toEqual({ profile: 'profile.png' });
 
-        expect(updateProfile).toHaveBeenCalledWith();
+        expect(updateProfile).toHaveBeenCalledWith(
+          { username: 'YEONGHUN KO' },
+          { displayName: 'Sinkyo', photoURL: { url: 'url.com' } }
+        );
 
-        // expect(doc).toHaveBeenCalled();
+        expect(doc).toHaveBeenCalledWith({ db: 'db' }, 'users', 'Sinkyo');
+        expect(setDoc).toHaveBeenCalled();
+        expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
 
-        // expect(setDoc).toHaveBeenCalled();
-        // expect(setDoc).toHaveBeenCalledWith(
-        //   { doc: 'doc' },
-        //   {},
-        //   { merge: true }
-        // );
+        expect(getByPlaceholderText('username').value).toBe('Sinkyo');
       });
     });
   });

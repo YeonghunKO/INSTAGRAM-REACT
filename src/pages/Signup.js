@@ -72,6 +72,7 @@ function Signup() {
           dateCreated: Date.now(),
           photoURL,
         };
+
         const userRef = doc(db, 'users', username);
         await setDoc(userRef, newUsers, { merge: true });
 
