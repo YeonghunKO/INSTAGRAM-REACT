@@ -4,7 +4,7 @@ import * as ROUTES from '../constants/routes';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 function Login(props) {
-  // const navigate = useNavigate('');
+  const navigate = useNavigate('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -17,7 +17,7 @@ function Login(props) {
       const auth = getAuth(); //
       // console.log(auth);
       await signInWithEmailAndPassword(auth, emailAddress, password);
-      useNavigate(ROUTES.DASHBOARD);
+      navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setEmailAddress('');
       setPassword('');

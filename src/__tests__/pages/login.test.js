@@ -5,10 +5,12 @@ import Login from '../../pages/Login';
 import * as ROUTES from '../../constants/routes';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
+const mockUseNavigate = jest.fn();
+
 jest.mock('react-router-dom', () => ({
   __esModule: true,
   ...jest.requireActual('react-router-dom'),
-  useNavigate: jest.fn(),
+  useNavigate: () => mockUseNavigate,
 }));
 
 jest.mock('firebase/auth');
@@ -49,8 +51,8 @@ describe('Log in', () => {
       );
 
       await waitFor(() => {
-        expect(useNavigate).toHaveBeenCalled();
-        expect(useNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
+        expect(mockUseNavigate).toHaveBeenCalled();
+        expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
         expect(getByPlaceholderText('Email address').value).toBe(
           'yhko1988@gmail.com'
         );
