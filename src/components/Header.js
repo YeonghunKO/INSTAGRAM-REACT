@@ -10,11 +10,13 @@ import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
 function Header() {
   const { user: loggedInUser } = useContext(UserContext);
   const navigate = useNavigate();
+
   const onClickHeaderHandle = () => {
     const auth = getAuth();
     signOut(auth);
     navigate(ROUTES.LOGIN);
   };
+
   return (
     <div className="h-16 bg-white border-b border-gray-primary mb-8">
       <div className="container mx-auto max-w-screen-lg h-full">

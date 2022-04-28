@@ -53,7 +53,8 @@
     ],
     "watchPathIgnorePatterns": [
       "src/__tests__/pages/login.test.js",
-      "src/__tests__/pages/signup.test.js"
+      "src/__tests__/pages/signup.test.js",
+      "src/__tests__/pages/notfound.test.js"
     ]
   },
   "browserslist": {
