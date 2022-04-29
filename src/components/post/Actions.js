@@ -9,7 +9,6 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
     user: { uid: userId },
   } = useContext(UserContext);
   const { db } = useContext(FirebaseContext);
-
   const [toggleLiked, setToggleLiked] = useState(likedPhoto);
   const [likes, setLikes] = useState(totalLikes);
 
@@ -26,6 +25,7 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
     <div className="flex justify-between p-4">
       <div className="flex">
         <svg
+          data-testid={`like-photo-${docId}`}
           onClick={handleToggleLiked}
           onKeyDown={event => {
             if (event.key === 'Enter') {

@@ -11,7 +11,7 @@ function AddComments({ docId, comments, setComments, commentInput }) {
     user: { displayName },
   } = useContext(UserContext);
 
-  const handleSubmitCommnet = evt => {
+  const handleSubmitComment = evt => {
     evt.preventDefault();
 
     setComments([...comments, { displayName, comment }]);
@@ -28,7 +28,7 @@ function AddComments({ docId, comments, setComments, commentInput }) {
         className="flex justify-between pl-0 pr-5"
         method="POST"
         onSubmit={evt => {
-          comment.length >= 1 ? handleSubmitCommnet(evt) : evt.preventDefault();
+          comment.length >= 1 ? handleSubmitComment(evt) : evt.preventDefault();
         }}
       >
         <input
@@ -48,7 +48,7 @@ function AddComments({ docId, comments, setComments, commentInput }) {
           }`}
           type="button"
           disabled={comment.length < 1}
-          onClick={handleSubmitCommnet}
+          onClick={handleSubmitComment}
         >
           Post
         </button>

@@ -8,7 +8,7 @@ import loggedInUserContext from '../context/loggedInUser';
 function Timeline() {
   const { activeUser: { following, userId } = {} } =
     useContext(loggedInUserContext);
-
+  // console.log(useContext(loggedInUserContext));
   const { photos } = usePhotos(userId, following);
   return (
     <div className="col-span-2">
