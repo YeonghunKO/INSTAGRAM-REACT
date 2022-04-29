@@ -15,6 +15,7 @@ function AddComments({ docId, comments, setComments, commentInput }) {
     evt.preventDefault();
 
     setComments([...comments, { displayName, comment }]);
+    // console.log(comment);
     setComment('');
 
     const suggestedProfileRef = doc(db, 'photos', docId);
@@ -25,13 +26,19 @@ function AddComments({ docId, comments, setComments, commentInput }) {
   return (
     <div className="border-t border-gray-primary">
       <form
+        data-testid={`add-comment-submit-${docId}`}
         className="flex justify-between pl-0 pr-5"
         method="POST"
         onSubmit={evt => {
-          comment.length >= 1 ? handleSubmitComment(evt) : evt.preventDefault();
+          if (comment.length >= 1) {
+            handleSubmitComment(evt);
+          } else {
+            evt.preventDefault();
+          }
         }}
       >
         <input
+          data-testid={`add-comment-${docId}`}
           aria-label="Add a comment"
           autoComplete="off"
           type="text"

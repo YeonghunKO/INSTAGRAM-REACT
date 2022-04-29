@@ -23,6 +23,7 @@ function Comments({ docId, comments: allComments, posted, commentInput }) {
         ))}
         {comments.length >= 3 && commentsSlice < comments.length && (
           <button
+            data-testid={`view-more-${docId}`}
             className="text-sm text-gray-base mb-1 cursor-pointer focus:outline-none"
             type="button"
             onClick={showNextComments}
