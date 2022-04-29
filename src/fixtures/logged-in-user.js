@@ -3,8 +3,8 @@ export default {
   username: 'sinkyo',
   fullName: 'YEONGHU KO',
   emailAddress: 'yhko1988@gmail.com',
-  following: [],
-  followers: ['sS173TzGO4T0cqPfimKcbao6DFj2'],
+  following: ['2'],
+  followers: ['2', '3', '4'],
   dateCreated: 1649150548023,
   displayName: 'sinkyo',
   photoURL:

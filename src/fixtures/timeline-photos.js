@@ -1,5 +1,6 @@
 export default [
   {
+    userPhotoUrl: 'photo.com',
     username: 'raphael',
     photoId: 3,
     comments: [
@@ -23,6 +24,7 @@ export default [
     userLikedPhoto: true,
   },
   {
+    userPhotoUrl: 'photo.com',
     username: 'raphael',
     caption: 'Saint George and the Dragon',
     photoId: 1,
@@ -46,6 +48,7 @@ export default [
     userLikedPhoto: true,
   },
   {
+    userPhotoUrl: 'photo.com',
     username: 'raphael',
     likes: ['NvPY9M9MzFTARQ6M816YAzDJxZ72'],
     userLatitude: '40.7128°',
@@ -69,6 +72,7 @@ export default [
     userLikedPhoto: true,
   },
   {
+    userPhotoUrl: 'photo.com',
     username: 'raphael',
     userLatitude: '40.7128°',
     dateCreated: 1612227788343,
@@ -92,6 +96,7 @@ export default [
     userLikedPhoto: false,
   },
   {
+    userPhotoUrl: 'photo.com',
     username: 'raphael',
     comments: [
       {

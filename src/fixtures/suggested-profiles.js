@@ -8,5 +8,6 @@ export default [
     emailAddress: 'salvador@dali.com',
     username: 'dali',
     docId: 'utH4EadD3gBUbQkdG6Da',
+    photoURL: 'URL.COM',
   },
 ];
