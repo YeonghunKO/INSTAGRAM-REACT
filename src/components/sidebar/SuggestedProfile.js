@@ -35,6 +35,7 @@ function SuggestedProfile({
           </Link>
         </div>
         <button
+          data-testid={`suggested-profile-${profileDocId}`}
           className="text-sm font-bold text-blue-medium"
           type="button"
           onClick={handleFollowUser}

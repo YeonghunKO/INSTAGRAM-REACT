@@ -12,6 +12,22 @@ export default [
         displayName: 'orwell',
         comment: 'Would you mind if I used this picture?',
       },
+      {
+        displayName: 'orwell2',
+        comment: 'Would you mind if I used this picture?',
+      },
+      {
+        displayName: 'orwell3',
+        comment: 'Would you mind if I used this picture?',
+      },
+      {
+        displayName: 'orwell4',
+        comment: 'Would you mind if I used this picture?',
+      },
+      {
+        displayName: 'orwell5',
+        comment: 'Would you mind if I used this picture?',
+      },
     ],
     userLatitude: '40.7128°',
     imageSrc: '/images/users/raphael/3.jpg',
