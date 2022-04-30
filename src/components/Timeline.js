@@ -15,7 +15,7 @@ function Timeline() {
         Array.from({ length: 4 }, (v, i) => 0).map((_, ind) => (
           <Instagram key={ind} />
         ))
-      ) : following.length === 0 ? (
+      ) : following?.length === 0 ? (
         <p className="flex justify-center font-bold">
           Follow other people to see Photos
         </p>

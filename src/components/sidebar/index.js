@@ -18,13 +18,19 @@ function Sidebar() {
 
   return (
     <div className="p-4">
-      <User username={username} fullName={fullName} photoURL={photoURL} />
-      <div className="font-semibold text-gray-base">Suggestions for you</div>
-      <Suggestion
-        loggedInUserId={userId}
-        following={following}
-        loggedInUserDocId={docId}
-      />
+      {fullName ? (
+        <>
+          <User username={username} fullName={fullName} photoURL={photoURL} />
+          <div className="font-semibold text-gray-base">
+            Suggestions for you
+          </div>
+          <Suggestion
+            loggedInUserId={userId}
+            following={following}
+            loggedInUserDocId={docId}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
