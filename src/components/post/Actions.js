@@ -5,9 +5,7 @@ import UserContext from '../../context/currentUser';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
-  const {
-    user: { uid: userId },
-  } = useContext(UserContext);
+  const { user: { uid: userId } = {} } = useContext(UserContext);
   const { db } = useContext(FirebaseContext);
   const [toggleLiked, setToggleLiked] = useState(likedPhoto);
   const [likes, setLikes] = useState(totalLikes);

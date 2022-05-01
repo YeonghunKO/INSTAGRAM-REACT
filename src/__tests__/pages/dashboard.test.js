@@ -130,17 +130,17 @@ describe('dashboard', () => {
     });
   });
 
-  it.only('renders the dashboard with a undefined user to trigger fallback', async () => {
+  it('renders the dashboard with a undefined user to trigger fallback', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => []);
 
-    const { container } = render(
+    const { container, getByText, debug } = render(
       <Router>
         <FirebaseContext.Provider value={{ db: {} }}>
-          <UserContext.Provider value={{ user: { uid: 1 } }}>
+          <UserContext.Provider value={{ user: undefined }}>
             <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-              <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
+              <Dashboard user={userFixtures} />
             </loggedInContext.Provider>
           </UserContext.Provider>
         </FirebaseContext.Provider>
@@ -148,10 +148,10 @@ describe('dashboard', () => {
     );
 
     await waitFor(() => {
-      const suggestedProfileEle = container.querySelector(
-        '[data-testid="suggested-profile-utH4EadD3gBUbQkdG6Da"]'
-      );
-      expect(suggestedProfileEle).toBeFalsy();
+      const logInEle = getByText('Log In');
+      const signUpEle = getByText('Sign Up');
+      expect(logInEle).toBeTruthy();
+      expect(signUpEle).toBeTruthy();
     });
   });
 

@@ -7,9 +7,7 @@ import { db } from '../../lib/firebase';
 
 function AddComments({ docId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('');
-  const {
-    user: { displayName },
-  } = useContext(UserContext);
+  const { user: { displayName } = {} } = useContext(UserContext);
 
   const handleSubmitComment = evt => {
     evt.preventDefault();
