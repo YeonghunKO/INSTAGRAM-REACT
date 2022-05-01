@@ -135,7 +135,7 @@ describe('dashboard', () => {
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => []);
 
-    const { container, getByText, debug } = render(
+    const { getByText } = render(
       <Router>
         <FirebaseContext.Provider value={{ db: {} }}>
           <UserContext.Provider value={{ user: undefined }}>
