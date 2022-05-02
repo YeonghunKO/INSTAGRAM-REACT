@@ -97,7 +97,7 @@ function Header({
                   }
                 }}
               >
-                {isFollowingProfile ? 'Unfollow' : 'follow'}
+                {isFollowingProfile ? 'Unfollow' : 'Follow'}
               </button>
             )}
           </div>

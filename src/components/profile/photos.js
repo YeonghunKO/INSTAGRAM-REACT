@@ -19,6 +19,7 @@ function Photos({ photos }) {
           {photos?.length
             ? photos.map((photo, ind) => (
                 <div
+                  data-testid={`photo`}
                   key={photo.docId}
                   className={`${
                     ind + 1 === photos.length && 'mb-6'

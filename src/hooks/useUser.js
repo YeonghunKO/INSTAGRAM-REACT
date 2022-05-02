@@ -9,6 +9,7 @@ function useUser(userId) {
         const [user] = await getUserByUid(userId);
         setActiveUser(user);
       } catch (error) {
+        console.log(error);
         setActiveUser([]);
       }
     }
