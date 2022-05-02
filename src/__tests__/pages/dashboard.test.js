@@ -1,15 +1,7 @@
-import {
-  render,
-  waitFor,
-  fireEvent,
-  act,
-  getAllByText,
-  screen,
-} from '@testing-library/react';
+import { render, waitFor, fireEvent, act } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Dashboard from '../../pages/Dashboard';
-import ProtectedRoute from '../../helpers/ProtectedRoute';
 
 import loggedInContext from '../../context/loggedInUser';
 import UserContext from '../../context/currentUser';
@@ -21,8 +13,6 @@ import usePhotos from '../../hooks/usePhotos';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 import {
-  getUserByUid,
-  getFollowingPhotos,
   getSuggestedProfiles,
   updateLoggedInUserFollowing,
   updateFollowedFollowers,
@@ -56,17 +46,7 @@ describe('dashboard', () => {
     arrayUnion.mockImplementation(() => jest.fn());
     arrayRemove.mockImplementation(() => jest.fn());
 
-    const {
-      getByText,
-      getByAltText,
-      getByTitle,
-      getAllByText,
-      getAllByAltText,
-      getByTestId,
-      container,
-
-      debug,
-    } = render(
+    const { getByText, getAllByText, getAllByAltText, getByTestId } = render(
       <Router>
         <FirebaseContext.Provider value={{ db: {} }}>
           <UserContext.Provider
@@ -126,7 +106,7 @@ describe('dashboard', () => {
         expect(getByText('Great photo!')).toBeTruthy();
         expect(isHeartRed).toBe(true);
         expect(viewMore).toBeFalsy();
-      }, 6000);
+      });
     });
   });
 
