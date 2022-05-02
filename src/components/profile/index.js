@@ -20,9 +20,10 @@ function UserProfile({ user }) {
   );
 
   useEffect(() => {
+    let isMounted = true;
     async function getUserPhotos() {
       const photos = await getUserPhotosByUserId(user?.userId);
-      if (photos) {
+      if (photos && isMounted) {
         dispatch({
           profile: user,
           photosCollection: photos,
@@ -34,6 +35,10 @@ function UserProfile({ user }) {
     if (user) {
       getUserPhotos();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, [user?.userId]);
   return (
     <>
