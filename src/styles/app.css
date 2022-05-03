@@ -535,6 +535,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-6 {
   margin-bottom: 1.5rem;
 }
+.block {
+  display: block;
+}
 .inline-block {
   display: inline-block;
 }
@@ -618,6 +621,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-10 {
   width: 2.5rem;
+}
+.w-1\/5 {
+  width: 20%;
+}
+.w-3\/6 {
+  width: 50%;
 }
 .max-w-screen-lg {
   max-width: 1024px;
@@ -900,6 +909,10 @@ body {
 
   .lg\:w-40 {
     width: 10rem;
+  }
+
+  .lg\:w-3\/5 {
+    width: 60%;
   }
 
   .lg\:grid-cols-3 {
