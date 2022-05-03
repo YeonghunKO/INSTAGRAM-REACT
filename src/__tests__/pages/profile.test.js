@@ -116,7 +116,7 @@ describe('profile', () => {
     });
   });
 
-  it.only('renders the profile page with a user profile and unfollows', async () => {
+  it('renders the profile page with a user profile and unfollows', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     getUserByUsername.mockImplementation(() => [
       profileThatIsFollowedByLoggedInUserFixture,
@@ -140,7 +140,6 @@ describe('profile', () => {
     // debug();
     await act(async () => {
       await waitFor(async () => {
-        // 5photos, 3followers, 1following testing
         const profilePhotosEle = getAllByTestId('photo');
         expect(mockUseNavigate).not.toHaveBeenCalled();
         expect(getUserByUsername).toHaveBeenCalledWith('orwell');
@@ -148,11 +147,30 @@ describe('profile', () => {
         expect(getByText('George Orwell')).toBeTruthy();
         expect(profilePhotosEle).toBeTruthy();
 
-        // screen.getByText((content,node))
-
         fireEvent.keyDown(getByText('Unfollow'), { key: 'Enter' });
         expect(getByText('Follow')).toBeTruthy();
       });
+    });
+  });
+
+  it('renders the profile page with a undefined user. so redirect triggered ', async () => {
+    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
+    getUserByUsername.mockImplementation(() => [undefined]);
+
+    render(
+      <Router>
+        <UserContext.Provider
+          value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+        >
+          <loggedInContext.Provider value={{ activeUser: userFixtures }}>
+            <Profile />
+          </loggedInContext.Provider>
+        </UserContext.Provider>
+      </Router>
+    );
+    await waitFor(async () => {
+      expect(mockUseNavigate).toHaveBeenCalled();
+      expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.NOT_FOUNT);
     });
   });
 });

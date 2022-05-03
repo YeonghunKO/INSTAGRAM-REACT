@@ -11,15 +11,11 @@ function Profile() {
   const navigation = useNavigate();
   useEffect(() => {
     async function chekcUserExists() {
-      try {
-        const [user] = await getUserByUsername(username);
-        if (user?.userId) {
-          setUser(user);
-        } else {
-          navigation(ROUTES.NOT_FOUNT);
-        }
-      } catch (error) {
-        console.log(error);
+      const [user] = await getUserByUsername(username);
+      if (user?.userId) {
+        setUser(user);
+      } else {
+        navigation(ROUTES.NOT_FOUNT);
       }
     }
     chekcUserExists();

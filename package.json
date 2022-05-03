@@ -27,7 +27,7 @@
     "react-scripts:dist": "react-scripts build",
     "start": "run-p watch:css react-scripts:start",
     "build": "run-s build:css react-scripts:dist",
-    "test": "react-scripts test --watchAll",
+    "test": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
   "jest": {
@@ -37,7 +37,8 @@
       "!<rootDir>/src/seed.js",
       "!<rootDir>/src/hooks/*.js",
       "!<rootDir>/src/helpers/*.js",
-      "!<rootDir>/src/services/firebase.js"
+      "!<rootDir>/src/services/firebase.js",
+      "!<rootDir>/src/constants/path.js"
     ],
     "coverageThreshold": {
       "global": {
@@ -51,12 +52,7 @@
       "html",
       "text"
     ],
-    "watchPathIgnorePatterns": [
-      "src/__tests__/pages/login.test.js",
-      "src/__tests__/pages/signup.test.js",
-      "src/__tests__/pages/notfound.test.js",
-      "src/__tests__/pages/dashboard.test.js"
-    ]
+    "watchPathIgnorePatterns": []
   },
   "browserslist": {
     "production": [
