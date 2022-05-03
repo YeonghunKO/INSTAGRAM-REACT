@@ -25,8 +25,8 @@ module.exports = {
     },
 
     extend: {
-      fontSize: {
-        xxs: '12px',
+      extend: {
+        display: ['group-hover'],
       },
     },
   },
