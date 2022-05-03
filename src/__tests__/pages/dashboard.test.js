@@ -1,4 +1,10 @@
-import { render, waitFor, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  fireEvent,
+  act,
+  screen,
+} from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Dashboard from '../../pages/Dashboard';
@@ -33,7 +39,7 @@ describe('dashboard', () => {
     jest.clearAllMocks();
   });
 
-  it('renders the dashboard with a user profile and follows a user from the suggested profile', async () => {
+  it.only('renders the dashboard with a user profile and follows a user from the suggested profile', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -46,7 +52,14 @@ describe('dashboard', () => {
     arrayUnion.mockImplementation(() => jest.fn());
     arrayRemove.mockImplementation(() => jest.fn());
 
-    const { getByText, getAllByText, getAllByAltText, getByTestId } = render(
+    const {
+      container,
+      getByText,
+      getAllByText,
+      getAllByAltText,
+      getByTestId,
+      debug,
+    } = render(
       <Router>
         <FirebaseContext.Provider value={{ db: {} }}>
           <UserContext.Provider
@@ -60,54 +73,64 @@ describe('dashboard', () => {
       </Router>
     );
 
-    await act(async () => {
-      jest.setTimeout(async () => {
-        const heartSvg = getByTestId('like-photo-494LKmaF03bUcYZ4xhNu');
-        const isHeartRed = heartSvg.classList.contains('fill-red');
-        const focusIcon = getByTestId('focus-icon-494LKmaF03bUcYZ4xhNu');
+    await waitFor(() => {
+      const heartSvg = getByTestId('like-photo-494LKmaF03bUcYZ4xhNu');
+      const isHeartRed = heartSvg.classList.contains('fill-red');
+      const focusIcon = getByTestId('focus-icon-494LKmaF03bUcYZ4xhNu');
 
-        const addCommentInput = getByTestId('add-comment-nJMT1l8msuNZ8tH3zvVI');
-        const addCommentSubmit = getByTestId(
-          'add-comment-submit-nJMT1l8msuNZ8tH3zvVI'
-        );
-        const follow = getByTestId('suggested-profile-utH4EadD3gBUbQkdG6Da');
-        const viewMore = getByTestId('view-more-494LKmaF03bUcYZ4xhNu');
+      const addCommentInput = getByTestId('add-comment-nJMT1l8msuNZ8tH3zvVI');
+      const addCommentSubmit = getByTestId(
+        'add-comment-submit-nJMT1l8msuNZ8tH3zvVI'
+      );
+      fireEvent.keyDown(heartSvg, {
+        key: 'Enter',
+      });
+      fireEvent.click(heartSvg);
 
-        await fireEvent.click(follow);
-        await fireEvent.keyDown(viewMore, {
-          key: 'Enter',
-        });
-        fireEvent.keyDown(heartSvg, {
-          key: 'Enter',
-        });
-        fireEvent.click(heartSvg);
+      fireEvent.click(focusIcon);
+      fireEvent.keyDown(focusIcon, { key: 'Enter' });
 
-        fireEvent.click(focusIcon);
-        fireEvent.keyDown(focusIcon, { key: 'Enter' });
+      fireEvent.change(addCommentInput, {
+        target: { value: 'Great photo!' },
+      });
 
-        fireEvent.change(addCommentInput, {
-          target: { value: 'Great photo!' },
-        });
+      fireEvent.submit(addCommentSubmit);
 
-        fireEvent.submit(addCommentSubmit);
+      fireEvent.change(addCommentInput, {
+        target: { value: '' },
+      });
 
-        fireEvent.change(addCommentInput, {
-          target: { value: '' },
-        });
+      fireEvent.submit(addCommentSubmit);
 
-        fireEvent.submit(addCommentSubmit);
-        expect(document.title).toBe('Instagram');
-        expect(getAllByText('raphael')).toBeTruthy();
-        expect(getAllByAltText('Instagram')).toBeTruthy();
-        expect(getAllByText('sinkyo')).toBeTruthy();
-        expect(getAllByText('Saint George and the Dragon')).toBeTruthy();
-        expect(getByText('Suggestions for you')).toBeTruthy();
+      expect(document.title).toBe('Instagram');
+      expect(getAllByText('raphael')).toBeTruthy();
+      expect(getAllByAltText('Instagram')).toBeTruthy();
+      expect(getAllByText('sinkyo')).toBeTruthy();
+      expect(getAllByText('Saint George and the Dragon')).toBeTruthy();
+      expect(getByText('Suggestions for you')).toBeTruthy();
 
-        expect(getByText('Great photo!')).toBeTruthy();
-        expect(isHeartRed).toBe(true);
-        expect(viewMore).toBeFalsy();
+      expect(getByText('Great photo!')).toBeTruthy();
+      expect(isHeartRed).toBe(true);
+    });
+
+    await waitFor(() => {
+      const follow = getByTestId('suggested-profile-utH4EadD3gBUbQkdG6Da');
+      const viewMore = getByTestId('view-more-494LKmaF03bUcYZ4xhNu');
+      fireEvent.click(follow);
+      fireEvent.keyDown(viewMore, {
+        key: 'Enter',
       });
     });
+
+    const follow = container.querySelector(
+      '[data-testid="suggested-profile-utH4EadD3gBUbQkdG6Da"]'
+    );
+    const viewMore = container.querySelector(
+      '[data-testid="view-more-494LKmaF03bUcYZ4xhNu"]'
+    );
+
+    expect(follow).toBeFalsy();
+    expect(viewMore).toBeFalsy();
   });
 
   it('renders the dashboard with a undefined user to trigger fallback', async () => {
