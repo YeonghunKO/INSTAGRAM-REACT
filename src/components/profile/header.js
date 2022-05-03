@@ -62,7 +62,7 @@ function Header({
       <div className="container flex justify-center items-center">
         {profileUsername ? (
           <img
-            className="rounded-full h-40 w-40 flex"
+            className="rounded-full h-20 lg:h-40 w-20 lg:w-40 flex"
             src={photoURL}
             onError={e => {
               e.target.src = DEFAULT_IMAGE_PATH;
@@ -101,7 +101,7 @@ function Header({
               </button>
             )}
           </div>
-          <div className="container flex mt-4">
+          <div className="container flex flex-col lg:flex-row mt-4">
             {
               <>
                 <p className="mr-10">
