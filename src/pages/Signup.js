@@ -92,12 +92,12 @@ function Signup() {
   }, []);
 
   return (
-    <div className="container flex mx-auto max-w-screen-md items-center h-screen">
+    <div className="container flex flex-col lg:flex-row px-4 lg:px-0 mx-auto max-w-screen-md items-center h-screen">
       {isLoading && <ReactLoader />}
-      <div className="flex w-3/5 m-3 ">
+      <div className="hidden lg:block w-3/5 m-3 ">
         <img src="/images/iphone-with-profile.jpg" alt="Iphone Login picture" />
       </div>
-      <div className="flex flex-col w-2/5">
+      <div className="flex flex-col w-full lg:w-2/5 mt-5">
         <div className="flex flex-col items-center bg-white p-4 border boder-gray-primary mb-4 rounded">
           <h1 className="flex justify-center w-full">
             <img
