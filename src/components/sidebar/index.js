@@ -17,7 +17,7 @@ function Sidebar() {
   } = useContext(loggedInUserContext);
 
   return (
-    <div className="p-4">
+    <div className="p-4 hidden lg:block">
       {fullName ? (
         <>
           <User username={username} fullName={fullName} photoURL={photoURL} />

@@ -20,7 +20,7 @@ function Post({ photoObj }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
   return (
-    <div className="rounded border w-9/12 bg-white border-gray-primary mb-12">
+    <div className="rounded border w-full lg:w-9/12 bg-white border-gray-primary mb-12">
       <Header username={username} userPhotoUrl={userPhotoUrl} />
       <img src={imageSrc} alt={caption} />
       <Actions

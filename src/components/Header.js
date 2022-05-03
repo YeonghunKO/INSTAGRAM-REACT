@@ -16,7 +16,7 @@ function Header() {
     navigate(ROUTES.LOGIN);
   };
   return (
-    <div className="h-16 bg-white border-b border-gray-primary mb-8">
+    <div className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center cursor-pointer">
