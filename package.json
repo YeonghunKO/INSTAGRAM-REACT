@@ -26,6 +26,7 @@
     "react-scripts:start": "sleep 5 && react-scripts start",
     "react-scripts:dist": "react-scripts build",
     "start": "run-p watch:css react-scripts:start",
+    "e2e": "cypress open",
     "build": "run-s build:css react-scripts:dist",
     "test": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.4",
+    "cypress": "^6.4.0",
     "eslint": "^8.12.0",
     "eslint-plugin-react": "^7.29.4",
     "jest-watch-typeahead": "^0.6.5",

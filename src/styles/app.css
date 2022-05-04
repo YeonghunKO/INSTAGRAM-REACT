@@ -459,14 +459,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .z-10 {
   z-index: 10;
 }
+.col-span-3 {
+  grid-column: span 3 / span 3;
+}
 .col-span-2 {
   grid-column: span 2 / span 2;
 }
 .col-span-1 {
   grid-column: span 1 / span 1;
-}
-.col-span-3 {
-  grid-column: span 3 / span 3;
 }
 .m-3 {
   margin: 0.75rem;
@@ -577,14 +577,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-4 {
   height: 1rem;
 }
-.h-40 {
-  height: 10rem;
+.h-20 {
+  height: 5rem;
 }
 .h-12 {
   height: 3rem;
-}
-.h-20 {
-  height: 5rem;
 }
 .w-full {
   width: 100%;
@@ -598,35 +595,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-20 {
   width: 5rem;
 }
-.w-3\/5 {
-  width: 60%;
-}
-.w-2\/5 {
-  width: 40%;
+.w-3\/6 {
+  width: 50%;
 }
 .w-0 {
   width: 0px;
 }
-.w-9\/12 {
-  width: 75%;
-}
-.w-40 {
-  width: 10rem;
-}
 .w-12 {
   width: 3rem;
-}
-.w-4 {
-  width: 1rem;
-}
-.w-10 {
-  width: 2.5rem;
-}
-.w-1\/5 {
-  width: 20%;
-}
-.w-3\/6 {
-  width: 50%;
 }
 .max-w-screen-lg {
   max-width: 1024px;
@@ -644,11 +620,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 .flex-row {
   flex-direction: row;
@@ -887,12 +863,12 @@ body {
     display: block;
   }
 
-  .lg\:flex {
-    display: flex;
-  }
-
   .lg\:h-40 {
     height: 10rem;
+  }
+
+  .lg\:w-3\/5 {
+    width: 60%;
   }
 
   .lg\:w-2\/5 {
@@ -903,16 +879,8 @@ body {
     width: 75%;
   }
 
-  .lg\:w-8 {
-    width: 2rem;
-  }
-
   .lg\:w-40 {
     width: 10rem;
-  }
-
-  .lg\:w-3\/5 {
-    width: 60%;
   }
 
   .lg\:grid-cols-3 {
@@ -923,17 +891,8 @@ body {
     flex-direction: row;
   }
 
-  .lg\:flex-col {
-    flex-direction: column;
-  }
-
   .lg\:px-0 {
     padding-left: 0px;
     padding-right: 0px;
-  }
-
-  .lg\:px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
   }
 }
