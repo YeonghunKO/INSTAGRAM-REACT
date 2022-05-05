@@ -15,7 +15,10 @@ function Photos({ photos }) {
             <rect x="260" y="110" rx="5" ry="5" width="120" height="100" />
           </ContentLoader>
         )}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-12 px-3 lg:px-0">
+        <div
+          data-testid="photos"
+          className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-12 px-3 lg:px-0"
+        >
           {photos?.length
             ? photos.map((photo, ind) => (
                 <div
