@@ -1,6 +1,6 @@
 describe('Login', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
 
     cy.get('body').within(() => {
       cy.get('div').should('contain.text', "Don't have an account? Sign up");
@@ -17,9 +17,9 @@ describe('Login', () => {
       cy.get('input:first')
         .should('have.attr', 'placeholder', 'Email address')
         .type('yhko1988@gmail.com');
-      cy.get('input:first')
+      cy.get('input:second')
         .should('have.attr', 'placeholder', 'Email password')
-        .type('test123');
+        .type('password');
       cy.get('button').click();
       cy.wait(3000);
     });

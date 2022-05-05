@@ -78,6 +78,7 @@ function Signup() {
 
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
+        setIsLoading(false);
         setUsername('');
         setEmailAddress('');
         setPassword('');
