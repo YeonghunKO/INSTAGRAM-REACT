@@ -1,10 +1,4 @@
-import {
-  render,
-  waitFor,
-  fireEvent,
-  act,
-  screen,
-} from '@testing-library/react';
+import { render, waitFor, fireEvent } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Dashboard from '../../pages/Dashboard';
