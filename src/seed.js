@@ -67,6 +67,6 @@ export async function seedDatabase(db, addDoc, setDoc, doc, collection) {
       userLongitude: '74.0060°',
       dateCreated: Date.now(),
     };
-    await addDoc(collection(db, 'photos'), photoData);
+    // await addDoc(collection(db, 'photos'), photoData);
   }
 }
