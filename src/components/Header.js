@@ -14,12 +14,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import UpgradeIcon from '@mui/icons-material/Upgrade';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import Stack from '@mui/material/Stack';
+
 import Snackbar from '@mui/material/Snackbar';
 
 import { debounce } from '../helpers/debounce';
 import { getItem, setItem, removeItem } from '../helpers/storage';
 
 import { Alert } from '../styles/Alert';
+
+import ReactImageUploading from 'react-images-uploading';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header() {
@@ -28,16 +35,23 @@ function Header() {
   const [dialogType, setDialogType] = useState('');
 
   const savedDescription = getItem('post-description');
+  const savedPicture = getItem('instagram-picture');
+
   const [snackBarOpen, setSnackBarOpen] = useState(false);
 
-  const [image, setImage] = useState('');
+  const [images, setImages] = useState('');
   const [description, setDescription] = useState('');
 
-  const handleClose = () => {
+  const onImageChange = (imageList, addUpdateIndex) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex);
+    setImages(imageList);
+  };
+  const handleDialogClose = () => {
     setDialogType(false);
   };
 
-  const handleOpen = () => {
+  const handleDialogOpen = () => {
     if (savedDescription) {
       setDialogType('showSavedDescription');
     } else {
@@ -47,19 +61,23 @@ function Header() {
 
   const continueWithSaveDescription = () => {
     setDescription(savedDescription);
+    setImages(savedPicture);
     setDialogType('choosePicture');
   };
 
   const notContinueWithSaveDescription = () => {
     setDialogType('choosePicture');
     setDescription('');
+    setImages([]);
     removeItem('post-description');
+    removeItem('instagram-picture');
   };
 
   const handlePostDescriptionChnage = evt => {
     setDescription(evt.target.value);
     debounce(() => {
       setItem('post-description', description);
+      setItem('instagram-picture', images);
       setSnackBarOpen(true);
     }, 1000);
   };
@@ -97,7 +115,7 @@ function Header() {
                 {!username && (
                   <>
                     <svg
-                      onClick={handleOpen}
+                      onClick={handleDialogOpen}
                       xmlns="http://www.w3.org/2000/svg"
                       className="w-8 mr-6 mt-[2px] text-black-light cursor-pointer"
                       fill="none"
@@ -113,7 +131,7 @@ function Header() {
                     </svg>
                     <Dialog
                       open={dialogType === 'showSavedDescription'}
-                      onClose={handleClose}
+                      onClose={handleDialogClose}
                       aria-labelledby="alert-dialog-title"
                       aria-describedby="alert-dialog-description"
                     >
@@ -134,20 +152,87 @@ function Header() {
                     </Dialog>
                     <Dialog
                       open={dialogType === 'choosePicture'}
-                      onClose={handleClose}
+                      onClose={handleDialogClose}
                     >
                       <DialogTitle>Shine your life</DialogTitle>
                       <DialogContent>
                         <DialogContentText>
-                          choose picture and writed down description about the
+                          Choose picture and write down description about the
                           picture
                         </DialogContentText>
+                        <ReactImageUploading
+                          value={images}
+                          onChange={onImageChange}
+                          dataURLKey="data_url"
+                        >
+                          {({
+                            imageList,
+                            onImageUpload,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                          }) => (
+                            // write your building UI
+                            <div className="upload__image-wrapper">
+                              <Button
+                                startIcon={<InsertPhotoIcon />}
+                                style={
+                                  isDragging
+                                    ? { color: 'red', marginTop: '1rem' }
+                                    : { marginTop: '1rem' }
+                                }
+                                onClick={onImageUpload}
+                                {...dragProps}
+                                variant="outlined"
+                                className="my-1"
+                                fullWidth={true}
+                              >
+                                {' '}
+                                Click or Drop here
+                              </Button>
+                              &nbsp;
+                              {imageList.map((image, index) => (
+                                <div key={index} className="image-item">
+                                  <img
+                                    src={image.data_url}
+                                    alt=""
+                                    className="w-full"
+                                  />
+                                  <div className="image-item__btn-wrapper">
+                                    <Stack
+                                      className="mt-3"
+                                      direction="row"
+                                      spacing={2}
+                                    >
+                                      <Button
+                                        onClick={() => onImageUpdate(index)}
+                                        variant="contained"
+                                        endIcon={<UpgradeIcon />}
+                                      >
+                                        Update
+                                      </Button>
+                                      <Button
+                                        onClick={() => onImageRemove(index)}
+                                        variant="contained"
+                                        color="error"
+                                        endIcon={<DeleteForeverIcon />}
+                                      >
+                                        Remove
+                                      </Button>
+                                    </Stack>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </ReactImageUploading>
                         <TextField
                           autoFocus
                           margin="dense"
-                          id="name"
-                          label="Email Address"
-                          type="email"
+                          id="description"
+                          label="Picture Description"
+                          type="text"
                           fullWidth
                           variant="standard"
                           onChange={handlePostDescriptionChnage}
@@ -155,8 +240,22 @@ function Header() {
                         />
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handleClose}>Post</Button>
+                        <Stack direction="row" spacing={1}>
+                          <Button
+                            onClick={handleDialogClose}
+                            variant="contained"
+                            color="error"
+                          >
+                            Cancel
+                          </Button>
+                          <Button
+                            onClick={handleDialogClose}
+                            variant="contained"
+                            style={{ marginRight: '.3rem' }}
+                          >
+                            Post
+                          </Button>
+                        </Stack>
                       </DialogActions>
                     </Dialog>
                     <Snackbar
