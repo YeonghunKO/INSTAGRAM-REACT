@@ -2,6 +2,10 @@ import { useContext, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 
+import loggedInContext from '../context/loggedInUser';
+
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import UserContext from '../context/currentUser';
 import * as ROUTES from '../constants/routes';
 import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
@@ -13,6 +17,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
@@ -23,6 +28,7 @@ import Snackbar from '@mui/material/Snackbar';
 
 import { debounce } from '../helpers/debounce';
 import { getItem, setItem, removeItem } from '../helpers/storage';
+import { getGeoLocation } from '../helpers/getGeoLocation';
 
 import { Alert } from '../styles/Alert';
 
@@ -31,6 +37,10 @@ import ReactImageUploading from 'react-images-uploading';
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header() {
   const { username } = useParams();
+
+  const { user: loggedInUser } = useContext(UserContext);
+
+  const { uid } = loggedInUser;
 
   const [dialogType, setDialogType] = useState('');
 
@@ -44,7 +54,7 @@ function Header() {
 
   const onImageChange = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex);
+    // console.log(imageList[0].file.name, addUpdateIndex);
     setImages(imageList);
   };
   const handleDialogClose = () => {
@@ -82,11 +92,43 @@ function Header() {
     }, 1000);
   };
 
+  const handlePost = async () => {
+    // if(images) {
+    //   const storage = getStorage();
+    //   const storageRef = ref(storage, `userPhotos/${displayName}/${images[0].file.name}`);
+    //   const urlStorageRef = ref(
+    //     storage,
+    //     `gs://instagram-d02c0.appspot.com/userPhotos/${displayName}/${images[0].file.name}`
+    //   );
+    //   await uploadBytes(storageRef, profileFile);
+
+    //   const imageSrc = await getDownloadURL(urlStorageRef);
+    const { latitude, longitude } = await getGeoLocation();
+
+    const newPhotoObj = {
+      caption: description,
+      comments: [],
+      dateCreated: Date.now(),
+      imageSrc: 'blahblah',
+      likes: [],
+      photoId: images[0].file.name,
+      userId: uid,
+      userLatitude: latitude,
+      userLongitude: longitude,
+    };
+
+    console.log(newPhotoObj);
+
+    // const userRef = doc(db, 'users', username);
+    // await setDoc(userRef, newUsers, { merge: true });
+    // setImages([]);
+    // }
+  };
+
   const handleSnackBarClose = () => {
     setSnackBarOpen(false);
   };
 
-  const { user: loggedInUser } = useContext(UserContext);
   const navigate = useNavigate();
   const onClickHeaderHandle = () => {
     const auth = getAuth();
@@ -114,21 +156,10 @@ function Header() {
               <>
                 {!username && (
                   <>
-                    <svg
+                    <AddToPhotosOutlinedIcon
                       onClick={handleDialogOpen}
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-8 mr-6 mt-[2px] text-black-light cursor-pointer"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                      />
-                    </svg>
+                      className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 !w-10 h-8"
+                    />
                     <Dialog
                       open={dialogType === 'showSavedDescription'}
                       onClose={handleDialogClose}
@@ -249,7 +280,7 @@ function Header() {
                             Cancel
                           </Button>
                           <Button
-                            onClick={handleDialogClose}
+                            onClick={handlePost}
                             variant="contained"
                             style={{ marginRight: '.3rem' }}
                           >
