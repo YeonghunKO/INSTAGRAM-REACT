@@ -1,10 +1,18 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
+import { collection, addDoc } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  uploadString,
+} from 'firebase/storage';
+
+import { db } from '../lib/firebase';
 
 import loggedInContext from '../context/loggedInUser';
-
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import UserContext from '../context/currentUser';
 import * as ROUTES from '../constants/routes';
@@ -28,11 +36,13 @@ import Snackbar from '@mui/material/Snackbar';
 
 import { debounce } from '../helpers/debounce';
 import { getItem, setItem, removeItem } from '../helpers/storage';
-import { getGeoLocation } from '../helpers/getGeoLocation';
+import { getLocation } from '../helpers/getGeoLocation';
 
 import { Alert } from '../styles/Alert';
 
 import ReactImageUploading from 'react-images-uploading';
+
+import ReactLoader from '../components/Loader';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header() {
@@ -40,14 +50,17 @@ function Header() {
 
   const { user: loggedInUser } = useContext(UserContext);
 
-  const { uid } = loggedInUser;
+  const { uid, displayName } = loggedInUser;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const [dialogType, setDialogType] = useState('');
 
   const savedDescription = getItem('post-description');
   const savedPicture = getItem('instagram-picture');
-
-  const [snackBarOpen, setSnackBarOpen] = useState(false);
+  console.log(savedPicture);
+  const [localSnackBarOpen, setLocalSnackBarOpen] = useState(false);
+  const [postSnackBarOpen, setpostSnackBarOpen] = useState(false);
 
   const [images, setImages] = useState('');
   const [description, setDescription] = useState('');
@@ -55,6 +68,12 @@ function Header() {
   const onImageChange = (imageList, addUpdateIndex) => {
     // data for submit
     // console.log(imageList[0].file.name, addUpdateIndex);
+    setItem(
+      'instagram-picture',
+      imageList.length
+        ? [{ ...imageList[0], imageName: imageList[0]?.file.name }]
+        : null
+    );
     setImages(imageList);
   };
   const handleDialogClose = () => {
@@ -86,47 +105,64 @@ function Header() {
   const handlePostDescriptionChnage = evt => {
     setDescription(evt.target.value);
     debounce(() => {
-      setItem('post-description', description);
-      setItem('instagram-picture', images);
-      setSnackBarOpen(true);
-    }, 1000);
+      setItem('post-description', evt.target.value);
+
+      setLocalSnackBarOpen(true);
+    }, 500);
   };
 
   const handlePost = async () => {
-    // if(images) {
-    //   const storage = getStorage();
-    //   const storageRef = ref(storage, `userPhotos/${displayName}/${images[0].file.name}`);
-    //   const urlStorageRef = ref(
-    //     storage,
-    //     `gs://instagram-d02c0.appspot.com/userPhotos/${displayName}/${images[0].file.name}`
-    //   );
-    //   await uploadBytes(storageRef, profileFile);
+    setIsLoading(true);
+    if (images) {
+      const storage = getStorage();
+      const storageRef = ref(
+        storage,
+        `userPhotos/${displayName}/${
+          images[0].file.name || images[0].imageName
+        }`
+      );
+      const urlStorageRef = ref(
+        storage,
+        `gs://instagram-d02c0.appspot.com/userPhotos/${displayName}/${
+          images[0].file.name || images[0].imageName
+        }`
+      );
 
-    //   const imageSrc = await getDownloadURL(urlStorageRef);
-    const { latitude, longitude } = await getGeoLocation();
+      await uploadString(storageRef, images[0].data_url, 'data_url');
 
-    const newPhotoObj = {
-      caption: description,
-      comments: [],
-      dateCreated: Date.now(),
-      imageSrc: 'blahblah',
-      likes: [],
-      photoId: images[0].file.name,
-      userId: uid,
-      userLatitude: latitude,
-      userLongitude: longitude,
-    };
+      const imageSrc = await getDownloadURL(urlStorageRef);
+      const { latitude, longitude, location } = await getLocation();
 
-    console.log(newPhotoObj);
+      const newPhotoObj = {
+        caption: description,
+        comments: [],
+        dateCreated: Date.now(),
+        imageSrc,
+        likes: [],
+        photoId: images[0]?.imageName,
+        userId: uid,
+        userLatitude: latitude,
+        userLongitude: longitude,
+        location,
+      };
 
-    // const userRef = doc(db, 'users', username);
-    // await setDoc(userRef, newUsers, { merge: true });
-    // setImages([]);
-    // }
+      await addDoc(collection(db, 'photos'), newPhotoObj);
+
+      setpostSnackBarOpen(true);
+      setImages([]);
+      setDescription('');
+      setDialogType('');
+      removeItem('post-description');
+      removeItem('instagram-picture');
+      setIsLoading(false);
+    }
   };
 
-  const handleSnackBarClose = () => {
-    setSnackBarOpen(false);
+  const handleLocalSnackBarClose = () => {
+    setLocalSnackBarOpen(false);
+  };
+  const handlePostSnackBarClose = () => {
+    setpostSnackBarOpen(false);
   };
 
   const navigate = useNavigate();
@@ -138,6 +174,7 @@ function Header() {
 
   return (
     <div className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
+      {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center cursor-pointer">
@@ -168,8 +205,8 @@ function Header() {
                     >
                       <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                          You already have saved description. Do you want to
-                          continue with it?
+                          You already have saved post. Do you want to continue
+                          with it?
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
@@ -283,6 +320,7 @@ function Header() {
                             onClick={handlePost}
                             variant="contained"
                             style={{ marginRight: '.3rem' }}
+                            disabled={!images || !description}
                           >
                             Post
                           </Button>
@@ -290,16 +328,29 @@ function Header() {
                       </DialogActions>
                     </Dialog>
                     <Snackbar
-                      open={snackBarOpen}
-                      autoHideDuration={3000}
-                      onClose={handleSnackBarClose}
+                      open={localSnackBarOpen}
+                      autoHideDuration={1000}
+                      onClose={handleLocalSnackBarClose}
                     >
                       <Alert
-                        onClose={handleSnackBarClose}
+                        onClose={handleLocalSnackBarClose}
                         severity="success"
                         sx={{ width: '100%' }}
                       >
-                        description saved !
+                        Description saved !
+                      </Alert>
+                    </Snackbar>
+                    <Snackbar
+                      open={postSnackBarOpen}
+                      autoHideDuration={3000}
+                      onClose={handlePostSnackBarClose}
+                    >
+                      <Alert
+                        onClose={handlePostSnackBarClose}
+                        severity="info"
+                        sx={{ width: '100%' }}
+                      >
+                        Post uploaded!
                       </Alert>
                     </Snackbar>
                   </>

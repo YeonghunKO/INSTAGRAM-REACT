@@ -86,14 +86,13 @@ async function getFollowingPhotos(userId, following) {
   // [2,3]
   const result = query(
     collection(db, 'photos'),
-    where('userId', 'in', following)
+    where('userId', 'in', [...following, userId])
   );
   const snapShot = await getDocs(result);
   const followingUserPhotos = snapShot.docs.map(photo => ({
     ...photo.data(),
     docId: photo.id,
   }));
-
   const photosWithUserDetails = await Promise.all(
     followingUserPhotos.map(async photo => {
       let userLikedPhoto = false;
