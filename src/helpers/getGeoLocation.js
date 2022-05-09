@@ -1,11 +1,23 @@
-export async function getGeoLocation() {
-  let latitude;
-  let longitude;
-  navigator.geolocation.getCurrentPosition(pos => {
-    latitude = pos.coords.latitude;
-    longitude = pos.coords.longitude;
-    return { latitude, longitude };
+async function getGeoLocation() {
+  return new Promise((res, rej) => {
+    navigator.geolocation.getCurrentPosition(res, rej);
   });
-  console.log({ latitude, longitude });
-  return { latitude, longitude };
+}
+
+export async function getLocation() {
+  const {
+    coords: { latitude, longitude },
+  } = await getGeoLocation();
+
+  const locationData = await fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+  );
+
+  const jsonLocationData = await locationData.json();
+  const { countryName, principalSubdivision } = jsonLocationData;
+  return {
+    latitude,
+    longitude,
+    location: `${principalSubdivision},${countryName}`,
+  };
 }
