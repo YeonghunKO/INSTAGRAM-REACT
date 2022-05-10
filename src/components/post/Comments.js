@@ -4,7 +4,13 @@ import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import AddComments from './AddComments';
 
-function Comments({ docId, comments: allComments, posted, commentInput }) {
+function Comments({
+  docId,
+  comments: allComments,
+  posted,
+  commentInput,
+  location,
+}) {
   const [comments, setComments] = useState(allComments);
   const [commentsSlice, setCommentsSlice] = useState(3);
   const showNextComments = () => {
@@ -39,6 +45,28 @@ function Comments({ docId, comments: allComments, posted, commentInput }) {
         <p className="text-gray-base font-semibold uppercase text-xs mt-2">
           {formatDistance(posted, new Date())} ago
         </p>
+        <div className="mt-1">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="inline-block mr-1 w-3 select-none cursor-pointer focus:outline-none"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+            />
+          </svg>
+          <span className="text-[12px]">{location}</span>
+        </div>
       </div>
       <AddComments
         docId={docId}

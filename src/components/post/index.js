@@ -16,6 +16,7 @@ function Post({ photoObj }) {
     comments,
     dateCreated,
     userPhotoUrl,
+    location,
   } = photoObj;
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
@@ -36,6 +37,7 @@ function Post({ photoObj }) {
         comments={comments}
         posted={dateCreated}
         commentInput={commentInput}
+        location={location}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-function Footer({ caption, username }) {
+function Footer({ caption, username, location }) {
   return (
     <div className="p-4 pt-2 pb-1">
       <span className="mr-1 font-bold">{username}</span>
