@@ -74,7 +74,11 @@ function Header() {
         ? [{ ...imageList[0], imageName: imageList[0]?.file.name }]
         : null
     );
-    setImages(imageList);
+    if (imageList.length) {
+      setImages([{ ...imageList[0], imageName: imageList[0]?.file.name }]);
+    } else {
+      setImages([]);
+    }
   };
   const handleDialogClose = () => {
     setDialogType(false);
@@ -154,8 +158,8 @@ function Header() {
       setDialogType('');
       removeItem('post-description');
       removeItem('instagram-picture');
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   const handleLocalSnackBarClose = () => {
