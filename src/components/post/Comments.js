@@ -85,4 +85,5 @@ Comments.propTypes = {
   comments: PropTypes.array.isRequired,
   posted: PropTypes.number.isRequired,
   commentInput: PropTypes.object.isRequired,
+  location: PropTypes.string.isRequired,
 };

@@ -1,14 +1,9 @@
-import { useContext } from 'react';
 import { Instagram } from 'react-content-loader';
 import Post from '../components/post';
-import usePhotos from '../hooks/usePhotos';
 
-import loggedInUserContext from '../context/loggedInUser';
+import PropTypes from 'prop-types';
 
-function Timeline() {
-  const { activeUser: { following, userId } = {} } =
-    useContext(loggedInUserContext);
-  const { photos } = usePhotos(userId, following);
+function Timeline({ photos, following }) {
   return (
     <div className="col-span-3 lg:col-span-2">
       {!photos && !following ? (
@@ -30,3 +25,8 @@ function Timeline() {
 }
 
 export default Timeline;
+
+Timeline.propTypes = {
+  photos: PropTypes.array,
+  following: PropTypes.array,
+};

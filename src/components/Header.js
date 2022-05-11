@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 import { useContext, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
@@ -45,12 +47,11 @@ import ReactImageUploading from 'react-images-uploading';
 import ReactLoader from '../components/Loader';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
-function Header() {
+function Header({ setPostPhotos }) {
   const { username } = useParams();
 
   const { user: loggedInUser } = useContext(UserContext);
-
-  const { uid, displayName } = loggedInUser;
+  const { uid, displayName, photoURL } = loggedInUser;
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -58,7 +59,6 @@ function Header() {
 
   const savedDescription = getItem('post-description');
   const savedPicture = getItem('instagram-picture');
-  console.log(savedPicture);
   const [localSnackBarOpen, setLocalSnackBarOpen] = useState(false);
   const [postSnackBarOpen, setpostSnackBarOpen] = useState(false);
 
@@ -66,8 +66,6 @@ function Header() {
   const [description, setDescription] = useState('');
 
   const onImageChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    // console.log(imageList[0].file.name, addUpdateIndex);
     setItem(
       'instagram-picture',
       imageList.length
@@ -137,7 +135,7 @@ function Header() {
       const imageSrc = await getDownloadURL(urlStorageRef);
       const { latitude, longitude, location } = await getLocation();
 
-      const newPhotoObj = {
+      let newPhotoObj = {
         caption: description,
         comments: [],
         dateCreated: Date.now(),
@@ -150,7 +148,15 @@ function Header() {
         location,
       };
 
-      await addDoc(collection(db, 'photos'), newPhotoObj);
+      const { id } = await addDoc(collection(db, 'photos'), newPhotoObj);
+
+      newPhotoObj = {
+        ...newPhotoObj,
+        docId: id,
+        username: displayName,
+        userLikedPhoto: false,
+        userPhotoUrl: photoURL,
+      };
 
       setpostSnackBarOpen(true);
       setImages([]);
@@ -158,6 +164,7 @@ function Header() {
       setDialogType('');
       removeItem('post-description');
       removeItem('instagram-picture');
+      setPostPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
     }
     setIsLoading(false);
   };
@@ -442,3 +449,7 @@ function Header() {
 }
 
 export default Header;
+
+Header.propType = {
+  setPostPhotos: PropTypes.func.isRequired,
+};
