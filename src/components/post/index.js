@@ -23,7 +23,7 @@ function Post({ photoObj }) {
   return (
     <div className="rounded border w-full lg:w-9/12 bg-white border-gray-primary mb-12">
       <Header username={username} userPhotoUrl={userPhotoUrl} />
-      <img src={imageSrc} alt={caption} />
+      <img src={imageSrc} alt={caption} className="w-full" />
       <Actions
         docId={docId}
         // eslint-disable-next-line react/prop-types

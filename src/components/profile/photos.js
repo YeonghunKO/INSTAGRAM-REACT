@@ -33,7 +33,7 @@ function Photos({ photos }) {
                     className="h-9/12 mb-3 cursor-pointer relative group"
                   >
                     <img
-                      className="rounded h-full"
+                      className="rounded h-full w-full"
                       src={photo.imageSrc}
                       alt={photo.caption}
                     />
