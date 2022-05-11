@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 
 import PostPhotosContext from '../context/postPhotos';
 
@@ -7,10 +7,23 @@ import Post from '../components/post';
 
 import PropTypes from 'prop-types';
 
+import useScroll from '../hooks/useScroll';
+
 function Timeline({ following }) {
-  const { postPhotos } = useContext(PostPhotosContext);
+  let photos = useContext(PostPhotosContext);
+  photos = photos.postPhotos;
+  const [postPhotos, setPhotos] = useState(photos);
+  console.log(postPhotos);
+  const sectionEle = useRef();
+  const [scrollY, innerHeight] = useScroll();
+
+  if (sectionEle.current) {
+    if (scrollY + innerHeight >= sectionEle.current.offsetHeight - 30) {
+    }
+  }
+
   return (
-    <section className="col-span-3 lg:col-span-2">
+    <section ref={sectionEle} className="col-span-3 lg:col-span-2">
       {!postPhotos && !following ? (
         Array.from({ length: 4 }, (v, i) => 0).map((_, ind) => (
           <Instagram key={ind} />
