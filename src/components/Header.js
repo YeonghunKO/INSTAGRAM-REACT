@@ -7,14 +7,11 @@ import { collection, addDoc } from 'firebase/firestore';
 import {
   getStorage,
   ref,
-  uploadBytes,
   getDownloadURL,
   uploadString,
 } from 'firebase/storage';
 
 import { db } from '../lib/firebase';
-
-import loggedInContext from '../context/loggedInUser';
 
 import UserContext from '../context/currentUser';
 import * as ROUTES from '../constants/routes';
@@ -66,16 +63,20 @@ function Header({ setPostPhotos }) {
   const [description, setDescription] = useState('');
 
   const onImageChange = (imageList, addUpdateIndex) => {
-    setItem(
-      'instagram-picture',
-      imageList.length
-        ? [{ ...imageList[0], imageName: imageList[0]?.file.name }]
-        : null
-    );
-    if (imageList.length) {
-      setImages([{ ...imageList[0], imageName: imageList[0]?.file.name }]);
-    } else {
-      setImages([]);
+    try {
+      setItem(
+        'instagram-picture',
+        imageList.length
+          ? [{ ...imageList[0], imageName: imageList[0]?.file.name }]
+          : null
+      );
+      if (imageList.length) {
+        setImages([{ ...imageList[0], imageName: imageList[0]?.file.name }]);
+      } else {
+        setImages([]);
+      }
+    } catch (error) {
+      alert('Picture size is too big.');
     }
   };
   const handleDialogClose = () => {
@@ -450,6 +451,6 @@ function Header({ setPostPhotos }) {
 
 export default Header;
 
-Header.propType = {
+Header.propTypes = {
   setPostPhotos: PropTypes.func.isRequired,
 };
