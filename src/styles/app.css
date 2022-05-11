@@ -632,6 +632,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-6 {
   height: 1.5rem !important;
 }
+.h-4 {
+  height: 1rem !important;
+}
+.h-8 {
+  height: 2rem !important;
+}
+.h-6 {
+  height: 1.5rem !important;
+}
 .w-full {
   width: 100% !important;
 }
@@ -658,6 +667,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-12 {
   width: 3rem !important;
+}
+.w-8 {
+  width: 2rem !important;
+}
+.w-6 {
+  width: 1.5rem !important;
 }
 .w-8 {
   width: 2rem !important;
@@ -924,6 +939,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .outline-none {
   outline: 2px solid transparent !important;
   outline-offset: 2px !important;
+}
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow) !important;
 }
 .transition-all {
   transition-property: all !important;

@@ -1,12 +1,17 @@
+import { useContext } from 'react';
+
+import PostPhotosContext from '../context/postPhotos';
+
 import { Instagram } from 'react-content-loader';
 import Post from '../components/post';
 
 import PropTypes from 'prop-types';
 
-function Timeline({ photos, following }) {
+function Timeline({ following }) {
+  const { postPhotos } = useContext(PostPhotosContext);
   return (
     <div className="col-span-3 lg:col-span-2">
-      {!photos && !following ? (
+      {!postPhotos && !following ? (
         Array.from({ length: 4 }, (v, i) => 0).map((_, ind) => (
           <Instagram key={ind} />
         ))
@@ -15,8 +20,8 @@ function Timeline({ photos, following }) {
           Follow other people to see Photos
         </p>
       ) : (
-        photos &&
-        photos.map(photoObj => (
+        postPhotos &&
+        postPhotos.map(photoObj => (
           <Post key={photoObj.docId} photoObj={photoObj} />
         ))
       )}
@@ -27,6 +32,5 @@ function Timeline({ photos, following }) {
 export default Timeline;
 
 Timeline.propTypes = {
-  photos: PropTypes.array,
   following: PropTypes.array,
 };

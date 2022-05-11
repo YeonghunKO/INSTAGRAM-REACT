@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Timeline from '../components/Timeline';
 import Sidebar from '../components/sidebar';
 
-import useUser from '../hooks/useUser';
-
 import loggedInContext from '../context/loggedInUser';
-import usePhotos from '../hooks/usePhotos';
+import PostPhotosContext from '../context/postPhotos';
 
-import loggedInUserContext from '../context/loggedInUser';
+import usePhotos from '../hooks/usePhotos';
 
 function Dashboard({ activeUser = {} }) {
   const { userId, following } = activeUser;
@@ -27,18 +25,19 @@ function Dashboard({ activeUser = {} }) {
   }, [photos, following]);
   return (
     <loggedInContext.Provider value={{ activeUser }}>
-      <div className="bg-gray-background">
-        <Header setPostPhotos={setPostPhotos} />
-        <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg px-4 lg:px-0">
-          <Timeline photos={postPhotos} following={postfollowing} />
-          <Sidebar setPostFollowing={setPostFollowing} />
+      <PostPhotosContext.Provider value={{ postPhotos, setPostPhotos }}>
+        <div className="bg-gray-background">
+          <Header setPostPhotos={setPostPhotos} />
+          <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg px-4 lg:px-0">
+            <Timeline photos={postPhotos} following={postfollowing} />
+            <Sidebar />
+          </div>
         </div>
-      </div>
+      </PostPhotosContext.Provider>
     </loggedInContext.Provider>
   );
 }
-// setPhotos={setPostPhotos}
-// following={postfollowing} photos={postPhotos}
+
 export default Dashboard;
 
 Dashboard.propTypes = {

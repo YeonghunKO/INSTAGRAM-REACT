@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import PostPhotosContext from '../../context/postPhotos';
+import loggedInContext from '../../context/loggedInUser';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,8 +11,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 
-function Header({ username, userPhotoUrl }) {
+import { doc, deleteDoc } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+
+function Header({ postUsername, userPhotoUrl, docId }) {
   const [open, setOpen] = useState(false);
+
+  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
+  const {
+    activeUser: { username },
+  } = useContext(loggedInContext);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,15 +30,22 @@ function Header({ username, userPhotoUrl }) {
     setOpen(false);
   };
 
+  const handleDelete = async () => {
+    const filteredPhotos = postPhotos.filter(photo => photo.docId !== docId);
+    setPostPhotos(filteredPhotos);
+    setOpen(false);
+    await deleteDoc(doc(db, 'photos', docId));
+  };
+
   return (
     <div className="flex justify-between items-center border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex items-center">
-        <Link to={`p/${username}`} className="flex items-center">
+        <Link to={`p/${postUsername}`} className="flex items-center">
           <img src={userPhotoUrl} className="rounded-full h-8 w-8 flex mr-3" />
-          <p className="font-bold">{username}</p>
+          <p className="font-bold">{postUsername}</p>
         </Link>
       </div>
-      <div>
+      <div className={`${postUsername !== username && 'hidden'}`}>
         <svg
           onClick={handleClickOpen}
           className="h-6 w-6 cursor-pointer hover:text-red-primary"
@@ -57,7 +75,7 @@ function Header({ username, userPhotoUrl }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleDelete} autoFocus>
             Yes
           </Button>
         </DialogActions>
@@ -69,6 +87,7 @@ function Header({ username, userPhotoUrl }) {
 export default Header;
 
 Header.propTypes = {
-  username: PropTypes.string.isRequired,
+  postUsername: PropTypes.string.isRequired,
   userPhotoUrl: PropTypes.string.isRequired,
+  docId: PropTypes.string.isRequired,
 };
