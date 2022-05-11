@@ -18,6 +18,7 @@ function Header({ postUsername, userPhotoUrl, docId }) {
   const [open, setOpen] = useState(false);
 
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
+
   const {
     activeUser: { username },
   } = useContext(loggedInContext);

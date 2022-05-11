@@ -60,5 +60,6 @@ Post.propTypes = {
     comments: PropTypes.array.isRequired,
     dateCreated: PropTypes.number.isRequired,
     userPhotoUrl: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
   }),
 };

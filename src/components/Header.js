@@ -185,7 +185,7 @@ function Header({ setPostPhotos }) {
   };
 
   return (
-    <div className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
+    <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
@@ -445,7 +445,7 @@ function Header({ setPostPhotos }) {
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
 
