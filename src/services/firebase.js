@@ -105,7 +105,6 @@ async function getFollowingPhotos(userId, following) {
     })
   );
 
-  console.log(photosWithUserDetails);
   return photosWithUserDetails;
 }
 
