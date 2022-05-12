@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import Actions from './Actions';
@@ -47,7 +47,7 @@ function Post({ photoObj }) {
   );
 }
 
-export default Post;
+export default memo(Post);
 
 Post.propTypes = {
   photoObj: PropTypes.shape({
