@@ -218,22 +218,22 @@ function Header({ setPostPhotos }) {
       {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between items-center h-full">
-          <div className="text-gray-700 text-center flex items-center cursor-pointer">
-            <h1 className="flex justify-center w-full">
+          <div className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 ">
+            <h1 className="flex justify-center">
               <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
                 <img
                   src={INSTAGRAM_LOGO}
                   alt="Instagram"
-                  className="mt-2 w-6/12"
+                  className="mt-2 lg:w-6/12"
                 />
               </Link>
             </h1>
           </div>
 
           {!username && (
-            <div className="mr-3 lg:mr-0">
+            <div className="xs:w-3/6 lg:w-2/6 mr-3 lg:mr-0">
               <OutlinedInput
-                className="h-10 "
+                className="h-10 xs:h-8"
                 placeholder="search user here"
                 id="description"
                 color="primary"
@@ -258,7 +258,7 @@ function Header({ setPostPhotos }) {
                   <>
                     <AddToPhotosOutlinedIcon
                       onClick={handleDialogOpen}
-                      className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 !w-4 lg:!w-8 h-8"
+                      className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 w-6 lg:w-8 h-8 xs:mr-2"
                     />
                     <Dialog
                       open={dialogType === 'showSavedDescription'}
@@ -420,7 +420,7 @@ function Header({ setPostPhotos }) {
 
                 <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
                   <svg
-                    className="w-4 lg:w-8 mr-6 text-black-light cursor-pointer"
+                    className="mr-6 text-black-light cursor-pointer w-6 xs:mr-2 lg:w-8 "
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -446,7 +446,7 @@ function Header({ setPostPhotos }) {
                   }}
                 >
                   <svg
-                    className="w-4 lg:w-8 lg:mr-6 text-black-light cursor-pointer"
+                    className="w-6 text-black-light cursor-pointer xs:mr-2 lg:w-8 lg:mr-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -464,7 +464,7 @@ function Header({ setPostPhotos }) {
                   <div className="flex items-center cursor-pointer">
                     <Link to={`/p/${loggedInUser?.displayName}`}>
                       <img
-                        className=" rounded-full h-8 w-8 flex"
+                        className=" rounded-full h-8 w-8 xs:h-7 xs:w-7 flex"
                         src={loggedInUser?.photoURL}
                         alt={`${loggedInUser?.displayName} profile`}
                         onError={evt => {
