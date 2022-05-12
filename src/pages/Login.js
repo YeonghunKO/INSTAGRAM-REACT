@@ -16,7 +16,11 @@ function Login(props) {
     try {
       const auth = getAuth(); //
       // console.log(auth);
-      await signInWithEmailAndPassword(auth, emailAddress, password);
+      await signInWithEmailAndPassword(
+        auth,
+        emailAddress.trim(''),
+        password.trim('')
+      );
       navigate(ROUTES.DASHBOARD);
     } catch (error) {
       setEmailAddress('');

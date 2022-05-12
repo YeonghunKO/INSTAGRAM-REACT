@@ -54,8 +54,8 @@ function Signup() {
         const auth = getAuth();
         const createdUserResult = await createUserWithEmailAndPassword(
           auth,
-          emailAddress,
-          password
+          emailAddress.trim(''),
+          password.trim('')
         );
         await updateProfile(auth.currentUser, {
           displayName: username,
@@ -66,7 +66,7 @@ function Signup() {
           userId: createdUserResult.user.uid,
           username: username.toLowerCase(),
           fullName,
-          emailAddress: emailAddress.toLocaleLowerCase(),
+          emailAddress: emailAddress.toLocaleLowerCase().trim(''),
           following: ['2'],
           followers: [],
           dateCreated: Date.now(),
