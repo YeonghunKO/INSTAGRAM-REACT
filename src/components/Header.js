@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+
 import {
   getStorage,
   ref,
@@ -39,6 +40,16 @@ import { getLocation } from '../helpers/getGeoLocation';
 
 import { Alert } from '../styles/Alert';
 
+import OutlinedInput from '@mui/material/OutlinedInput';
+import SearchIcon from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import ReactImageUploading from 'react-images-uploading';
 
 import ReactLoader from '../components/Loader';
@@ -46,6 +57,7 @@ import ReactLoader from '../components/Loader';
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header({ setPostPhotos }) {
   const { username } = useParams();
+  const navigate = useNavigate();
 
   const { user: loggedInUser } = useContext(UserContext);
   const { uid, displayName, photoURL } = loggedInUser;
@@ -61,6 +73,20 @@ function Header({ setPostPhotos }) {
 
   const [images, setImages] = useState('');
   const [description, setDescription] = useState('');
+
+  const [searchingUsername, setSearchingUsername] = useState('');
+
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(async () => {
+    const allUsers = await getDocs(collection(db, 'users'));
+    const allUsersArr = [];
+    allUsers.forEach(doc => {
+      const { userId, username, photoURL } = doc.data();
+      allUsersArr.push({ userId, username, photoURL });
+    });
+    setAllUsers(allUsersArr);
+  }, []);
 
   const onImageChange = (imageList, addUpdateIndex) => {
     try {
@@ -105,7 +131,7 @@ function Header({ setPostPhotos }) {
     removeItem('instagram-picture');
   };
 
-  const handlePostDescriptionChnage = evt => {
+  const handlePostDescriptionChange = evt => {
     setDescription(evt.target.value);
     debounce(() => {
       setItem('post-description', evt.target.value);
@@ -177,7 +203,10 @@ function Header({ setPostPhotos }) {
     setpostSnackBarOpen(false);
   };
 
-  const navigate = useNavigate();
+  const handleSeachInputChange = evt => {
+    setSearchingUsername(evt.target.value.trim());
+  };
+
   const onClickHeaderHandle = () => {
     const auth = getAuth();
     signOut(auth);
@@ -188,7 +217,7 @@ function Header({ setPostPhotos }) {
     <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
-        <div className="flex justify-between h-full">
+        <div className="flex justify-between items-center h-full">
           <div className="text-gray-700 text-center flex items-center cursor-pointer">
             <h1 className="flex justify-center w-full">
               <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
@@ -200,6 +229,28 @@ function Header({ setPostPhotos }) {
               </Link>
             </h1>
           </div>
+
+          {!username && (
+            <div className="mr-3 lg:mr-0">
+              <OutlinedInput
+                className="h-10 "
+                placeholder="search user here"
+                id="description"
+                color="primary"
+                type="text"
+                fullWidth
+                variant="standard"
+                onChange={handleSeachInputChange}
+                value={searchingUsername}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
+              />
+            </div>
+          )}
+
           <div className="text-gray-700 text-center flex items-center">
             {loggedInUser ? (
               <>
@@ -207,7 +258,7 @@ function Header({ setPostPhotos }) {
                   <>
                     <AddToPhotosOutlinedIcon
                       onClick={handleDialogOpen}
-                      className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 !w-10 h-8"
+                      className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 !w-4 lg:!w-8 h-8"
                     />
                     <Dialog
                       open={dialogType === 'showSavedDescription'}
@@ -314,7 +365,7 @@ function Header({ setPostPhotos }) {
                           type="text"
                           fullWidth
                           variant="standard"
-                          onChange={handlePostDescriptionChnage}
+                          onChange={handlePostDescriptionChange}
                           value={description}
                         />
                       </DialogContent>
@@ -369,7 +420,7 @@ function Header({ setPostPhotos }) {
 
                 <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
                   <svg
-                    className="w-8 mr-6 text-black-light cursor-pointer"
+                    className="w-4 lg:w-8 mr-6 text-black-light cursor-pointer"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -395,7 +446,7 @@ function Header({ setPostPhotos }) {
                   }}
                 >
                   <svg
-                    className="w-8 mr-6 text-black-light cursor-pointer"
+                    className="w-4 lg:w-8 lg:mr-6 text-black-light cursor-pointer"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -413,7 +464,7 @@ function Header({ setPostPhotos }) {
                   <div className="flex items-center cursor-pointer">
                     <Link to={`/p/${loggedInUser?.displayName}`}>
                       <img
-                        className="rounded-full h-8 w-8 flex"
+                        className=" rounded-full h-8 w-8 flex"
                         src={loggedInUser?.photoURL}
                         alt={`${loggedInUser?.displayName} profile`}
                         onError={evt => {
@@ -451,5 +502,5 @@ function Header({ setPostPhotos }) {
 export default Header;
 
 Header.propTypes = {
-  setPostPhotos: PropTypes.func.isRequired,
+  setPostPhotos: PropTypes.func,
 };
