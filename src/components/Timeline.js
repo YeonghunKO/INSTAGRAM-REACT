@@ -20,7 +20,7 @@ function Timeline({ following, photos }) {
     sectionEle.current &&
     scrollY + innerHeight >= sectionEle.current.offsetHeight
   ) {
-    if (photosSlice <= postPhotos.length) {
+    if (photosSlice <= postPhotos?.length) {
       debounce(() => {
         setPhotosSlice(prevSlice => prevSlice + 2);
       }, 300);
