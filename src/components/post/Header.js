@@ -76,9 +76,7 @@ function Header({ postUsername, userPhotoUrl, docId }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleDelete} autoFocus>
-            Yes
-          </Button>
+          <Button onClick={handleDelete}>Yes</Button>
         </DialogActions>
       </Dialog>
     </div>

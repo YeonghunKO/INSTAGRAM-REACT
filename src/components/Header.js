@@ -308,7 +308,6 @@ function Header({ setPostPhotos }) {
                           )}
                         </ReactImageUploading>
                         <TextField
-                          autoFocus
                           margin="dense"
                           id="description"
                           label="Picture Description"
