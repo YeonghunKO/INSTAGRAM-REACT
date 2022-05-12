@@ -15,7 +15,6 @@ function Dashboard({ activeUser = {} }) {
 
   const [postPhotos, setPostPhotos] = useState([]);
   const [postfollowing, setPostFollowing] = useState([]);
-
   const { photos } = usePhotos(userId, following);
 
   useEffect(() => {
