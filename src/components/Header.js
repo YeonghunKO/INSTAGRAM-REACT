@@ -40,10 +40,6 @@ import { getLocation } from '../helpers/getGeoLocation';
 
 import { Alert } from '../styles/Alert';
 
-import OutlinedInput from '@mui/material/OutlinedInput';
-import SearchIcon from '@mui/icons-material/Search';
-import InputAdornment from '@mui/material/InputAdornment';
-
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -53,6 +49,8 @@ import Select from '@mui/material/Select';
 import ReactImageUploading from 'react-images-uploading';
 
 import ReactLoader from '../components/Loader';
+
+import InputField from './InputField';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
 function Header({ setPostPhotos }) {
@@ -73,8 +71,6 @@ function Header({ setPostPhotos }) {
 
   const [images, setImages] = useState('');
   const [description, setDescription] = useState('');
-
-  const [searchingUsername, setSearchingUsername] = useState('');
 
   const [allUsers, setAllUsers] = useState([]);
 
@@ -203,10 +199,6 @@ function Header({ setPostPhotos }) {
     setpostSnackBarOpen(false);
   };
 
-  const handleSeachInputChange = evt => {
-    setSearchingUsername(evt.target.value.trim());
-  };
-
   const onClickHeaderHandle = () => {
     const auth = getAuth();
     signOut(auth);
@@ -230,26 +222,7 @@ function Header({ setPostPhotos }) {
             </h1>
           </div>
 
-          {!username && (
-            <div className="xs:w-3/6 lg:w-2/6 mr-3 lg:mr-0">
-              <OutlinedInput
-                className="h-10 xs:h-8"
-                placeholder="search user here"
-                id="description"
-                color="primary"
-                type="text"
-                fullWidth
-                variant="standard"
-                onChange={handleSeachInputChange}
-                value={searchingUsername}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <SearchIcon />
-                  </InputAdornment>
-                }
-              />
-            </div>
-          )}
+          {!username && <InputField allUsers={allUsers} />}
 
           <div className="text-gray-700 text-center flex items-center">
             {loggedInUser ? (
@@ -446,7 +419,7 @@ function Header({ setPostPhotos }) {
                   }}
                 >
                   <svg
-                    className="w-6 text-black-light cursor-pointer xs:mr-2 lg:w-8 lg:mr-6"
+                    className="w-[1.7rem] text-black-light cursor-pointer xs:mr-2 lg:w-8 lg:mr-6"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"

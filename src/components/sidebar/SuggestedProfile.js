@@ -7,12 +7,12 @@ import {
 } from '../../services/firebase';
 
 function SuggestedProfile({
-  profileDocId,
-  username,
-  profileId,
-  photoURL,
-  userId,
-  loggedInUserDocId,
+  profileDocId = '',
+  username = '',
+  profileId = '',
+  photoURL = '',
+  userId = '',
+  loggedInUserDocId = '',
 }) {
   const [followed, setFollowed] = useState(false);
   async function handleFollowUser() {

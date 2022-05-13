@@ -20,14 +20,12 @@ function Suggestions({ loggedInUserId, following, loggedInUserDocId }) {
 
   return !profiles ? (
     <>
-      {Array.from({ length: profiles?.length || 3 }, (v, i) => 0).map(
-        (v, i) => (
-          <ContentLoader viewBox="0 0 380 70" key={i}>
-            <circle cx="30" cy="30" r="30" />
-            <rect x="80" y="17" rx="4" ry="4" width="130" height="13" />
-          </ContentLoader>
-        )
-      )}
+      {Array.from({ length: profiles?.length || 3 }, () => 0).map((_, i) => (
+        <ContentLoader viewBox="0 0 380 70" key={i}>
+          <circle cx="30" cy="30" r="30" />
+          <rect x="80" y="17" rx="4" ry="4" width="130" height="13" />
+        </ContentLoader>
+      ))}
     </>
   ) : (
     profiles.length > 0 && (
