@@ -17,7 +17,11 @@ function InputField({ allUsers }) {
   };
 
   return (
-    <div className="xs:w-3/6 lg:w-2/6 mr-3 lg:mr-0">
+    <div
+      className={`xs:w-3/6 w-[25rem] mr-3 mt-[18rem] ${
+        suggestedUsers.length === 0 ? '-z-1' : 'z-10'
+      } lg:mr-0`}
+    >
       <OutlinedInput
         autoComplete="off"
         className="h-10 xs:h-8"
@@ -35,7 +39,11 @@ function InputField({ allUsers }) {
           </InputAdornment>
         }
       />
-      <div className="rounded absolute top-13 bg-white xs:w-3/6">
+      <div
+        className={`rounded w-full bg-white ${
+          suggestedUsers.length === 0 && 'invisible'
+        }`}
+      >
         {allUsers.length > 0 &&
           allUsers.map(userInfo => (
             <SuggestedUsers key={userInfo.userId} {...userInfo} />

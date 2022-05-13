@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 function SuggestedUsers({ photoURL, username }) {
   return (
     <Link to={`/p/${username}`}>
-      <div className="flex p-2 flex-row items-center justify-between hover:bg-gray-primary overflow-hidden">
+      <div className="rounded flex p-2 flex-row items-center justify-between hover:bg-gray-primary">
         <div className="flex items-center justify-between ">
           <img
             className="rounded-full h-8 w-8 flex mr-3"

@@ -6,6 +6,8 @@ module.exports = {
   theme: {
     screens: {
       xs: { max: '600px' },
+      lg: { min: '1080px' },
+      xl: { min: '1450px' },
       ...defaultTheme.screens,
     },
     fill: theme => ({
