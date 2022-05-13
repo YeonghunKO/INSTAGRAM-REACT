@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,18 +10,24 @@ import SuggestedUsers from './SuggestedUsers';
 function InputField({ allUsers }) {
   const [searchingUsername, setSearchingUsername] = useState('');
 
-  const [suggestedUsers, setSuggestedUsers] = useState(allUsers);
+  const [suggestedUsers, setSuggestedUsers] = useState([]);
 
-  const handleSeachInputChange = evt => {
-    setSearchingUsername(evt.target.value.trim());
+  const filteringUser = username => {
+    console.log(username);
   };
 
+  //   console.log(searchingUsername);
+  const handleSeachInputChange = evt => {
+    setSearchingUsername(evt.target.value.trim());
+    filteringUser(evt.target.value.trim());
+  };
+
+  useEffect(() => {
+    setSuggestedUsers(allUsers);
+  }, [allUsers]);
+
   return (
-    <div
-      className={`xs:w-3/6 w-[25rem] mr-3 mt-[18rem] ${
-        suggestedUsers.length === 0 ? '-z-1' : 'z-10'
-      } lg:mr-0`}
-    >
+    <div className={`xs:w-3/6 w-[25rem] mr-3 lg:mr-0`}>
       <OutlinedInput
         autoComplete="off"
         className="h-10 xs:h-8"
@@ -39,13 +45,9 @@ function InputField({ allUsers }) {
           </InputAdornment>
         }
       />
-      <div
-        className={`rounded w-full bg-white ${
-          suggestedUsers.length === 0 && 'invisible'
-        }`}
-      >
-        {allUsers.length > 0 &&
-          allUsers.map(userInfo => (
+      <div className={`rounded xs:w-[47%] w-[25rem] absolute top-13 bg-white `}>
+        {suggestedUsers.length > 0 &&
+          suggestedUsers.map(userInfo => (
             <SuggestedUsers key={userInfo.userId} {...userInfo} />
           ))}
       </div>

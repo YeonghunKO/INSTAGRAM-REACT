@@ -56,7 +56,7 @@ import InputField from './InputField';
 function Header({ setPostPhotos }) {
   const { username } = useParams();
   const navigate = useNavigate();
-
+  console.log('header');
   const { user: loggedInUser } = useContext(UserContext);
   const { uid, displayName, photoURL } = loggedInUser;
 
