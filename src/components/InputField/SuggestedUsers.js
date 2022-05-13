@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
 
-function SuggestedUsers({ photoURL, username }) {
+function SuggestedUsers({ photoURL, username, userPos, cursorPos }) {
   return (
-    <div className="rounded flex p-2 flex-row items-center justify-between hover:bg-gray-primary hover:cursor-pointer">
+    <div
+      className={`rounded flex p-2 flex-row items-center justify-between ${
+        userPos === cursorPos && 'bg-gray-primary'
+      } hover:bg-gray-primary hover:cursor-pointer`}
+    >
       <div className="flex items-center justify-between ">
         <img
           className="rounded-full h-8 w-8 flex mr-3"
@@ -22,4 +26,6 @@ export default SuggestedUsers;
 SuggestedUsers.propTypes = {
   photoURL: PropTypes.string,
   username: PropTypes.string,
+  userPos: PropTypes.number,
+  cursorPos: PropTypes.number,
 };

@@ -82,7 +82,7 @@ function Header({ setPostPhotos }) {
       allUsersArr.push({ userId, username, photoURL });
     });
     setAllUsers(allUsersArr);
-  }, []);
+  }, [db]);
 
   const onImageChange = (imageList, addUpdateIndex) => {
     try {
