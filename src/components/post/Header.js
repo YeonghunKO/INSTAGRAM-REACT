@@ -4,6 +4,7 @@ import { useState, useContext } from 'react';
 
 import PostPhotosContext from '../../context/postPhotos';
 import loggedInContext from '../../context/loggedInUser';
+import originalPhotosContext from '../../context/originalPost';
 
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -18,6 +19,9 @@ function Header({ postUsername, userPhotoUrl, docId }) {
   const [open, setOpen] = useState(false);
 
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
+  const { orginalPhotos, setOriginalPhotos } = useContext(
+    originalPhotosContext
+  );
 
   const {
     activeUser: { username },
@@ -36,6 +40,11 @@ function Header({ postUsername, userPhotoUrl, docId }) {
     setPostPhotos(filteredPhotos);
     setOpen(false);
     await deleteDoc(doc(db, 'photos', docId));
+
+    const toggledOriginalPhotos = orginalPhotos.filter(
+      photo => photo.docId !== docId
+    );
+    setOriginalPhotos(toggledOriginalPhotos);
   };
 
   return (

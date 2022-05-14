@@ -10,7 +10,9 @@ import originalPhotosContext from '../../context/originalPost';
 
 function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
   const { user: { uid: userId } = {} } = useContext(UserContext);
-  const { orginalPhotos, setOrginalPhotos } = useContext(originalPhotosContext);
+  const { orginalPhotos, setOriginalPhotos } = useContext(
+    originalPhotosContext
+  );
 
   const { db } = useContext(FirebaseContext);
 
@@ -26,13 +28,25 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
       likes: toggleLiked ? arrayRemove(userId) : arrayUnion(userId),
     });
 
-    const toggledOriginalPhotos = orginalPhotos.map(photo =>
-      photo.docId === docId
-        ? { ...photo, likes: [...photo.likes, userId] }
-        : photo
-    );
-
-    console.log(toggledOriginalPhotos);
+    const toggledOriginalPhotos = orginalPhotos.map(photo => {
+      if (photo.docId === docId) {
+        if (!toggleLiked) {
+          return {
+            ...photo,
+            likes: [...photo.likes, userId],
+            userLikedPhoto: true,
+          };
+        } else {
+          return {
+            ...photo,
+            likes: [...photo.likes.filter(likedUser => likedUser !== userId)],
+            userLikedPhoto: false,
+          };
+        }
+      }
+      return photo;
+    });
+    setOriginalPhotos(toggledOriginalPhotos);
   };
   return (
     <div className="flex justify-between p-4">

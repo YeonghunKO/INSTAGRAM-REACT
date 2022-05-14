@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useState, useContext } from 'react';
 import UserContext from '../../context/currentUser';
+import originalPhotosContext from '../../context/originalPost';
 
 import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -8,6 +9,9 @@ import { db } from '../../lib/firebase';
 function AddComments({ docId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('');
   const { user: { displayName } = {} } = useContext(UserContext);
+  const { orginalPhotos, setOriginalPhotos } = useContext(
+    originalPhotosContext
+  );
 
   const handleSubmitComment = evt => {
     evt.preventDefault();
@@ -17,9 +21,17 @@ function AddComments({ docId, comments, setComments, commentInput }) {
     setComment('');
 
     const suggestedProfileRef = doc(db, 'photos', docId);
-    return updateDoc(suggestedProfileRef, {
+    updateDoc(suggestedProfileRef, {
       comments: arrayUnion({ displayName, comment }),
     });
+
+    const commentChangedPhotos = orginalPhotos.map(photo =>
+      photo.docId === docId
+        ? { ...photo, comments: [...photo.comments, { displayName, comment }] }
+        : photo
+    );
+
+    setOriginalPhotos(commentChangedPhotos);
   };
   return (
     <div className="border-t border-gray-primary">

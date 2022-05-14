@@ -9,17 +9,14 @@ import SuggestedUsers from './SuggestedUsers';
 
 import PostPhotosContext from '../../context/postPhotos';
 
-import { getFollowingPhotos } from '../../services/firebase';
-
-import loggedInContext from '../../context/loggedInUser';
+import originalPhotosContext from '../../context/originalPost';
 
 function InputField({ allUsers }) {
   const [searchingUsername, setSearchingUsername] = useState('');
 
-  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
-  const {
-    activeUser: { userId, following },
-  } = useContext(loggedInContext);
+  const { setPostPhotos } = useContext(PostPhotosContext);
+
+  const { orginalPhotos } = useContext(originalPhotosContext);
 
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   console.log('inputfield rendering');
@@ -55,12 +52,13 @@ function InputField({ allUsers }) {
         );
         break;
       case 'Enter':
-        const followedUserPhotos = await getFollowingPhotos(userId, following);
-        followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
+        // const followedUserPhotos = await getFollowingPhotos(userId, following);
+        // followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
         const selectedUserId = suggestedUsers[cursorPos].userId;
-        const filteredPost = followedUserPhotos.filter(
+        const filteredPost = orginalPhotos.filter(
           photo => photo.userId === selectedUserId
         );
+        console.log(filteredPost);
         setSuggestedUsers([]);
         setCursorPos(-1);
         setSearchingUsername('');
