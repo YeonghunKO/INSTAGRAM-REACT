@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useContext } from 'react';
 
 import OutlinedInput from '@mui/material/OutlinedInput';
 import SearchIcon from '@mui/icons-material/Search';
@@ -7,8 +7,19 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import SuggestedUsers from './SuggestedUsers';
 
+import PostPhotosContext from '../../context/postPhotos';
+
+import { getFollowingPhotos } from '../../services/firebase';
+
+import loggedInContext from '../../context/loggedInUser';
+
 function InputField({ allUsers }) {
   const [searchingUsername, setSearchingUsername] = useState('');
+
+  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
+  const {
+    activeUser: { userId, following },
+  } = useContext(loggedInContext);
 
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   console.log('inputfield rendering');
@@ -27,10 +38,11 @@ function InputField({ allUsers }) {
       filteringUser(inputValue);
     } else {
       setSuggestedUsers([]);
+      setCursorPos(-1);
     }
   };
 
-  const handelSuggestedUserContainer = ({ key }) => {
+  const handelSuggestedUserContainer = async ({ key }) => {
     switch (key) {
       case 'ArrowUp':
         setCursorPos(prevCurPos =>
@@ -41,6 +53,18 @@ function InputField({ allUsers }) {
         setCursorPos(prevCurPos =>
           prevCurPos === suggestedUsers.length - 1 ? 0 : prevCurPos + 1
         );
+        break;
+      case 'Enter':
+        const followedUserPhotos = await getFollowingPhotos(userId, following);
+        followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
+        const selectedUserId = suggestedUsers[cursorPos].userId;
+        const filteredPost = followedUserPhotos.filter(
+          photo => photo.userId === selectedUserId
+        );
+        setSuggestedUsers([]);
+        setCursorPos(-1);
+        setSearchingUsername('');
+        setPostPhotos(filteredPost);
         break;
       default:
         break;
@@ -53,6 +77,7 @@ function InputField({ allUsers }) {
       className={`xs:w-3/6 w-[25rem] mr-3 lg:mr-0`}
     >
       <OutlinedInput
+        onBlur={() => setSuggestedUsers([])}
         autoComplete="off"
         className="h-10 xs:h-8"
         placeholder="search user here"

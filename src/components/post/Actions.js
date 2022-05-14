@@ -1,12 +1,19 @@
-import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+
+import { useState, useContext } from 'react';
+
 import FirebaseContext from '../../context/firebase';
-import UserContext from '../../context/currentUser';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+
+import UserContext from '../../context/currentUser';
+import originalPhotosContext from '../../context/originalPost';
 
 function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
   const { user: { uid: userId } = {} } = useContext(UserContext);
+  const { orginalPhotos, setOrginalPhotos } = useContext(originalPhotosContext);
+
   const { db } = useContext(FirebaseContext);
+
   const [toggleLiked, setToggleLiked] = useState(likedPhoto);
   const [likes, setLikes] = useState(totalLikes);
 
@@ -18,6 +25,14 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
     await updateDoc(suggestedProfileRef, {
       likes: toggleLiked ? arrayRemove(userId) : arrayUnion(userId),
     });
+
+    const toggledOriginalPhotos = orginalPhotos.map(photo =>
+      photo.docId === docId
+        ? { ...photo, likes: [...photo.likes, userId] }
+        : photo
+    );
+
+    console.log(toggledOriginalPhotos);
   };
   return (
     <div className="flex justify-between p-4">

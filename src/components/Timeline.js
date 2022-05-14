@@ -15,7 +15,6 @@ function Timeline({ following, photos }) {
 
   const sectionEle = useRef();
   const [scrollY, innerHeight] = useScroll();
-
   if (
     sectionEle.current &&
     scrollY + innerHeight >= sectionEle.current.offsetHeight

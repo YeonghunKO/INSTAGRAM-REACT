@@ -5,6 +5,8 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 
+import { getFollowingPhotos } from '../services/firebase';
+
 import {
   getStorage,
   ref,
@@ -15,6 +17,8 @@ import {
 import { db } from '../lib/firebase';
 
 import UserContext from '../context/currentUser';
+import loggedInContext from '../context/loggedInUser';
+
 import * as ROUTES from '../constants/routes';
 import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
 
@@ -40,12 +44,6 @@ import { getLocation } from '../helpers/getGeoLocation';
 
 import { Alert } from '../styles/Alert';
 
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
 import ReactImageUploading from 'react-images-uploading';
 
 import ReactLoader from '../components/Loader';
@@ -58,6 +56,10 @@ function Header({ setPostPhotos }) {
   const navigate = useNavigate();
   console.log('header');
   const { user: loggedInUser } = useContext(UserContext);
+  const {
+    activeUser: { userId, following },
+  } = useContext(loggedInContext);
+
   const { uid, displayName, photoURL } = loggedInUser;
 
   const [isLoading, setIsLoading] = useState(false);
@@ -205,12 +207,21 @@ function Header({ setPostPhotos }) {
     navigate(ROUTES.LOGIN);
   };
 
+  const setOriginalPhotos = async () => {
+    const followedUserPhotos = await getFollowingPhotos(userId, following);
+    followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
+    setPostPhotos(followedUserPhotos);
+  };
+
   return (
     <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between items-center h-full">
-          <div className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 ">
+          <div
+            onClick={setOriginalPhotos}
+            className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 "
+          >
             <h1 className="flex justify-center">
               <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
                 <img
@@ -475,5 +486,6 @@ function Header({ setPostPhotos }) {
 export default Header;
 
 Header.propTypes = {
+  orginalPhotos: PropTypes.array,
   setPostPhotos: PropTypes.func,
 };

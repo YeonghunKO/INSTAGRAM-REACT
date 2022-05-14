@@ -8,6 +8,7 @@ function usePhotos(userId, following) {
       if (following?.length > 0) {
         const followedUserPhotos = await getFollowingPhotos(userId, following);
         followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
+        console.log('usePhotos', followedUserPhotos);
         setPhotos(followedUserPhotos);
       }
     }
