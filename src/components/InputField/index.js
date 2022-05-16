@@ -28,26 +28,32 @@ function InputField({ allUsers }) {
     setSuggestedUsers(filteredSuggestedUsers);
   };
 
+  const resetSuggestedUser = () => {
+    setSuggestedUsers([]);
+    setCursorPos(-1);
+    setSearchingUsername('');
+    console.log('reset');
+  };
+
   const handleSeachInputChange = ({ target }) => {
     const inputValue = target.value.trim();
     setSearchingUsername(inputValue);
     if (inputValue.length) {
       filteringUser(inputValue);
     } else {
-      setSuggestedUsers([]);
-      setCursorPos(-1);
+      resetSuggestedUser();
     }
   };
 
   const filterPostbyUserId = (
     selectedUserId = suggestedUsers[cursorPos].userId
   ) => {
+    console.log('filterPostbyUserId');
     const filteredPost = orginalPhotos.filter(
       photo => photo.userId === selectedUserId
     );
-    setSuggestedUsers([]);
-    setCursorPos(-1);
-    setSearchingUsername('');
+    resetSuggestedUser();
+
     setPostPhotos(filteredPost);
   };
 
@@ -65,7 +71,9 @@ function InputField({ allUsers }) {
         break;
       case 'Enter':
         filterPostbyUserId();
-
+        break;
+      case 'Escape':
+        resetSuggestedUser();
         break;
       default:
         break;
@@ -78,6 +86,7 @@ function InputField({ allUsers }) {
       className={`xs:w-3/6 w-[25rem] mr-3 lg:mr-0`}
     >
       <OutlinedInput
+        onBlur={() => setTimeout(resetSuggestedUser, 100)}
         autoComplete="off"
         className="h-10 xs:h-8"
         placeholder="search user here"
