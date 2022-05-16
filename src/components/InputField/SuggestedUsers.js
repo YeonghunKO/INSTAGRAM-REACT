@@ -1,11 +1,19 @@
 import PropTypes from 'prop-types';
 
-function SuggestedUsers({ photoURL, username, userPos, cursorPos }) {
+function SuggestedUsers({
+  photoURL,
+  userId,
+  username,
+  userPos,
+  cursorPos,
+  filterPostbyUserId,
+}) {
   return (
     <div
       className={`rounded flex p-2 flex-row items-center justify-between ${
         userPos === cursorPos && 'bg-gray-primary'
       } hover:bg-gray-primary hover:cursor-pointer`}
+      onClick={() => filterPostbyUserId(userId)}
     >
       <div className="flex items-center justify-between ">
         <img
@@ -28,4 +36,6 @@ SuggestedUsers.propTypes = {
   username: PropTypes.string,
   userPos: PropTypes.number,
   cursorPos: PropTypes.number,
+  userId: PropTypes.string,
+  filterPostbyUserId: PropTypes.func,
 };
