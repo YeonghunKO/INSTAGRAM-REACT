@@ -24,6 +24,9 @@ function Header({
   const { user: loggedInUser } = useContext(UserContext);
   const { activeUser } = useUser(loggedInUser?.uid);
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
+
+  const [windowWidth] = useState(window.innerWidth);
+
   const activeBtnFollow =
     activeUser?.username && activeUser?.username !== profileUsername;
 
@@ -70,7 +73,11 @@ function Header({
           />
         ) : (
           <ContentLoader>
-            <circle cx="140" cy="75" r="70" />
+            <circle
+              cx={`${windowWidth > 501 ? '210' : '80'}`}
+              cy={`${windowWidth > 501 ? '75' : '65'}`}
+              r={`${windowWidth > 501 ? '70' : '60'}`}
+            />
           </ContentLoader>
         )}
       </div>

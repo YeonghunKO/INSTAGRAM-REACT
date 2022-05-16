@@ -1,25 +1,34 @@
 import PropTypes from 'prop-types';
 import ContentLoader from 'react-content-loader';
 
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 
 function Photos({ photos }) {
+  const [windowWidth] = useState(window.innerWidth);
+  console.log(windowWidth);
   return (
     <>
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
-        {!photos && (
-          <ContentLoader viewBox="0 0 380 220">
-            <rect x="0" y="0" rx="5" ry="5" width="120" height="100" />
-            <rect x="130" y="0" rx="5" ry="5" width="120" height="100" />
-            <rect x="260" y="0" rx="5" ry="5" width="120" height="100" />
-            <rect x="0" y="110" rx="5" ry="5" width="120" height="100" />
-            <rect x="130" y="110" rx="5" ry="5" width="120" height="100" />
-            <rect x="260" y="110" rx="5" ry="5" width="120" height="100" />
-          </ContentLoader>
-        )}
+        {!photos &&
+          (windowWidth > 501 ? (
+            <ContentLoader viewBox="0 0 380 220">
+              <rect x="0" y="0" rx="5" ry="5" width="120" height="100" />
+              <rect x="130" y="0" rx="5" ry="5" width="120" height="100" />
+              <rect x="260" y="0" rx="5" ry="5" width="120" height="100" />
+              <rect x="0" y="110" rx="5" ry="5" width="120" height="100" />
+              <rect x="130" y="110" rx="5" ry="5" width="120" height="100" />
+              <rect x="260" y="110" rx="5" ry="5" width="120" height="100" />
+            </ContentLoader>
+          ) : (
+            <ContentLoader viewBox="0 0 380 670">
+              <rect x="15" y="0" rx="5" ry="5" width="350" height="300" />
+              <rect x="15" y="310" rx="5" ry="5" width="350" height="300" />
+            </ContentLoader>
+          ))}
+
         {photos?.length ? (
           <div
             data-testid="photos"
