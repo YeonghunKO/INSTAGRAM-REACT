@@ -52,8 +52,6 @@ function InputField({ allUsers }) {
         );
         break;
       case 'Enter':
-        // const followedUserPhotos = await getFollowingPhotos(userId, following);
-        // followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
         const selectedUserId = suggestedUsers[cursorPos].userId;
         const filteredPost = orginalPhotos.filter(
           photo => photo.userId === selectedUserId

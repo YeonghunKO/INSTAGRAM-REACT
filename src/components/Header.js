@@ -49,7 +49,7 @@ import ReactLoader from '../components/Loader';
 import InputField from './InputField';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
-function Header({ setPostPhotos }) {
+function Header({ setPostPhotos = function () {} }) {
   const { username } = useParams();
   const navigate = useNavigate();
   console.log('header');
