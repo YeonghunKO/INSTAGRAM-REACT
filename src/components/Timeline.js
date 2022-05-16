@@ -37,14 +37,15 @@ function Timeline({ following, photos }) {
           <Instagram key={ind} />
         ))
       ) : following?.length === 0 ? (
-        <p className="flex justify-center font-bold">
+        <p className="flex justify-center font-bold text-4xl">
           Follow other people to see Photos
         </p>
-      ) : (
-        postPhotos &&
+      ) : postPhotos && postPhotos.length ? (
         postPhotos
           .slice(0, photosSlice)
           .map(photoObj => <Post key={photoObj.docId} photoObj={photoObj} />)
+      ) : (
+        <p className="flex justify-center font-bold text-4xl">No Posts</p>
       )}
     </section>
   );

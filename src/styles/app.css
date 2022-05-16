@@ -471,6 +471,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .col-span-1 {
   grid-column: span 1 / span 1 !important;
 }
+.col-span-3 {
+  grid-column: span 3 / span 3 !important;
+}
 .m-3 {
   margin: 0.75rem !important;
 }
@@ -825,6 +828,26 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-size: 1.125rem !important;
   line-height: 1.75rem !important;
 }
+.text-9xl {
+  font-size: 8rem !important;
+  line-height: 1 !important;
+}
+.text-8xl {
+  font-size: 6rem !important;
+  line-height: 1 !important;
+}
+.text-7xl {
+  font-size: 4.5rem !important;
+  line-height: 1 !important;
+}
+.text-6xl {
+  font-size: 3.75rem !important;
+  line-height: 1 !important;
+}
+.text-4xl {
+  font-size: 2.25rem !important;
+  line-height: 2.5rem !important;
+}
 .font-bold {
   font-weight: 700 !important;
 }
@@ -836,6 +859,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .font-medium {
   font-weight: 500 !important;
+}
+.font-bold {
+  font-weight: 700 !important;
 }
 .uppercase {
   text-transform: uppercase !important;
@@ -952,6 +978,26 @@ body {
   }
 }
 @media (min-width: 1024px) {
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2 !important;
+  }
 
   .lg\:col-span-2 {
     grid-column: span 2 / span 2 !important;
