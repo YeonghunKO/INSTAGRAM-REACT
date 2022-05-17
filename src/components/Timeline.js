@@ -13,13 +13,15 @@ function Timeline({ following, photos }) {
   const [postPhotos, setPostPhotos] = useState([]);
   const [photosSlice, setPhotosSlice] = useState(3);
 
+  console.log('timeline');
+  const PhotosNotEnd = photosSlice <= postPhotos?.length;
   const sectionEle = useRef();
-  const [scrollY, innerHeight] = useScroll();
+  const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
   if (
     sectionEle.current &&
     scrollY + innerHeight >= sectionEle.current.offsetHeight
   ) {
-    if (photosSlice <= postPhotos?.length) {
+    if (PhotosNotEnd) {
       debounce(() => {
         setPhotosSlice(prevSlice => prevSlice + 2);
       }, 300);
