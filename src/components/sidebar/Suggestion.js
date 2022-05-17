@@ -1,22 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { getSuggestedProfiles } from '../../services/firebase';
 import ContentLoader from 'react-content-loader';
 import SuggestedProfile from './SuggestedProfile';
 
-function Suggestions({ loggedInUserId, following, loggedInUserDocId }) {
+import UserFollowingContext from '../../context/userFollowing';
+
+function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   const [profiles, setProfiles] = useState(null);
+  const { userFollowing, setUserFollowing } = useContext(UserFollowingContext);
 
   useEffect(() => {
     async function setSuggestedProfile() {
-      const profiles = await getSuggestedProfiles(loggedInUserId, following);
+      const profiles = await getSuggestedProfiles(
+        loggedInUserId,
+        userFollowing
+      );
       setProfiles(profiles);
     }
 
-    if (loggedInUserId) {
+    if (loggedInUserId && userFollowing) {
       setSuggestedProfile();
     }
-  }, [loggedInUserId]);
+  }, [loggedInUserId, userFollowing]);
 
   return !profiles ? (
     <>
@@ -41,6 +47,7 @@ function Suggestions({ loggedInUserId, following, loggedInUserDocId }) {
                 photoURL={profile.photoURL}
                 userId={loggedInUserId}
                 loggedInUserDocId={loggedInUserDocId}
+                setUserFollowing={setUserFollowing}
               />
             ))}
           </div>
@@ -54,6 +61,5 @@ export default Suggestions;
 
 Suggestions.propTypes = {
   loggedInUserId: PropTypes.string,
-  following: PropTypes.array,
   loggedInUserDocId: PropTypes.string,
 };

@@ -6,6 +6,7 @@ import UserContext from './context/currentUser';
 import loggedInContext from './context/loggedInUser';
 import PostPhotosContext from './context/postPhotos';
 import originalPhotosContext from './context/originalPost';
+import UserFollowingContext from './context/userFollowing';
 
 import useAuthListner from './hooks/useAuthListener';
 import useUser from './hooks/useUser';
@@ -29,10 +30,8 @@ function App() {
   const [postPhotos, setPostPhotos] = useState([]);
   const [orginalPhotos, setOriginalPhotos] = useState([]);
   const [userFollowing, setUserFollowing] = useState([]);
-  // console.log(userFollowing);
   const { photos } = usePhotos(userId, userFollowing);
 
-  // console.log('userFollowing', userFollowing);
   console.log('app');
   useEffect(() => {
     setOriginalPhotos(photos);
@@ -42,6 +41,7 @@ function App() {
   useEffect(() => {
     setUserFollowing(following);
   }, [following]);
+
   return (
     <UserContext.Provider value={{ user }}>
       <loggedInContext.Provider value={{ activeUser }}>
@@ -49,22 +49,26 @@ function App() {
           <originalPhotosContext.Provider
             value={{ orginalPhotos, setOriginalPhotos }}
           >
-            <Suspense fallback={<ReactLoader />}>
-              <Routes>
-                <Route
-                  path={ROUTES.DASHBOARD}
-                  element={
-                    <ProtectedRoute user={user} activeUser={activeUser}>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path={ROUTES.LOGIN} element={<Login />} />
-                <Route path={ROUTES.SIGN_UP} element={<Signup />} />
-                <Route path={ROUTES.PROFILE} element={<Profile />} />
-                <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <UserFollowingContext.Provider
+              value={{ userFollowing, setUserFollowing }}
+            >
+              <Suspense fallback={<ReactLoader />}>
+                <Routes>
+                  <Route
+                    path={ROUTES.DASHBOARD}
+                    element={
+                      <ProtectedRoute user={user} activeUser={activeUser}>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path={ROUTES.LOGIN} element={<Login />} />
+                  <Route path={ROUTES.SIGN_UP} element={<Signup />} />
+                  <Route path={ROUTES.PROFILE} element={<Profile />} />
+                  <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </UserFollowingContext.Provider>
           </originalPhotosContext.Provider>
         </PostPhotosContext.Provider>
       </loggedInContext.Provider>

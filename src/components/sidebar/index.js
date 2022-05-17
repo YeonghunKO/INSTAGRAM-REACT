@@ -6,14 +6,7 @@ import loggedInUserContext from '../../context/loggedInUser';
 
 function Sidebar() {
   const {
-    activeUser: {
-      docId = '',
-      fullName,
-      username,
-      userId,
-      following,
-      photoURL,
-    } = {},
+    activeUser: { docId = '', fullName, username, userId, photoURL } = {},
   } = useContext(loggedInUserContext);
 
   return (
@@ -24,11 +17,7 @@ function Sidebar() {
           <div className="font-semibold text-gray-base">
             Suggestions for you
           </div>
-          <Suggestion
-            loggedInUserId={userId}
-            following={following}
-            loggedInUserDocId={docId}
-          />
+          <Suggestion loggedInUserId={userId} loggedInUserDocId={docId} />
         </>
       ) : null}
     </section>

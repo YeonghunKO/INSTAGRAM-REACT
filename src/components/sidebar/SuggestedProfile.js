@@ -13,6 +13,7 @@ function SuggestedProfile({
   photoURL = '',
   userId = '',
   loggedInUserDocId = '',
+  setUserFollowing,
 }) {
   const [followed, setFollowed] = useState(false);
 
@@ -20,6 +21,7 @@ function SuggestedProfile({
     setFollowed(true);
     updateLoggedInUserFollowing(loggedInUserDocId, profileId, false);
     updateFollowedFollowers(profileDocId, userId, false);
+    setUserFollowing(prevFollowing => [...prevFollowing, profileId]);
   }
 
   return (
@@ -58,4 +60,5 @@ SuggestedProfile.propTypes = {
   photoURL: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   loggedInUserDocId: PropTypes.string.isRequired,
+  setUserFollowing: PropTypes.func,
 };
