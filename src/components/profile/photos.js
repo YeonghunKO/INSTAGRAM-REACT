@@ -1,14 +1,34 @@
 import PropTypes from 'prop-types';
 import ContentLoader from 'react-content-loader';
 
-import { useState } from 'react';
-import Box from '@mui/material/Box';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import { useState, useRef } from 'react';
+
+import Photo from './photo';
+
+import useScroll from '../../hooks/useScroll';
+
+import { debounce } from '../../helpers/debounce';
 
 function Photos({ photos }) {
+  console.log('photos');
   const [windowWidth] = useState(window.innerWidth);
-  console.log(windowWidth);
+  const [photosSlice, setPhotosSlice] = useState(3);
+
+  const PhotosNotEnd = photosSlice <= photos?.length;
+
+  const photosContainer = useRef();
+  const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
+
+  if (
+    photosContainer.current &&
+    scrollY + innerHeight >= photosContainer.current.offsetHeight
+  ) {
+    if (PhotosNotEnd) {
+      debounce(() => {
+        setPhotosSlice(prevSlice => prevSlice + 2);
+      }, 300);
+    }
+  }
   return (
     <>
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
@@ -33,53 +53,12 @@ function Photos({ photos }) {
           <div
             data-testid="photos"
             className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-12 px-3 lg:px-0"
+            ref={photosContainer}
           >
             {photos?.length
-              ? photos.map((photo, ind) => (
-                  <div
-                    data-testid={`photo`}
-                    key={photo.docId}
-                    className="h-9/12 mb-3 cursor-pointer relative group"
-                  >
-                    <img
-                      className="rounded h-full w-full"
-                      src={photo.imageSrc}
-                      alt={photo.caption}
-                    />
-                    <div className="absolute bottom-0 left-0 bg-gray-base z-10 w-full justify-evenly items-center h-full bg-black-faded rounded group-hover:flex hidden">
-                      <p className="flex items-center text-white font-bold">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          className="w-8 mr-4"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {photo.likes.length}
-                      </p>
-                      <p className="flex items-center text-white font-bold">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          className="w-8 mr-4"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                        {photo.comments.length}
-                      </p>
-                    </div>
-                  </div>
-                ))
+              ? photos
+                  .slice(0, photosSlice)
+                  .map(photo => <Photo key={photo.docId} photo={photo} />)
               : null}
           </div>
         ) : null}
