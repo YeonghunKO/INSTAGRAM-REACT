@@ -7,7 +7,6 @@ function usePhotos(userId, following) {
     async function getTimeLinePhotos() {
       if (following) {
         const followedUserPhotos = await getFollowingPhotos(userId, following);
-        console.log(followedUserPhotos);
         followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
         setPhotos(followedUserPhotos);
       }

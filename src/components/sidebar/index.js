@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import User from './User';
 import Suggestion from './Suggestion';
 

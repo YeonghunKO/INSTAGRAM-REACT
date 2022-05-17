@@ -15,11 +15,13 @@ function SuggestedProfile({
   loggedInUserDocId = '',
 }) {
   const [followed, setFollowed] = useState(false);
+
   async function handleFollowUser() {
     setFollowed(true);
     updateLoggedInUserFollowing(loggedInUserDocId, profileId, false);
     updateFollowedFollowers(profileDocId, userId, false);
   }
+
   return (
     !followed && (
       <div className="flex flex-row items-center justify-between">
