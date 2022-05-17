@@ -41,10 +41,10 @@ function Header({ postUsername, userPhotoUrl, docId }) {
     setOpen(false);
     await deleteDoc(doc(db, 'photos', docId));
 
-    const toggledOriginalPhotos = orginalPhotos.filter(
+    const filteredOriginalPhotos = orginalPhotos.filter(
       photo => photo.docId !== docId
     );
-    setOriginalPhotos(toggledOriginalPhotos);
+    setOriginalPhotos(filteredOriginalPhotos);
   };
 
   return (
