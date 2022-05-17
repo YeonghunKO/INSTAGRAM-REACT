@@ -15,7 +15,6 @@ function Login(props) {
     event.preventDefault();
     try {
       const auth = getAuth(); //
-      // console.log(auth);
       await signInWithEmailAndPassword(
         auth,
         emailAddress.trim(''),

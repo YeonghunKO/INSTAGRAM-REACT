@@ -17,7 +17,6 @@ function Dashboard({ activeUser = {} }) {
   const [postPhotos, setPostPhotos] = useState([]);
   const [postfollowing, setPostFollowing] = useState([]);
   const [orginalPhotos, setOriginalPhotos] = useState([]);
-  console.log(postPhotos);
   const { photos } = usePhotos(userId, following);
   useEffect(() => {
     document.title = 'Instagram';

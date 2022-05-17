@@ -13,7 +13,6 @@ function Timeline({ following, photos }) {
   const [postPhotos, setPostPhotos] = useState([]);
   const [photosSlice, setPhotosSlice] = useState(3);
 
-  console.log('timeline');
   const PhotosNotEnd = photosSlice <= postPhotos?.length;
   const sectionEle = useRef();
   const [scrollY, innerHeight] = useScroll(PhotosNotEnd);

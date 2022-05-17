@@ -17,7 +17,6 @@ function AddComments({ docId, comments, setComments, commentInput }) {
     evt.preventDefault();
 
     setComments([...comments, { displayName, comment }]);
-    // console.log(comment);
     setComment('');
 
     const suggestedProfileRef = doc(db, 'photos', docId);

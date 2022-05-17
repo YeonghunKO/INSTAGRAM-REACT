@@ -19,7 +19,6 @@ function InputField({ allUsers }) {
   const { orginalPhotos } = useContext(originalPhotosContext);
 
   const [suggestedUsers, setSuggestedUsers] = useState([]);
-  console.log('inputfield rendering');
   const [cursorPos, setCursorPos] = useState(-1);
   const filteringUser = username => {
     const filteredSuggestedUsers = allUsers.filter(user =>
@@ -32,7 +31,6 @@ function InputField({ allUsers }) {
     setSuggestedUsers([]);
     setCursorPos(-1);
     setSearchingUsername('');
-    console.log('reset');
   };
 
   const handleSeachInputChange = ({ target }) => {
@@ -48,7 +46,6 @@ function InputField({ allUsers }) {
   const filterPostbyUserId = (
     selectedUserId = suggestedUsers[cursorPos].userId
   ) => {
-    console.log('filterPostbyUserId');
     const filteredPost = orginalPhotos.filter(
       photo => photo.userId === selectedUserId
     );
@@ -57,7 +54,7 @@ function InputField({ allUsers }) {
     setPostPhotos(filteredPost);
   };
 
-  const handelSuggestedUserContainer = async ({ key }) => {
+  const handelSuggestedUserSelect = async ({ key }) => {
     switch (key) {
       case 'ArrowUp':
         setCursorPos(prevCurPos =>
@@ -82,7 +79,7 @@ function InputField({ allUsers }) {
 
   return (
     <div
-      onKeyUp={handelSuggestedUserContainer}
+      onKeyUp={handelSuggestedUserSelect}
       className={`xs:w-3/6 w-[25rem] mr-3 lg:mr-0`}
     >
       <OutlinedInput
