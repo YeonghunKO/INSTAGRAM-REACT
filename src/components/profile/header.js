@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ContentLoader from 'react-content-loader';
 import { DEFAULT_IMAGE_PATH } from '../../constants/path';
 
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
+
+import UserFollowingContext from '../../context/userFollowing';
 
 function Header({
   activeUser,
@@ -21,6 +23,8 @@ function Header({
   },
 }) {
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
+
+  const { setUserFollowing } = useContext(UserFollowingContext);
 
   const [windowWidth] = useState(window.innerWidth);
 
@@ -41,6 +45,19 @@ function Header({
       activeUser.userId,
       isFollowingProfile
     );
+
+    if (isFollowingProfile) {
+      setUserFollowing(prevUserFollowing =>
+        prevUserFollowing.filter(
+          followingUser => followingUser !== profileUserId
+        )
+      );
+    } else {
+      setUserFollowing(prevUserFollowing => [
+        ...prevUserFollowing,
+        profileUserId,
+      ]);
+    }
   };
 
   useEffect(() => {

@@ -208,6 +208,7 @@ function Header({ setPostPhotos = function () {} }) {
   };
 
   const getOriginalPhotos = () => {
+    console.log('getOriginalPhotos');
     setPostPhotos(orginalPhotos);
   };
 
