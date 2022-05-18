@@ -5,7 +5,7 @@ function usePhotos(userId, following) {
   const [photos, setPhotos] = useState();
   useEffect(() => {
     async function getTimeLinePhotos() {
-      if (following) {
+      if (userId && following) {
         const followedUserPhotos = await getFollowingPhotos(userId, following);
         followedUserPhotos.sort((a, b) => b.dateCreated - a.dateCreated);
         setPhotos(followedUserPhotos);
