@@ -2,14 +2,17 @@ import PropTypes from 'prop-types';
 
 import { useEffect, useReducer, useContext } from 'react';
 import Header from './header';
-import { getUserPhotosByUserId } from '../../services/firebase';
 
 import Photos from './photos';
 
 import loggedInContext from '../../context/loggedInUser';
+import originalPhotosContext from '../../context/originalPost';
 
 function UserProfile({ user }) {
   const { activeUser = {} } = useContext(loggedInContext);
+  const { orginalPhotos, setOriginalPhotos } = useContext(
+    originalPhotosContext
+  );
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });
   const initState = {
     profile: {},
@@ -25,31 +28,33 @@ function UserProfile({ user }) {
   useEffect(() => {
     let isMounted = true;
     async function getUserPhotos() {
-      const photos = await getUserPhotosByUserId(
-        user?.userId,
-        activeUser?.userId
-      );
-      if (photos && isMounted) {
-        dispatch({
-          profile: user,
-          photosCollection: photos.map(photo => ({
-            ...photo,
-            username: user.username,
-            userPhotoUrl: user.photoURL,
-          })),
-          followersCount: user.followers.length,
-        });
+      if (orginalPhotos) {
+        const photos = orginalPhotos.filter(
+          photo => photo.username === user.username
+        );
+
+        if (photos && isMounted) {
+          dispatch({
+            profile: user,
+            photosCollection: photos.map(photo => ({
+              ...photo,
+              username: user.username,
+              userPhotoUrl: user.photoURL,
+            })),
+            followersCount: user.followers.length,
+          });
+        }
       }
     }
 
-    if (user) {
+    if (user && orginalPhotos) {
       getUserPhotos();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [user?.userId]);
+  }, [user?.userId, orginalPhotos]);
   return (
     <>
       <Header
