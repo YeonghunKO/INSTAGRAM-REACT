@@ -209,7 +209,6 @@ function Header({ setPostPhotos = function () {} }) {
 
   const getOriginalPhotos = () => {
     console.log('getOriginalPhotos');
-    setPostPhotos(orginalPhotos);
   };
 
   return (
@@ -218,7 +217,7 @@ function Header({ setPostPhotos = function () {} }) {
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between items-center h-full">
           <div
-            onClick={getOriginalPhotos}
+            onClick={() => setPostPhotos(orginalPhotos)}
             className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 "
           >
             <h1 className="flex justify-center">
