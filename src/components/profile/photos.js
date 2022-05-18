@@ -33,7 +33,7 @@ function Photos({ photos }) {
     <>
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
         {!photos &&
-          (windowWidth > 501 ? (
+          (windowWidth > 601 ? (
             <ContentLoader viewBox="0 0 380 220">
               <rect x="0" y="0" rx="5" ry="5" width="120" height="100" />
               <rect x="130" y="0" rx="5" ry="5" width="120" height="100" />

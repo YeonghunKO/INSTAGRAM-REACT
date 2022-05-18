@@ -88,9 +88,9 @@ function Header({
         ) : (
           <ContentLoader>
             <circle
-              cx={`${windowWidth > 501 ? '210' : '80'}`}
-              cy={`${windowWidth > 501 ? '75' : '65'}`}
-              r={`${windowWidth > 501 ? '70' : '60'}`}
+              cx={`${windowWidth > 601 ? '210' : '80'}`}
+              cy={`${windowWidth > 601 ? '75' : '65'}`}
+              r={`${windowWidth > 601 ? '70' : '60'}`}
             />
           </ContentLoader>
         )}
