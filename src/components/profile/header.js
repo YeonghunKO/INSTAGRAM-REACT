@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import ContentLoader from 'react-content-loader';
-import useUser from '../../hooks/useUser';
 import { DEFAULT_IMAGE_PATH } from '../../constants/path';
-import UserContext from '../../context/currentUser';
 
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
 
 function Header({
+  activeUser,
   photosCount,
   followersCount,
   setFollowerCount,
@@ -21,8 +20,6 @@ function Header({
     username: profileUsername,
   },
 }) {
-  const { user: loggedInUser } = useContext(UserContext);
-  const { activeUser } = useUser(loggedInUser?.uid);
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
 
   const [windowWidth] = useState(window.innerWidth);
@@ -138,6 +135,7 @@ function Header({
 export default Header;
 
 Header.propTypes = {
+  activeUser: PropTypes.object.isRequired,
   photosCount: PropTypes.number.isRequired,
   followersCount: PropTypes.number.isRequired,
   setFollowerCount: PropTypes.func.isRequired,

@@ -1,12 +1,15 @@
 import PropTypes from 'prop-types';
 
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useContext } from 'react';
 import Header from './header';
 import { getUserPhotosByUserId } from '../../services/firebase';
 
 import Photos from './photos';
 
+import loggedInContext from '../../context/loggedInUser';
+
 function UserProfile({ user }) {
+  const { activeUser = {} } = useContext(loggedInContext);
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });
   const initState = {
     profile: {},
@@ -22,11 +25,18 @@ function UserProfile({ user }) {
   useEffect(() => {
     let isMounted = true;
     async function getUserPhotos() {
-      const photos = await getUserPhotosByUserId(user?.userId);
+      const photos = await getUserPhotosByUserId(
+        user?.userId,
+        activeUser?.userId
+      );
       if (photos && isMounted) {
         dispatch({
           profile: user,
-          photosCollection: photos,
+          photosCollection: photos.map(photo => ({
+            ...photo,
+            username: user.username,
+            userPhotoUrl: user.photoURL,
+          })),
           followersCount: user.followers.length,
         });
       }
@@ -47,6 +57,7 @@ function UserProfile({ user }) {
         profile={profile}
         followersCount={followersCount}
         setFollowerCount={dispatch}
+        activeUser={activeUser}
       />
 
       <Photos photos={photosCollection} />
@@ -65,5 +76,6 @@ UserProfile.propTypes = {
     fullName: PropTypes.string,
     userId: PropTypes.string,
     username: PropTypes.string,
+    photoURL: PropTypes.string,
   }),
 };

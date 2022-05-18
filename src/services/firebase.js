@@ -108,14 +108,24 @@ async function getFollowingPhotos(userId, following) {
   return photosWithUserDetails;
 }
 
-async function getUserPhotosByUserId(userId) {
-  const result = query(collection(db, 'photos'), where('userId', '==', userId));
-  const snapShot = await getDocs(result);
-  const userPhotos = snapShot.docs.map(photo => ({
-    ...photo.data(),
-    docId: photo.id,
-  }));
-  return userPhotos;
+async function getUserPhotosByUserId(userId, activeUserId) {
+  if (userId && activeUserId) {
+    const result = query(
+      collection(db, 'photos'),
+      where('userId', '==', userId)
+    );
+    const snapShot = await getDocs(result);
+    const photosWithUserDetails = await Promise.all(
+      snapShot.docs.map(async photo => {
+        let userLikedPhoto = false;
+        if (photo.data().likes.includes(activeUserId)) {
+          userLikedPhoto = true;
+        }
+        return { ...photo.data(), docId: photo.id, userLikedPhoto };
+      })
+    );
+    return photosWithUserDetails;
+  }
 }
 
 async function isUserFollowingProfile(username, profileUserId) {
