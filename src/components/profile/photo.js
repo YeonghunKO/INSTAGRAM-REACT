@@ -66,7 +66,7 @@ function Photo({ photo }) {
                 clipRule="evenodd"
               />
             </svg>
-            {likes}
+            {photo.likes.length}
           </p>
           <p className="flex items-center text-white font-bold">
             <svg
@@ -81,7 +81,7 @@ function Photo({ photo }) {
                 clipRule="evenodd"
               />
             </svg>
-            {comments}
+            {photo.comments.length}
           </p>
         </div>
 
@@ -97,8 +97,8 @@ function Photo({ photo }) {
           }}
         >
           <Fade in={open}>
-            <Box className="outline-none absolute top-10 left-[40%] w-2/6 m-0">
-              <Post photoObj={photo} />
+            <Box className="outline-none absolute top-7 h-[92%] xs:left-[12%] lg:left-[26%] xs:w-9/12 lg:w-6/12 m-0">
+              <Post isProfile={true} photoObj={photo} />
             </Box>
           </Fade>
         </Modal>
