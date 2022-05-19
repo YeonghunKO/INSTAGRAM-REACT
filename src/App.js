@@ -11,6 +11,7 @@ import UserFollowingContext from './context/userFollowing';
 import useAuthListner from './hooks/useAuthListener';
 import useUser from './hooks/useUser';
 import usePhotos from './hooks/usePhotos';
+import useStateCallback from './hooks/useStateCallback';
 
 import ProtectedRoute from './helpers/ProtectedRoute';
 
@@ -27,7 +28,7 @@ function App() {
   const { activeUser = {} } = useUser(user?.uid);
   const { userId, following } = activeUser;
 
-  const [postPhotos, setPostPhotos] = useState([]);
+  const [postPhotos, setPostPhotos] = useStateCallback([]);
   const [orginalPhotos, setOriginalPhotos] = useState([]);
   const [userFollowing, setUserFollowing] = useState([]);
   const { photos } = usePhotos(userId, userFollowing);

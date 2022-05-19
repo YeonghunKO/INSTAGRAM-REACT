@@ -211,23 +211,27 @@ function Header({ setPostPhotos = function () {} }) {
     console.log('getOriginalPhotos');
   };
 
+  console.log(setPostPhotos);
   return (
     <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between items-center h-full">
-          <div
-            onClick={() => setPostPhotos(orginalPhotos)}
-            className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 "
-          >
+          <div className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 ">
             <h1 className="flex justify-center">
-              <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
-                <img
-                  src={INSTAGRAM_LOGO}
-                  alt="Instagram"
-                  className="mt-2 lg:w-6/12"
-                />
-              </Link>
+              {/* <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo"> */}
+              <img
+                onClick={() => {
+                  setPostPhotos([], () => {
+                    navigate(ROUTES.DASHBOARD);
+                    console.log('second cb!');
+                  });
+                }}
+                src={INSTAGRAM_LOGO}
+                alt="Instagram"
+                className="mt-2 lg:w-6/12"
+              />
+              {/* </Link> */}
             </h1>
           </div>
 

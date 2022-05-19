@@ -560,9 +560,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-6 {
   margin-bottom: 1.5rem !important;
 }
-.mb-12 {
-  margin-bottom: 3rem !important;
-}
 .block {
   display: block !important;
 }
@@ -617,15 +614,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-12 {
   height: 3rem !important;
 }
-.h-5\/6 {
-  height: 83.333333% !important;
-}
-.h-\[90\%\] {
-  height: 90% !important;
-}
-.h-\[95\%\] {
-  height: 95% !important;
-}
 .w-6 {
   width: 1.5rem !important;
 }
@@ -659,17 +647,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-12 {
   width: 3rem !important;
 }
-.w-full {
-  width: 100% !important;
-}
 .max-w-screen-lg {
   max-width: 1024px !important;
 }
 .max-w-screen-md {
   max-width: 768px !important;
-}
-.transform {
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)) !important;
 }
 .cursor-pointer {
   cursor: pointer !important;
@@ -732,9 +714,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-0 {
   border-width: 0px !important;
 }
-.border {
-  border-width: 1px !important;
-}
 .border-b {
   border-bottom-width: 1px !important;
 }
@@ -767,10 +746,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .bg-black-faded {
   background-color: #00000059 !important;
-}
-.bg-white {
-  --tw-bg-opacity: 1 !important;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
 }
 .fill-red {
   fill: #ed4956 !important;
@@ -1032,8 +1007,8 @@ body {
 
 @media (min-width: 1024px) {
 
-  .lg\:left-\[26\%\] {
-    left: 26% !important;
+  .lg\:left-\[35\%\] {
+    left: 35% !important;
   }
 
   .lg\:col-span-2 {
@@ -1084,28 +1059,8 @@ body {
     width: 10rem !important;
   }
 
-  .lg\:w-full {
-    width: 100% !important;
-  }
-
-  .lg\:w-9\/12 {
-    width: 75% !important;
-  }
-
-  .lg\:w-full {
-    width: 100% !important;
-  }
-
-  .lg\:w-9\/12 {
-    width: 75% !important;
-  }
-
-  .lg\:w-full {
-    width: 100% !important;
-  }
-
-  .lg\:w-9\/12 {
-    width: 75% !important;
+  .lg\:w-4\/12 {
+    width: 33.333333% !important;
   }
 
   .lg\:grid-cols-3 {

@@ -18,6 +18,7 @@ function Post({ photoObj, isProfile }) {
     userPhotoUrl,
     location,
   } = photoObj;
+  console.log(docId);
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
   return (
