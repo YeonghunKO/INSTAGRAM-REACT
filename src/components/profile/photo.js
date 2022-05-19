@@ -5,29 +5,9 @@ import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
 import Post from '../post';
 
-const style = {
-  position: 'absolute',
-  top: '5%',
-  left: '33%',
-  height: '10%',
-  width: '50%',
-  // transform: 'translate(-50%, -50%)',
-  // width: 400,
-  // bgcolor: 'background.paper',
-  // border: '2px solid #000',
-  // boxShadow: 24,
-  // p: 4,
-};
-
 function Photo({ photo }) {
-  const [likes, setLikes] = useState(photo.likes.length);
-  const [comments, setComments] = useState(photo.comments.length);
-
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -97,7 +77,7 @@ function Photo({ photo }) {
           }}
         >
           <Fade in={open}>
-            <Box className="outline-none absolute top-7 h-[92%] xs:left-[12%] lg:left-[26%] xs:w-9/12 lg:w-6/12 m-0">
+            <Box className="outline-none absolute top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0">
               <Post isProfile={true} photoObj={photo} />
             </Box>
           </Fade>
