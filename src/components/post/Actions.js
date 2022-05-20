@@ -11,7 +11,7 @@ import PostPhotosContext from '../../context/postPhotos';
 
 function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
   const { user: { uid: userId } = {} } = useContext(UserContext);
-  const { orginalPhotos, setOriginalPhotos } = useContext(
+  const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
@@ -30,7 +30,7 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
       likes: toggleLiked ? arrayRemove(userId) : arrayUnion(userId),
     });
 
-    const toggledOriginalPhotos = orginalPhotos.map(photo => {
+    const toggledOriginalPhotos = originalPhotos.map(photo => {
       if (photo.docId === docId) {
         if (!toggleLiked) {
           return {

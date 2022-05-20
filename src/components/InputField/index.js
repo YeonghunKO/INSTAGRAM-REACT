@@ -16,7 +16,7 @@ function InputField({ allUsers }) {
 
   const { setPostPhotos } = useContext(PostPhotosContext);
 
-  const { orginalPhotos } = useContext(originalPhotosContext);
+  const { originalPhotos } = useContext(originalPhotosContext);
 
   const [suggestedUsers, setSuggestedUsers] = useState([]);
   const [cursorPos, setCursorPos] = useState(-1);
@@ -46,7 +46,7 @@ function InputField({ allUsers }) {
   const filterPostbyUserId = (
     selectedUserId = suggestedUsers[cursorPos].userId
   ) => {
-    const filteredPost = orginalPhotos.filter(
+    const filteredPost = originalPhotos.filter(
       photo => photo.userId === selectedUserId
     );
     resetSuggestedUser();

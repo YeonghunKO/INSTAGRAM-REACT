@@ -9,7 +9,7 @@ import { db } from '../../lib/firebase';
 function AddComments({ docId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('');
   const { user: { displayName } = {} } = useContext(UserContext);
-  const { orginalPhotos, setOriginalPhotos } = useContext(
+  const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
 
@@ -24,7 +24,7 @@ function AddComments({ docId, comments, setComments, commentInput }) {
       comments: arrayUnion({ displayName, comment }),
     });
 
-    const commentChangedPhotos = orginalPhotos.map(photo =>
+    const commentChangedPhotos = originalPhotos.map(photo =>
       photo.docId === docId
         ? { ...photo, comments: [...photo.comments, { displayName, comment }] }
         : photo
