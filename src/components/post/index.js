@@ -31,6 +31,7 @@ function Post({ photoObj, isProfile }) {
     >
       <div>
         <Header
+          isProfile={isProfile}
           docId={docId}
           postUsername={username}
           userPhotoUrl={userPhotoUrl}

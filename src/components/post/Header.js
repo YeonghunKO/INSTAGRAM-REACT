@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import { doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 
-function Header({ postUsername, userPhotoUrl, docId }) {
+function Header({ isProfile, postUsername, userPhotoUrl, docId }) {
   const [open, setOpen] = useState(false);
 
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
@@ -50,7 +50,10 @@ function Header({ postUsername, userPhotoUrl, docId }) {
   return (
     <div className="flex justify-between items-center border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex items-center">
-        <Link to={`p/${postUsername}`} className="flex items-center">
+        <Link
+          to={`${isProfile ? '' : `p/${postUsername}`}`}
+          className="flex items-center"
+        >
           <img src={userPhotoUrl} className="rounded-full h-8 w-8 flex mr-3" />
           <p className="font-bold">{postUsername}</p>
         </Link>
@@ -95,6 +98,7 @@ function Header({ postUsername, userPhotoUrl, docId }) {
 export default Header;
 
 Header.propTypes = {
+  isProfile: PropTypes.bool,
   postUsername: PropTypes.string.isRequired,
   userPhotoUrl: PropTypes.string.isRequired,
   docId: PropTypes.string.isRequired,
