@@ -7,22 +7,12 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Post from '../post';
 
-function Photo({ photo }) {
-  const [open, setOpen] = useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setTimeout(() => setOpen(false), 100);
-  };
-
+function Photo({ photo, handlePostOpen }) {
   console.log(photo.docId);
   return (
     <>
       <div
-        onClick={handleOpen}
+        onClick={handlePostOpen}
         data-testid={`photo`}
         key={photo.docId}
         className="h-9/12 mb-3 cursor-pointer relative group"
@@ -64,24 +54,6 @@ function Photo({ photo }) {
             {photo.comments.length}
           </p>
         </div>
-
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={open}>
-            <Box className="outline-none absolute top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0">
-              <Post isProfile={true} photoObj={photo} />
-            </Box>
-          </Fade>
-        </Modal>
       </div>
     </>
   );
@@ -91,4 +63,5 @@ export default memo(Photo);
 
 Photo.propTypes = {
   photo: PropTypes.object,
+  handlePostOpen: PropTypes.func,
 };
