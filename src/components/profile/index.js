@@ -10,7 +10,7 @@ import originalPhotosContext from '../../context/originalPost';
 
 function UserProfile({ user }) {
   const { activeUser = {} } = useContext(loggedInContext);
-  const { orginalPhotos, setOriginalPhotos } = useContext(
+  const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });
@@ -28,8 +28,8 @@ function UserProfile({ user }) {
   useEffect(() => {
     let isMounted = true;
     async function getUserPhotos() {
-      if (orginalPhotos) {
-        const photos = orginalPhotos.filter(
+      if (originalPhotos) {
+        const photos = originalPhotos.filter(
           photo => photo.username === user.username
         );
 
@@ -47,14 +47,14 @@ function UserProfile({ user }) {
       }
     }
 
-    if (user && orginalPhotos) {
+    if (user && originalPhotos) {
       getUserPhotos();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [user?.userId, orginalPhotos]);
+  }, [user?.userId, originalPhotos]);
   return (
     <>
       <Header

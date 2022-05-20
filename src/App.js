@@ -29,7 +29,7 @@ function App() {
   const { userId, following } = activeUser;
 
   const [postPhotos, setPostPhotos] = useStateCallback([]);
-  const [orginalPhotos, setOriginalPhotos] = useState([]);
+  const [originalPhotos, setOriginalPhotos] = useState([]);
   const [userFollowing, setUserFollowing] = useState([]);
   const { photos } = usePhotos(userId, userFollowing);
 
@@ -48,7 +48,7 @@ function App() {
       <loggedInContext.Provider value={{ activeUser }}>
         <PostPhotosContext.Provider value={{ postPhotos, setPostPhotos }}>
           <originalPhotosContext.Provider
-            value={{ orginalPhotos, setOriginalPhotos }}
+            value={{ originalPhotos, setOriginalPhotos }}
           >
             <UserFollowingContext.Provider
               value={{ userFollowing, setUserFollowing }}
