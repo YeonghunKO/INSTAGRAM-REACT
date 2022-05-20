@@ -10,9 +10,7 @@ import originalPhotosContext from '../../context/originalPost';
 
 function UserProfile({ user }) {
   const { activeUser = {} } = useContext(loggedInContext);
-  const { originalPhotos, setOriginalPhotos } = useContext(
-    originalPhotosContext
-  );
+  const { originalPhotos } = useContext(originalPhotosContext);
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });
   const initState = {
     profile: {},
