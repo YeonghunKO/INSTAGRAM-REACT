@@ -19,7 +19,7 @@ function Header({ postUsername, userPhotoUrl, docId }) {
   const [open, setOpen] = useState(false);
 
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
-  const { orginalPhotos, setOriginalPhotos } = useContext(
+  const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
 
@@ -41,7 +41,7 @@ function Header({ postUsername, userPhotoUrl, docId }) {
     setOpen(false);
     await deleteDoc(doc(db, 'photos', docId));
 
-    const filteredOriginalPhotos = orginalPhotos.filter(
+    const filteredOriginalPhotos = originalPhotos.filter(
       photo => photo.docId !== docId
     );
     setOriginalPhotos(filteredOriginalPhotos);
