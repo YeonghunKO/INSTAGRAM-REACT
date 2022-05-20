@@ -16,6 +16,7 @@ import { db } from '../lib/firebase';
 
 import UserContext from '../context/currentUser';
 import originalPhotosContext from '../context/originalPost';
+import PostPhotosContext from '../context/postPhotos';
 
 import * as ROUTES from '../constants/routes';
 import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
@@ -49,15 +50,14 @@ import ReactLoader from '../components/Loader';
 import InputField from './InputField';
 
 // hover 하면 opacity가 자연스럽게 옅어지는 효과를 tailwind config에 추가해보기
-function Header({ setPostPhotos = function () {} }) {
+function Header() {
   const { username } = useParams();
   const navigate = useNavigate();
 
   const { user: loggedInUser } = useContext(UserContext);
 
-  const { orginalPhotos, setOriginalPhotos } = useContext(
-    originalPhotosContext
-  );
+  const { originalPhotos } = useContext(originalPhotosContext);
+  const { setPostPhotos } = useContext(PostPhotosContext);
 
   const { uid, displayName, photoURL } = loggedInUser;
 
@@ -207,11 +207,6 @@ function Header({ setPostPhotos = function () {} }) {
     navigate(ROUTES.LOGIN);
   };
 
-  const getOriginalPhotos = () => {
-    console.log('getOriginalPhotos');
-  };
-
-  console.log(setPostPhotos);
   return (
     <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
@@ -219,19 +214,14 @@ function Header({ setPostPhotos = function () {} }) {
         <div className="flex justify-between items-center h-full">
           <div className="text-gray-700 text-center flex cursor-pointer xs:w-[16%] xs:mr-1 ">
             <h1 className="flex justify-center">
-              {/* <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo"> */}
-              <img
-                onClick={() => {
-                  setPostPhotos([], () => {
-                    navigate(ROUTES.DASHBOARD);
-                    console.log('second cb!');
-                  });
-                }}
-                src={INSTAGRAM_LOGO}
-                alt="Instagram"
-                className="mt-2 lg:w-6/12"
-              />
-              {/* </Link> */}
+              <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
+                <img
+                  onClick={() => setPostPhotos(originalPhotos)}
+                  src={INSTAGRAM_LOGO}
+                  alt="Instagram"
+                  className="mt-2 lg:w-6/12"
+                />
+              </Link>
             </h1>
           </div>
 
@@ -486,7 +476,3 @@ function Header({ setPostPhotos = function () {} }) {
 }
 
 export default Header;
-
-Header.propTypes = {
-  setPostPhotos: PropTypes.func,
-};

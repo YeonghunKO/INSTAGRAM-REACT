@@ -1,16 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 
 import { Instagram } from 'react-content-loader';
 import Post from '../components/post';
 
-import PropTypes from 'prop-types';
+import PostPhotosContext from '../context/postPhotos';
+import UserFollowingContext from '../context/userFollowing';
 
 import useScroll from '../hooks/useScroll';
 
 import { debounce } from '../helpers/debounce';
 
-function Timeline({ following, photos }) {
-  const [postPhotos, setPostPhotos] = useState([]);
+function Timeline() {
+  const { postPhotos } = useContext(PostPhotosContext);
+  const { userFollowing } = useContext(UserFollowingContext);
+
+  const [photos, setPhotos] = useState([]);
   const [photosSlice, setPhotosSlice] = useState(3);
 
   const PhotosNotEnd = photosSlice <= postPhotos?.length;
@@ -28,17 +32,17 @@ function Timeline({ following, photos }) {
   }
 
   useEffect(() => {
-    setPostPhotos(photos);
-  }, [photos]);
+    setPhotos(postPhotos);
+  }, [postPhotos]);
 
   return (
     <section ref={sectionEle} className="col-span-3 lg:col-span-2">
-      {!postPhotos && !following ? (
+      {!photos && !userFollowing ? (
         Array.from({ length: 4 }, () => 0).map((_, ind) => (
           <Instagram key={ind} />
         ))
-      ) : postPhotos && postPhotos.length ? (
-        postPhotos
+      ) : photos && photos.length ? (
+        photos
           .slice(0, photosSlice)
           .map(photoObj => <Post key={photoObj.docId} photoObj={photoObj} />)
       ) : (
@@ -49,8 +53,3 @@ function Timeline({ following, photos }) {
 }
 
 export default Timeline;
-
-Timeline.propTypes = {
-  following: PropTypes.array,
-  photos: PropTypes.array,
-};
