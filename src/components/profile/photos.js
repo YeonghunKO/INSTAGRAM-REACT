@@ -12,7 +12,7 @@ import { debounce } from '../../helpers/debounce';
 function Photos({ photos }) {
   console.log('photos');
   const [windowWidth] = useState(window.innerWidth);
-  const [photosSlice, setPhotosSlice] = useState(3);
+  const [photosSlice, setPhotosSlice] = useState(4);
 
   const PhotosNotEnd = photosSlice <= photos?.length;
 

@@ -207,6 +207,10 @@ function Header() {
     navigate(ROUTES.LOGIN);
   };
 
+  const getOriginalPhotos = () => {
+    setPostPhotos(originalPhotos);
+  };
+
   return (
     <nav className="h-16 px-4 lg:px-0 bg-white border-b border-gray-primary mb-8">
       {isLoading && <ReactLoader />}
@@ -216,7 +220,7 @@ function Header() {
             <h1 className="flex justify-center">
               <Link to={ROUTES.DASHBOARD} aria-label="Instagram logo">
                 <img
-                  onClick={() => setPostPhotos(originalPhotos)}
+                  onClick={getOriginalPhotos}
                   src={INSTAGRAM_LOGO}
                   alt="Instagram"
                   className="mt-2 lg:w-6/12"
@@ -396,6 +400,7 @@ function Header() {
 
                 <Link to={ROUTES.DASHBOARD} aria-label="Dashboard">
                   <svg
+                    onClick={getOriginalPhotos}
                     className="mr-6 text-black-light cursor-pointer w-6 xs:mr-2 lg:w-8 "
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
