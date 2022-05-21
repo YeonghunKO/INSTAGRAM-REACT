@@ -27,7 +27,7 @@ function Post({ photoObj, isProfile }) {
         isProfile && 'overflow-y-scroll'
       } rounded border ${isProfile && 'h-full'} w-full ${
         isProfile ? 'lg:w-full' : 'lg:w-9/12'
-      } bg-white border-gray-primary mb-12 scrollbar`}
+      } bg-white border-gray-primary mb-12 scrollbar z-[2000]`}
     >
       <div>
         <Header

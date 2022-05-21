@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import ContentLoader from 'react-content-loader';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 import Photo from './photo';
 
@@ -15,6 +15,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 
 import Post from '../post';
 
@@ -27,22 +28,37 @@ function Photos({ photos }) {
 
   const [postOpen, setpostOpen] = useState(false);
 
-  const handlePostOpen = () => {
+  const PhotosNotEnd = photosSlice <= photos?.length - 1;
+
+  const postLength = photos?.length;
+
+  const handlePostOpen = useCallback(() => {
     setpostOpen(true);
-  };
+  }, []);
 
   const handlePostClose = () => {
     setTimeout(() => setpostOpen(false), 100);
   };
 
-  const PhotosNotEnd = photosSlice <= photos?.length;
+  const prevPost = () => {
+    if (currentPostIndex === 0) {
+      setCurrentPostIndex(postLength - 1);
+    } else {
+      setCurrentPostIndex(prevPostIndex => prevPostIndex - 1);
+    }
+  };
+
+  const nextPost = () => {
+    if (currentPostIndex === postLength - 1) {
+      setCurrentPostIndex(0);
+    } else {
+      setCurrentPostIndex(prevPostIndex => prevPostIndex + 1);
+    }
+  };
 
   const photosContainer = useRef();
   const postContainer = useRef();
   const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
-
-  const postLength = photos?.length;
-  console.log(postLength);
 
   if (
     photosContainer.current &&
@@ -99,6 +115,7 @@ function Photos({ photos }) {
             <p className="text-center text-2xl">No Posts Yet</p>
           ))}
       </div>
+
       {photos?.length ? (
         <Modal
           aria-labelledby="transition-modal-title"
@@ -112,20 +129,38 @@ function Photos({ photos }) {
           }}
         >
           <Fade in={postOpen}>
-            <Box className="outline-none absolute top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0">
-              <Post isProfile={true} photoObj={photos[0]} />
+            <Box
+              class={`absolute text-white outline-none top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0`}
+            >
+              <CloseIcon
+                className={`absolute cursor-pointer -top-5 -right-11`}
+                onClick={handlePostClose}
+              />
+
+              <ArrowCircleLeftOutlinedIcon
+                onClick={prevPost}
+                className={`absolute cursor-pointer top-[50%] -left-11`}
+              />
+              <ArrowCircleRightOutlinedIcon
+                onClick={nextPost}
+                className={`absolute cursor-pointer top-[50%] -right-11`}
+              />
+              <Box className="overflow-hidden text-[#000000] outline-none absolute top-7 h-[92%] left-1 w-full m-0">
+                <section
+                  className={`flex h-[100%] w-[400%]`}
+                  ref={postContainer}
+                >
+                  {photos.slice(0, photosSlice).map((photo, ind) => (
+                    <div key={photo.docId} className={`w-full`}>
+                      <Post photoObj={photo} isProfile={true} />
+                    </div>
+                  ))}
+                </section>
+              </Box>
             </Box>
           </Fade>
         </Modal>
       ) : null}
-      <div
-        className={`${
-          !postOpen && 'hidden'
-        } absolute top-0 left-0 h-full w-full text-white cursor-pointer `}
-      >
-        <ArrowCircleLeftOutlinedIcon className="absolute text-3xl top-[50%] left-2 z-[2000]" />
-        <ArrowCircleRightOutlinedIcon className="absolute text-3xl top-[50%] right-2 z-[2000]" />
-      </div>
     </>
   );
 }
