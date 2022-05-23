@@ -30,9 +30,13 @@ function Photos({ photos }) {
 
   const [postOpen, setpostOpen] = useState(false);
 
+  const $photosContainer = useRef();
+  const $postContainer = useRef();
+  const $post = useRef();
+
   const PhotosNotEnd = photosSlice <= photos?.length - 1;
 
-  const postLength = photos?.length;
+  const postLength = $photosContainer.current?.childElementCount;
 
   const handlePostOpen = useCallback(() => {
     setpostOpen(true);
@@ -58,16 +62,14 @@ function Photos({ photos }) {
     }
   };
 
-  const $photosContainer = useRef();
-  const $postContainer = useRef();
   const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
 
+  console.log($post.current?.offsetWidth * currentPostIndex);
   if (
     $photosContainer.current &&
     scrollY + innerHeight >= $photosContainer.current.offsetHeight
   ) {
     if (PhotosNotEnd) {
-      console.log('photos not end');
       debounce(() => {
         setPhotosSlice(prevSlice => prevSlice + 2);
       }, 300);
@@ -142,19 +144,25 @@ function Photos({ photos }) {
 
               <ArrowCircleLeftOutlinedIcon
                 onClick={prevPost}
-                className={`absolute cursor-pointer top-[50%] -left-11`}
+                className={`${
+                  photos.length <= 1 && 'hidden'
+                } absolute cursor-pointer top-[50%] -left-11`}
               />
               <ArrowCircleRightOutlinedIcon
                 onClick={nextPost}
-                className={`absolute cursor-pointer top-[50%] -right-11`}
+                className={`${
+                  photos.length <= 1 && 'hidden'
+                } absolute cursor-pointer top-[50%] -right-11`}
               />
               <Box className="overflow-hidden text-[#000000] outline-none absolute top-7 h-[92%] left-1 w-full m-0">
                 <PostContainer
                   width={$photosContainer.current?.childElementCount}
                   ref={$postContainer}
+                  postWidth={$post.current?.offsetWidth}
+                  currentPostIndex={currentPostIndex}
                 >
                   {photos.slice(0, photosSlice).map((photo, ind) => (
-                    <div key={photo.docId} className={`w-full`}>
+                    <div ref={$post} key={photo.docId} className={`w-full`}>
                       <Post photoObj={photo} isProfile={true} />
                     </div>
                   ))}
