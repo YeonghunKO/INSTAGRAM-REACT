@@ -56,7 +56,9 @@ function Header() {
 
   const { user: loggedInUser } = useContext(UserContext);
 
-  const { originalPhotos } = useContext(originalPhotosContext);
+  const { originalPhotos, setOriginalPhotos } = useContext(
+    originalPhotosContext
+  );
   const { setPostPhotos } = useContext(PostPhotosContext);
 
   const { uid, displayName, photoURL } = loggedInUser;
