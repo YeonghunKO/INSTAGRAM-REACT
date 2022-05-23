@@ -17,12 +17,14 @@ import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutl
 import ArrowCircleRightOutlinedIcon from '@mui/icons-material/ArrowCircleRightOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 
+import { PostContainer } from '../../styles/PostContainer.style';
+
 import Post from '../post';
 
 function Photos({ photos }) {
   console.log('photos');
   const [windowWidth] = useState(window.innerWidth);
-  const [photosSlice, setPhotosSlice] = useState(4);
+  const [photosSlice, setPhotosSlice] = useState(6);
 
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
@@ -56,15 +58,16 @@ function Photos({ photos }) {
     }
   };
 
-  const photosContainer = useRef();
-  const postContainer = useRef();
+  const $photosContainer = useRef();
+  const $postContainer = useRef();
   const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
 
   if (
-    photosContainer.current &&
-    scrollY + innerHeight >= photosContainer.current.offsetHeight
+    $photosContainer.current &&
+    scrollY + innerHeight >= $photosContainer.current.offsetHeight
   ) {
     if (PhotosNotEnd) {
+      console.log('photos not end');
       debounce(() => {
         setPhotosSlice(prevSlice => prevSlice + 2);
       }, 300);
@@ -94,7 +97,7 @@ function Photos({ photos }) {
           <div
             data-testid="photos"
             className="grid grid-cols-1 lg:grid-cols-3 gap-2 mb-12 px-3 lg:px-0"
-            ref={photosContainer}
+            ref={$photosContainer}
           >
             {photos?.length
               ? photos
@@ -130,7 +133,7 @@ function Photos({ photos }) {
         >
           <Fade in={postOpen}>
             <Box
-              class={`absolute text-white outline-none top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0`}
+              className={`absolute text-white outline-none top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0`}
             >
               <CloseIcon
                 className={`absolute cursor-pointer -top-5 -right-11`}
@@ -146,16 +149,16 @@ function Photos({ photos }) {
                 className={`absolute cursor-pointer top-[50%] -right-11`}
               />
               <Box className="overflow-hidden text-[#000000] outline-none absolute top-7 h-[92%] left-1 w-full m-0">
-                <section
-                  className={`flex h-[100%] w-[400%]`}
-                  ref={postContainer}
+                <PostContainer
+                  width={$photosContainer.current?.childElementCount}
+                  ref={$postContainer}
                 >
                   {photos.slice(0, photosSlice).map((photo, ind) => (
                     <div key={photo.docId} className={`w-full`}>
                       <Post photoObj={photo} isProfile={true} />
                     </div>
                   ))}
-                </section>
+                </PostContainer>
               </Box>
             </Box>
           </Fade>
