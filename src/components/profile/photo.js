@@ -1,18 +1,15 @@
 import PropTypes from 'prop-types';
-import { useState, memo } from 'react';
+import { memo } from 'react';
 
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Post from '../post';
-
-function Photo({ photo, handlePostOpen }) {
+function Photo({ photo, handlePostOpen, index }) {
   console.log(photo.docId);
+  const handlePhotoClick = () => {
+    handlePostOpen(index);
+  };
   return (
     <>
       <div
-        onClick={handlePostOpen}
+        onClick={handlePhotoClick}
         data-testid={`photo`}
         key={photo.docId}
         className="h-9/12 mb-3 cursor-pointer relative group"
@@ -64,4 +61,5 @@ export default memo(Photo);
 Photo.propTypes = {
   photo: PropTypes.object,
   handlePostOpen: PropTypes.func,
+  index: PropTypes.number,
 };

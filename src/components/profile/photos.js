@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import ContentLoader from 'react-content-loader';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 import Photo from './photo';
 
@@ -30,6 +30,8 @@ function Photos({ photos }) {
 
   const [postOpen, setpostOpen] = useState(false);
 
+  const [postWidth, setPostWidth] = useState(0);
+
   const $photosContainer = useRef();
   const $postContainer = useRef();
   const $post = useRef();
@@ -38,7 +40,8 @@ function Photos({ photos }) {
 
   const postLength = $photosContainer.current?.childElementCount;
 
-  const handlePostOpen = useCallback(() => {
+  const handlePostOpen = useCallback(index => {
+    setCurrentPostIndex(index);
     setpostOpen(true);
   }, []);
 
@@ -64,7 +67,6 @@ function Photos({ photos }) {
 
   const [scrollY, innerHeight] = useScroll(PhotosNotEnd);
 
-  console.log($post.current?.offsetWidth * currentPostIndex);
   if (
     $photosContainer.current &&
     scrollY + innerHeight >= $photosContainer.current.offsetHeight
@@ -75,6 +77,13 @@ function Photos({ photos }) {
       }, 300);
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPostWidth($post.current?.offsetWidth);
+    }, 100);
+  }, [postOpen]);
+
   return (
     <>
       <div className="h-16 border-t border-gray-primary mt-12 pt-4">
@@ -104,11 +113,12 @@ function Photos({ photos }) {
             {photos?.length
               ? photos
                   .slice(0, photosSlice)
-                  .map(photo => (
+                  .map((photo, ind) => (
                     <Photo
                       handlePostOpen={handlePostOpen}
                       key={photo.docId}
                       photo={photo}
+                      index={ind}
                     />
                   ))
               : null}
@@ -158,11 +168,15 @@ function Photos({ photos }) {
                 <PostContainer
                   width={$photosContainer.current?.childElementCount}
                   ref={$postContainer}
-                  postWidth={$post.current?.offsetWidth}
+                  postWidth={postWidth}
                   currentPostIndex={currentPostIndex}
                 >
                   {photos.slice(0, photosSlice).map((photo, ind) => (
-                    <div ref={$post} key={photo.docId} className={`w-full`}>
+                    <div
+                      ref={$post}
+                      key={photo.docId}
+                      className={`w-full post`}
+                    >
                       <Post photoObj={photo} isProfile={true} />
                     </div>
                   ))}
