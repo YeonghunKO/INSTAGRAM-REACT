@@ -1,14 +1,18 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getUserByUsername } from '../services/firebase';
 import * as ROUTES from '../constants/routes';
 import Header from '../components/Header';
 import UserProfile from '../components/profile';
 
+import UserFollowingContext from '../context/userFollowing';
+
 function Profile() {
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const navigation = useNavigate();
+
+  const { userFollowing } = useContext(UserFollowingContext);
   useEffect(() => {
     async function chekcUserExists() {
       const [user] = await getUserByUsername(username);
@@ -19,7 +23,7 @@ function Profile() {
       }
     }
     chekcUserExists();
-  }, [username, navigation]);
+  }, [username, navigation, userFollowing]);
 
   return (
     <div className="bg-gray-background">
