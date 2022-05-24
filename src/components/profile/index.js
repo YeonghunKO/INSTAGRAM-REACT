@@ -11,7 +11,11 @@ import originalPhotosContext from '../../context/originalPost';
 function UserProfile({ user }) {
   const { activeUser = {} } = useContext(loggedInContext);
   const { originalPhotos } = useContext(originalPhotosContext);
-  const reducer = (prevState, newState) => ({ ...prevState, ...newState });
+  const reducer = (prevState, newState) => {
+    console.log('prevState', prevState);
+    console.log('newState', newState);
+    return { ...prevState, ...newState };
+  };
   const initState = {
     profile: {},
     photosCollection: null,
@@ -59,7 +63,7 @@ function UserProfile({ user }) {
         photosCount={photosCollection ? photosCollection.length : 0}
         profile={profile}
         followersCount={followersCount}
-        setFollowerCount={dispatch}
+        userProfileDispatch={dispatch}
         activeUser={activeUser}
       />
 

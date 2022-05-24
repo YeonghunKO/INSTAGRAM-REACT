@@ -8,8 +8,8 @@ import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
 import UserFollowingContext from '../../context/userFollowing';
 
 import { doc, updateDoc } from 'firebase/firestore';
-
 import { getAuth, updateProfile } from 'firebase/auth';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 import { db } from '../../lib/firebase';
 
@@ -35,7 +35,7 @@ function Header({
   activeUser,
   photosCount,
   followersCount,
-  setFollowerCount,
+  userProfileDispatch,
   profile: {
     docId: profileDocId,
     userId: profileUserId,
@@ -55,17 +55,17 @@ function Header({
 
   const [profileImg, setProfileImg] = useState([]);
   const [username, setUsername] = useState(profileUsername);
-  const [fullname, setFullname] = useState(profileFullName);
+  const [fullName, setFullname] = useState(profileFullName);
   const [introduction, setIntroduction] = useState(profileIntroduction);
 
-  const [editProfileOpen, setEditProfileOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('');
 
   const activeBtnFollow =
     activeUser?.username && activeUser?.username !== profileUsername;
 
   const handelToggleFollow = async () => {
     setIsFollowingProfile(prevIsFollowing => !prevIsFollowing);
-    setFollowerCount({
+    userProfileDispatch({
       followersCount: isFollowingProfile
         ? followersCount - 1
         : followersCount + 1,
@@ -93,10 +93,15 @@ function Header({
   };
 
   const handleEditProfileOpen = () => {
-    setEditProfileOpen(true);
+    setDialogType('profileInfo');
   };
+
+  const handleEditProfileImageOpen = () => {
+    setDialogType('profileImg');
+  };
+
   const handleEditProfileClose = () => {
-    setEditProfileOpen(false);
+    setDialogType('');
   };
 
   const onImageChange = (imageList, addUpdateIndex) => {
@@ -115,10 +120,57 @@ function Header({
   };
 
   const handleEditProfileConfirm = async () => {
-    console.log('profileImg', profileImg);
-    console.log('username', username);
-    console.log('fullname', fullname);
-    console.log('introduction', introduction);
+    const profileDoc = doc(db, 'users', profileDocId);
+
+    // Set the "capital" field of the city 'DC'
+    await updateDoc(profileDoc, {
+      username,
+      fullName,
+      introduction,
+    });
+
+    userProfileDispatch({
+      profile: {
+        profileDocId,
+        profileUserId,
+        followers,
+        following,
+        username,
+        fullName,
+        introduction,
+        photoURL,
+      },
+    });
+  };
+
+  const handleEditProfileImgConfirm = async () => {
+    if (profileImg[0].file) {
+      console.log('photo url changed');
+      const storage = getStorage();
+      const storageRef = ref(storage, `userProfilePicture/${username}`);
+      const urlStorageRef = ref(
+        storage,
+        `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
+      );
+      await uploadBytes(storageRef, profileImg[0].file);
+
+      const photoURL = await getDownloadURL(urlStorageRef);
+      const auth = getAuth();
+
+      await updateProfile(auth.currentUser, {
+        displayName: username,
+        photoURL,
+      }).catch(error => {
+        alert(error);
+      });
+
+      const profileDoc = doc(db, 'users', profileDocId);
+
+      // Set the "capital" field of the city 'DC'
+      await updateDoc(profileDoc, {
+        photoURL,
+      });
+    }
   };
 
   useEffect(() => {
@@ -141,10 +193,11 @@ function Header({
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center items-center">
+      <div className="container flex justify-center items-center hover:after:content-['cool'] hover:after:absolute hover:after:text-white hover:after:bg-black-faded hover:after:bg-opacity-70">
         {profileUsername ? (
           <img
-            className="rounded-full h-20 lg:h-40 w-20 lg:w-40 flex"
+            onClick={handleEditProfileImageOpen}
+            className="rounded-full h-20 lg:h-40 w-20 lg:w-40 flex cursor-pointer"
             src={photoURL}
             onError={e => {
               e.target.src = DEFAULT_IMAGE_PATH;
@@ -228,7 +281,67 @@ function Header({
           </div>
         </div>
       )}
-      <Dialog open={editProfileOpen} onClose={handleEditProfileClose}>
+      <Dialog
+        open={dialogType === 'profileInfo'}
+        onClose={handleEditProfileClose}
+      >
+        <DialogTitle>Edit your profile</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            id="username"
+            label="edit your username"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setUsername(target.value)}
+            value={username}
+          />
+          <TextField
+            margin="dense"
+            id="fullName"
+            label="edit your fullName"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setFullname(target.value)}
+            value={fullName}
+          />
+          <TextField
+            margin="dense"
+            id="introduction"
+            label="edit your introduction"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setIntroduction(target.value)}
+            value={introduction}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Stack direction="row" spacing={1}>
+            <Button
+              onClick={handleEditProfileClose}
+              variant="contained"
+              color="error"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleEditProfileConfirm}
+              variant="contained"
+              style={{ marginRight: '.3rem' }}
+            >
+              Edit
+            </Button>
+          </Stack>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={dialogType === 'profileImg'}
+        onClose={handleEditProfileClose}
+      >
         <DialogTitle>Edit your profile</DialogTitle>
         <DialogContent>
           <p className="text-[1rem] text-[rgba(0,0,0,0.6)]">
@@ -298,36 +411,6 @@ function Header({
               </div>
             )}
           </ReactImageUploading>
-          <TextField
-            margin="dense"
-            id="username"
-            label="edit your username"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setUsername(target.value)}
-            value={username}
-          />
-          <TextField
-            margin="dense"
-            id="fullname"
-            label="edit your fullname"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setFullname(target.value)}
-            value={fullname}
-          />
-          <TextField
-            margin="dense"
-            id="introduction"
-            label="edit your introduction"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setIntroduction(target.value)}
-            value={introduction}
-          />
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1}>
@@ -339,7 +422,7 @@ function Header({
               Cancel
             </Button>
             <Button
-              onClick={handleEditProfileConfirm}
+              onClick={handleEditProfileImgConfirm}
               variant="contained"
               style={{ marginRight: '.3rem' }}
             >
@@ -358,7 +441,7 @@ Header.propTypes = {
   activeUser: PropTypes.object.isRequired,
   photosCount: PropTypes.number.isRequired,
   followersCount: PropTypes.number.isRequired,
-  setFollowerCount: PropTypes.func.isRequired,
+  userProfileDispatch: PropTypes.func.isRequired,
   profile: PropTypes.shape({
     docId: PropTypes.string,
     userId: PropTypes.string,
