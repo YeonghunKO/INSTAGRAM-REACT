@@ -58,7 +58,7 @@ function Header({
   const [fullName, setFullname] = useState(profileFullName);
   const [introduction, setIntroduction] = useState(profileIntroduction);
 
-  const [dialogType, setDialogType] = useState('');
+  const [editProfileOpen, setEditProfileOpen] = useState(false);
 
   const activeBtnFollow =
     activeUser?.username && activeUser?.username !== profileUsername;
@@ -93,15 +93,11 @@ function Header({
   };
 
   const handleEditProfileOpen = () => {
-    setDialogType('profileInfo');
-  };
-
-  const handleEditProfileImageOpen = () => {
-    setDialogType('profileImg');
+    setEditProfileOpen(true);
   };
 
   const handleEditProfileClose = () => {
-    setDialogType('');
+    setEditProfileOpen(false);
   };
 
   const onImageChange = (imageList, addUpdateIndex) => {
@@ -119,7 +115,32 @@ function Header({
     }
   };
 
+  const updateProfileInfoOnly = async photo => {};
+
   const handleEditProfileConfirm = async () => {
+    let editedPhotoURL;
+    if (profileImg[0].file) {
+      console.log('photo url changed');
+      const storage = getStorage();
+      const storageRef = ref(storage, `userProfilePicture/${username}`);
+      const urlStorageRef = ref(
+        storage,
+        `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
+      );
+      await uploadBytes(storageRef, profileImg[0].file);
+
+      editedPhotoURL = await getDownloadURL(urlStorageRef);
+    }
+
+    const auth = getAuth();
+
+    await updateProfile(auth.currentUser, {
+      displayName: username,
+      photoURL: editedPhotoURL ? editedPhotoURL : photoURL,
+    }).catch(error => {
+      alert(error);
+    });
+
     const profileDoc = doc(db, 'users', profileDocId);
 
     // Set the "capital" field of the city 'DC'
@@ -138,40 +159,13 @@ function Header({
         username,
         fullName,
         introduction,
-        photoURL,
+        photoURL: editedPhotoURL ? editedPhotoURL : photoURL,
       },
     });
+    setEditProfileOpen(false);
   };
 
-  const handleEditProfileImgConfirm = async () => {
-    if (profileImg[0].file) {
-      console.log('photo url changed');
-      const storage = getStorage();
-      const storageRef = ref(storage, `userProfilePicture/${username}`);
-      const urlStorageRef = ref(
-        storage,
-        `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
-      );
-      await uploadBytes(storageRef, profileImg[0].file);
-
-      const photoURL = await getDownloadURL(urlStorageRef);
-      const auth = getAuth();
-
-      await updateProfile(auth.currentUser, {
-        displayName: username,
-        photoURL,
-      }).catch(error => {
-        alert(error);
-      });
-
-      const profileDoc = doc(db, 'users', profileDocId);
-
-      // Set the "capital" field of the city 'DC'
-      await updateDoc(profileDoc, {
-        photoURL,
-      });
-    }
-  };
+  const handleEditProfileImgConfirm = async () => {};
 
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
@@ -192,12 +186,11 @@ function Header({
   }, [activeUser?.username, profileUserId]);
 
   return (
-    <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center items-center hover:after:content-['cool'] hover:after:absolute hover:after:text-white hover:after:bg-black-faded hover:after:bg-opacity-70">
+    <div className="grid grid-cols-2 gap-0 justify-between mx-auto max-w-screen-lg">
+      <div className="container flex justify-center items-center lg:ml-[3rem]">
         {profileUsername ? (
           <img
-            onClick={handleEditProfileImageOpen}
-            className="rounded-full h-20 lg:h-40 w-20 lg:w-40 flex cursor-pointer"
+            className="rounded-full h-[9rem] lg:h-48 w-[9rem] lg:w-48 flex cursor-pointer"
             src={photoURL}
             onError={e => {
               e.target.src = DEFAULT_IMAGE_PATH;
@@ -222,9 +215,9 @@ function Header({
           <rect x="160" y="100" rx="5" ry="5" width="74" height="23" />
         </ContentLoader>
       ) : (
-        <div className="flex items-center justify-center flex-col col-span-2 mt-3">
+        <div className="flex items-center justify-center flex-col col-span-1 mt-3 xs:text-xs">
           <div className="container flex items-center">
-            <p className="text-2xl mr-7">{profileUsername}</p>
+            <p className="text-lg mr-4">{profileUsername}</p>
             {activeBtnFollow ? (
               <button
                 className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
@@ -281,67 +274,7 @@ function Header({
           </div>
         </div>
       )}
-      <Dialog
-        open={dialogType === 'profileInfo'}
-        onClose={handleEditProfileClose}
-      >
-        <DialogTitle>Edit your profile</DialogTitle>
-        <DialogContent>
-          <TextField
-            margin="dense"
-            id="username"
-            label="edit your username"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setUsername(target.value)}
-            value={username}
-          />
-          <TextField
-            margin="dense"
-            id="fullName"
-            label="edit your fullName"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setFullname(target.value)}
-            value={fullName}
-          />
-          <TextField
-            margin="dense"
-            id="introduction"
-            label="edit your introduction"
-            type="text"
-            fullWidth
-            variant="standard"
-            onChange={({ target }) => setIntroduction(target.value)}
-            value={introduction}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Stack direction="row" spacing={1}>
-            <Button
-              onClick={handleEditProfileClose}
-              variant="contained"
-              color="error"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleEditProfileConfirm}
-              variant="contained"
-              style={{ marginRight: '.3rem' }}
-            >
-              Edit
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog
-        open={dialogType === 'profileImg'}
-        onClose={handleEditProfileClose}
-      >
+      <Dialog open={editProfileOpen} onClose={handleEditProfileClose}>
         <DialogTitle>Edit your profile</DialogTitle>
         <DialogContent>
           <p className="text-[1rem] text-[rgba(0,0,0,0.6)]">
@@ -411,6 +344,64 @@ function Header({
               </div>
             )}
           </ReactImageUploading>
+          <TextField
+            margin="dense"
+            id="username"
+            label="edit your username"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setUsername(target.value)}
+            value={username}
+          />
+          <TextField
+            margin="dense"
+            id="fullName"
+            label="edit your fullName"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setFullname(target.value)}
+            value={fullName}
+          />
+          <TextField
+            margin="dense"
+            id="introduction"
+            label="edit your introduction"
+            type="text"
+            fullWidth
+            variant="standard"
+            onChange={({ target }) => setIntroduction(target.value)}
+            value={introduction}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Stack direction="row" spacing={1}>
+            <Button
+              onClick={handleEditProfileClose}
+              variant="contained"
+              color="error"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleEditProfileConfirm}
+              variant="contained"
+              style={{ marginRight: '.3rem' }}
+            >
+              Edit
+            </Button>
+          </Stack>
+        </DialogActions>
+      </Dialog>
+      {/* 
+      <Dialog
+        open={dialogType === 'profileImg'}
+        onClose={handleEditProfileClose}
+      >
+        <DialogTitle>Edit your profile</DialogTitle>
+        <DialogContent>
+        
         </DialogContent>
         <DialogActions>
           <Stack direction="row" spacing={1}>
@@ -430,7 +421,7 @@ function Header({
             </Button>
           </Stack>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 }
