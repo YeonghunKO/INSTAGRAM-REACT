@@ -20,6 +20,7 @@ function Header({
     following,
     photoURL,
     username: profileUsername,
+    introduction: profileIntroduction,
   },
 }) {
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
@@ -27,6 +28,11 @@ function Header({
   const { setUserFollowing } = useContext(UserFollowingContext);
 
   const [windowWidth] = useState(window.innerWidth);
+
+  const [profileImg, setProfileImg] = useState(photoURL);
+  const [username, setUsername] = useState(profileUsername);
+  const [fullname, setFullname] = useState(fullName);
+  const [introduction, setIntroduction] = useState(profileIntroduction);
 
   const activeBtnFollow =
     activeUser?.username && activeUser?.username !== profileUsername;
@@ -60,6 +66,8 @@ function Header({
     }
   };
 
+  const handleEditProfileFollow = async () => {};
+
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
       const isFollowing = await isUserFollowingProfile(
@@ -71,6 +79,10 @@ function Header({
     };
     if (activeUser?.username && profileUserId) {
       isLoggedInUserFollowingProfile();
+      setProfileImg(photoURL);
+      setUsername(profileUsername);
+      setFullname(fullName);
+      setIntroduction(profileIntroduction);
     }
   }, [activeUser?.username, profileUserId]);
 
@@ -107,7 +119,7 @@ function Header({
         <div className="flex items-center justify-center flex-col col-span-2 mt-3">
           <div className="container flex items-center">
             <p className="text-2xl mr-7">{profileUsername}</p>
-            {activeBtnFollow && (
+            {activeBtnFollow ? (
               <button
                 className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
                 type="button"
@@ -119,6 +131,19 @@ function Header({
                 }}
               >
                 {isFollowingProfile ? 'Unfollow' : 'Follow'}
+              </button>
+            ) : (
+              <button
+                className="bg-blue-medium font-bold text-sm rounded text-white w-28 h-10"
+                type="button"
+                onClick={handelToggleFollow}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    handleEditProfileFollow();
+                  }
+                }}
+              >
+                Edit your profile
               </button>
             )}
           </div>
@@ -143,6 +168,11 @@ function Header({
           <div className="container mt-4">
             <p className="font-bold">{fullName}</p>
           </div>
+          <div className="container mt-4">
+            <p className="italic">
+              {introduction ? introduction : 'No introduction'}
+            </p>
+          </div>
         </div>
       )}
     </div>
@@ -164,5 +194,6 @@ Header.propTypes = {
     followers: PropTypes.array,
     following: PropTypes.array,
     photoURL: PropTypes.string,
+    introduction: PropTypes.string,
   }).isRequired,
 };

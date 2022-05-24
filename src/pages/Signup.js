@@ -23,6 +23,7 @@ function Signup() {
   const [fullName, setFullName] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+  const [introduction, setIntroduction] = useState('');
   const [error, setError] = useState('');
   const [profileFile, setProfileFile] = useState({ name: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,7 @@ function Signup() {
           followers: [],
           dateCreated: Date.now(),
           photoURL,
+          introduction,
         };
 
         const userRef = doc(db, 'users', username);
@@ -144,6 +146,14 @@ function Signup() {
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2 outline-none"
               onChange={({ target }) => setPassword(target.value)}
               value={password}
+            />
+            <input
+              aria-label="Enter your Introduction"
+              type="text"
+              placeholder="your introduction"
+              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2 outline-none"
+              onChange={({ target }) => setIntroduction(target.value)}
+              value={introduction}
             />
             <div className="flex justify-between mb-2">
               <input
