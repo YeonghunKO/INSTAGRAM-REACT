@@ -7,6 +7,7 @@ import { DEFAULT_IMAGE_PATH } from '../../constants/path';
 import { isUserFollowingProfile, toggleFollow } from '../../services/firebase';
 
 import UserFollowingContext from '../../context/userFollowing';
+import IsProfileEditedContext from '../../context/isProfileEdited';
 
 import { doc, updateDoc } from 'firebase/firestore';
 import { getAuth, updateProfile } from 'firebase/auth';
@@ -19,9 +20,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import AddToPhotosOutlinedIcon from '@mui/icons-material/AddToPhotosOutlined';
 
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
@@ -53,6 +52,7 @@ function Header({
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
 
   const { setUserFollowing } = useContext(UserFollowingContext);
+  const { setIsProfileEdited } = useContext(IsProfileEditedContext);
 
   const [windowWidth] = useState(window.innerWidth);
 
@@ -151,7 +151,6 @@ function Header({
 
     const profileDoc = doc(db, 'users', profileDocId);
 
-    // Set the "capital" field of the city 'DC'
     await updateDoc(profileDoc, {
       username,
       fullName,
@@ -174,9 +173,8 @@ function Header({
     setEditProfileOpen(false);
     setIsLoading(false);
     navigate(`/p/${username}`, { replace: true });
+    setIsProfileEdited(prev => !prev);
   };
-
-  const handleEditProfileImgConfirm = async () => {};
 
   useEffect(() => {
     const isLoggedInUserFollowingProfile = async () => {
@@ -406,34 +404,6 @@ function Header({
           </Stack>
         </DialogActions>
       </Dialog>
-      {/* 
-      <Dialog
-        open={dialogType === 'profileImg'}
-        onClose={handleEditProfileClose}
-      >
-        <DialogTitle>Edit your profile</DialogTitle>
-        <DialogContent>
-        
-        </DialogContent>
-        <DialogActions>
-          <Stack direction="row" spacing={1}>
-            <Button
-              onClick={handleEditProfileClose}
-              variant="contained"
-              color="error"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleEditProfileImgConfirm}
-              variant="contained"
-              style={{ marginRight: '.3rem' }}
-            >
-              Edit
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog> */}
     </div>
   );
 }

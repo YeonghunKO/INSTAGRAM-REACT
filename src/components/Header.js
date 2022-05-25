@@ -1,5 +1,3 @@
-import PropTypes from 'prop-types';
-
 import { useContext, useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';

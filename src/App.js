@@ -7,6 +7,7 @@ import loggedInContext from './context/loggedInUser';
 import PostPhotosContext from './context/postPhotos';
 import originalPhotosContext from './context/originalPost';
 import UserFollowingContext from './context/userFollowing';
+import IsProfileEditedContext from './context/isProfileEdited';
 
 import useAuthListner from './hooks/useAuthListener';
 import useUser from './hooks/useUser';
@@ -26,7 +27,9 @@ const Profile = lazy(() => import('./pages/Profile'));
 function App() {
   const { user } = useAuthListner();
   console.log('APP user', user);
-  const { activeUser = {} } = useUser(user?.uid, user?.displayName);
+  const [isProfileEdited, setIsProfileEdited] = useState(false);
+
+  const { activeUser = {} } = useUser(user?.uid, isProfileEdited);
   const { userId, following } = activeUser;
 
   const [postPhotos, setPostPhotos] = useStateCallback([]);
@@ -54,22 +57,26 @@ function App() {
             <UserFollowingContext.Provider
               value={{ userFollowing, setUserFollowing }}
             >
-              <Suspense fallback={<ReactLoader />}>
-                <Routes>
-                  <Route
-                    path={ROUTES.DASHBOARD}
-                    element={
-                      <ProtectedRoute user={user}>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path={ROUTES.LOGIN} element={<Login />} />
-                  <Route path={ROUTES.SIGN_UP} element={<Signup />} />
-                  <Route path={ROUTES.PROFILE} element={<Profile />} />
-                  <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
-                </Routes>
-              </Suspense>
+              <IsProfileEditedContext.Provider
+                value={{ isProfileEdited, setIsProfileEdited }}
+              >
+                <Suspense fallback={<ReactLoader />}>
+                  <Routes>
+                    <Route
+                      path={ROUTES.DASHBOARD}
+                      element={
+                        <ProtectedRoute user={user}>
+                          <Dashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route path={ROUTES.LOGIN} element={<Login />} />
+                    <Route path={ROUTES.SIGN_UP} element={<Signup />} />
+                    <Route path={ROUTES.PROFILE} element={<Profile />} />
+                    <Route path={ROUTES.NOT_FOUNT} element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </IsProfileEditedContext.Provider>
             </UserFollowingContext.Provider>
           </originalPhotosContext.Provider>
         </PostPhotosContext.Provider>

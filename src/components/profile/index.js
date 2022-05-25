@@ -7,15 +7,11 @@ import Photos from './photos';
 
 import loggedInContext from '../../context/loggedInUser';
 import originalPhotosContext from '../../context/originalPost';
-import UserContext from '../../context/currentUser';
-
-import useUser from '../../hooks/useUser';
 
 function UserProfile({ profileUser }) {
   console.log('UserProfile');
 
-  const { user } = useContext(UserContext);
-  const { activeUser = {} } = useUser(user?.uid, user?.displayName);
+  const { activeUser = {} } = useContext(loggedInContext);
 
   const { originalPhotos } = useContext(originalPhotosContext);
   const reducer = (prevState, newState) => ({ ...prevState, ...newState });

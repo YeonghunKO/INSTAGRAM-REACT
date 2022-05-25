@@ -2,18 +2,11 @@ import { useContext, useState } from 'react';
 import User from './User';
 import Suggestion from './Suggestion';
 
-import loggedInUserContext from '../../context/loggedInUser';
-import UserContext from '../../context/currentUser';
-
-import useUser from '../../hooks/useUser';
-
+import loggedInContext from '../../context/loggedInUser';
 function Sidebar() {
-  const { user } = useContext(UserContext);
-
   const {
     activeUser: { username, fullName, photoURL, userId, docId = '' } = {},
-  } = useUser(user?.uid, user?.displayName);
-
+  } = useContext(loggedInContext);
   return (
     <section className="p-4 hidden lg:block">
       {fullName ? (

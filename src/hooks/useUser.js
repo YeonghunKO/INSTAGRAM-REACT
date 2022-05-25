@@ -1,12 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { getUserByUid } from '../services/firebase';
-import FirebaseContext from '../context/firebase';
 
 // https://firebase.google.com/docs/auth/admin/manage-users 참고
-function useUser(userId, displayName) {
-  console.log(userId, displayName);
+function useUser(userId, isProfileEdited) {
+  console.log('useUser');
   const [activeUser, setActiveUser] = useState();
-  const firebase = useContext(FirebaseContext);
   useEffect(() => {
     async function getUserObjByUserId(userId) {
       try {
@@ -23,7 +21,7 @@ function useUser(userId, displayName) {
       getUserObjByUserId(userId);
     }
     return () => getUserObjByUserId();
-  }, [userId, displayName]);
+  }, [userId, isProfileEdited]);
   return { activeUser, setActiveUser };
 }
 
