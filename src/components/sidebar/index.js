@@ -3,11 +3,16 @@ import User from './User';
 import Suggestion from './Suggestion';
 
 import loggedInUserContext from '../../context/loggedInUser';
+import UserContext from '../../context/currentUser';
+
+import useUser from '../../hooks/useUser';
 
 function Sidebar() {
+  const { user } = useContext(UserContext);
+
   const {
-    activeUser: { docId = '', fullName, username, userId, photoURL } = {},
-  } = useContext(loggedInUserContext);
+    activeUser: { username, fullName, photoURL, userId, docId = '' } = {},
+  } = useUser(user?.uid, user?.displayName);
 
   return (
     <section className="p-4 hidden lg:block">
