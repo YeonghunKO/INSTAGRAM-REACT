@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ContentLoader from 'react-content-loader';
 import { DEFAULT_IMAGE_PATH } from '../../constants/path';
 
@@ -47,6 +48,8 @@ function Header({
     introduction: profileIntroduction,
   },
 }) {
+  console.log('Header');
+
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
 
   const { setUserFollowing } = useContext(UserFollowingContext);
@@ -59,6 +62,10 @@ function Header({
   const [introduction, setIntroduction] = useState(profileIntroduction);
 
   const [editProfileOpen, setEditProfileOpen] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const activeBtnFollow =
     activeUser?.username && activeUser?.username !== profileUsername;
@@ -118,6 +125,7 @@ function Header({
   const updateProfileInfoOnly = async photo => {};
 
   const handleEditProfileConfirm = async () => {
+    setIsLoading(true);
     let editedPhotoURL;
     if (profileImg[0].file) {
       console.log('photo url changed');
@@ -148,6 +156,7 @@ function Header({
       username,
       fullName,
       introduction,
+      photoURL: editedPhotoURL ? editedPhotoURL : photoURL,
     });
 
     userProfileDispatch({
@@ -163,6 +172,8 @@ function Header({
       },
     });
     setEditProfileOpen(false);
+    setIsLoading(false);
+    navigate(`/p/${username}`, { replace: true });
   };
 
   const handleEditProfileImgConfirm = async () => {};
@@ -187,6 +198,7 @@ function Header({
 
   return (
     <div className="grid grid-cols-2 gap-0 justify-between mx-auto max-w-screen-lg">
+      {isLoading && <ReactLoader />}
       <div className="container flex justify-center items-center lg:ml-[3rem]">
         {profileUsername ? (
           <img

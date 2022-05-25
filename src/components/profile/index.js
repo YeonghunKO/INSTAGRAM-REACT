@@ -7,15 +7,18 @@ import Photos from './photos';
 
 import loggedInContext from '../../context/loggedInUser';
 import originalPhotosContext from '../../context/originalPost';
+import UserContext from '../../context/currentUser';
 
-function UserProfile({ user }) {
-  const { activeUser = {} } = useContext(loggedInContext);
+import useUser from '../../hooks/useUser';
+
+function UserProfile({ profileUser }) {
+  console.log('UserProfile');
+
+  const { user } = useContext(UserContext);
+  const { activeUser = {} } = useUser(user?.uid, user?.displayName);
+
   const { originalPhotos } = useContext(originalPhotosContext);
-  const reducer = (prevState, newState) => {
-    console.log('prevState', prevState);
-    console.log('newState', newState);
-    return { ...prevState, ...newState };
-  };
+  const reducer = (prevState, newState) => ({ ...prevState, ...newState });
   const initState = {
     profile: {},
     photosCollection: null,
@@ -32,31 +35,31 @@ function UserProfile({ user }) {
     async function getUserPhotos() {
       if (originalPhotos) {
         const photos = originalPhotos.filter(
-          photo => photo.username === user.username
+          photo => photo.userId === profileUser.userId
         );
 
         if (photos && isMounted) {
           dispatch({
-            profile: user,
+            profile: profileUser,
             photosCollection: photos.map(photo => ({
               ...photo,
-              username: user.username,
-              userPhotoUrl: user.photoURL,
+              username: profileUser.username,
+              userPhotoUrl: profileUser.photoURL,
             })),
-            followersCount: user.followers.length,
+            followersCount: profileUser.followers.length,
           });
         }
       }
     }
 
-    if (user && originalPhotos) {
+    if (profileUser && originalPhotos) {
       getUserPhotos();
     }
 
     return () => {
       isMounted = false;
     };
-  }, [user?.userId, originalPhotos]);
+  }, [profileUser?.userId, originalPhotos]);
   return (
     <>
       <Header
@@ -75,7 +78,7 @@ function UserProfile({ user }) {
 export default UserProfile;
 
 UserProfile.propTypes = {
-  user: PropTypes.shape({
+  profileUser: PropTypes.shape({
     dateCreated: PropTypes.number,
     emailAddress: PropTypes.string,
     followers: PropTypes.array,

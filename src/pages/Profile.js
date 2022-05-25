@@ -8,6 +8,7 @@ import UserProfile from '../components/profile';
 import UserFollowingContext from '../context/userFollowing';
 
 function Profile() {
+  console.log('Profile');
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const navigation = useNavigate();
@@ -29,7 +30,7 @@ function Profile() {
     <div className="bg-gray-background">
       <Header />
       <div className="mx-auto max-w-screen-lg">
-        <UserProfile user={user} />
+        <UserProfile profileUser={user} />
       </div>
     </div>
   );

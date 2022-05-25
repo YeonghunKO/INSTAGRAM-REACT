@@ -22,7 +22,7 @@ import { PostContainer } from '../../styles/PostContainer.style';
 import Post from '../post';
 
 function Photos({ photos }) {
-  console.log('photos');
+  // console.log('photos');
   const [windowWidth] = useState(window.innerWidth);
   const [photosSlice, setPhotosSlice] = useState(6);
 
