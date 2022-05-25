@@ -25,7 +25,8 @@ const Profile = lazy(() => import('./pages/Profile'));
 
 function App() {
   const { user } = useAuthListner();
-  const { activeUser = {} } = useUser(user?.uid);
+  console.log('APP user', user);
+  const { activeUser = {} } = useUser(user?.uid, user?.displayName);
   const { userId, following } = activeUser;
 
   const [postPhotos, setPostPhotos] = useStateCallback([]);
