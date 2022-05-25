@@ -9,7 +9,7 @@ import {
 
 import { db } from '../lib/firebase';
 
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection } from 'firebase/firestore';
 
 import { doesUsernameExist } from '../services/firebase';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -43,15 +43,19 @@ function Signup() {
     } else {
       try {
         setIsLoading(true);
-        const storage = getStorage();
-        const storageRef = ref(storage, `userProfilePicture/${username}`);
-        const urlStorageRef = ref(
-          storage,
-          `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
-        );
-        await uploadBytes(storageRef, profileFile);
+        let photoURL;
+        if (profileFile.name) {
+          const storage = getStorage();
+          const storageRef = ref(storage, `userProfilePicture/${username}`);
+          const urlStorageRef = ref(
+            storage,
+            `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
+          );
+          await uploadBytes(storageRef, profileFile);
 
-        const photoURL = await getDownloadURL(urlStorageRef);
+          photoURL = await getDownloadURL(urlStorageRef);
+        }
+
         const auth = getAuth();
         const createdUserResult = await createUserWithEmailAndPassword(
           auth,
@@ -60,10 +64,10 @@ function Signup() {
         );
         await updateProfile(auth.currentUser, {
           displayName: username,
-          photoURL, //{}
+          photoURL: profileFile.name ? photoURL : '',
         });
 
-        const newUsers = {
+        const newUsersData = {
           userId: createdUserResult.user.uid,
           username: username.toLowerCase(),
           fullName,
@@ -71,12 +75,12 @@ function Signup() {
           following: ['2'],
           followers: [],
           dateCreated: Date.now(),
-          photoURL,
+          photoURL: profileFile.name ? photoURL : '',
           introduction,
         };
 
-        const userRef = doc(db, 'users', username);
-        await setDoc(userRef, newUsers, { merge: true });
+        const userRef = doc(collection(db, 'users'));
+        await setDoc(userRef, newUsersData);
 
         navigate(ROUTES.DASHBOARD);
       } catch (error) {

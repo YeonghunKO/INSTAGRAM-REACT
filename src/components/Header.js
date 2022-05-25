@@ -448,7 +448,9 @@ function Header() {
                     <Link to={`/p/${loggedInUser?.displayName}`}>
                       <img
                         className=" rounded-full h-8 w-8 xs:h-7 xs:w-7 flex"
-                        src={loggedInUser?.photoURL}
+                        src={
+                          loggedInUser?.photoURL ? loggedInUser?.photoURL : ''
+                        }
                         alt={`${loggedInUser?.displayName} profile`}
                         onError={evt => {
                           evt.target.src = DEFAULT_IMAGE_PATH;
