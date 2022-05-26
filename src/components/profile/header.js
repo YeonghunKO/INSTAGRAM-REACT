@@ -225,7 +225,7 @@ function Header({
       ) : (
         <div className="flex items-center justify-center flex-col col-span-1 mt-3 xs:text-xs">
           <div className="container flex items-center">
-            <p className="text-lg mr-1 w-1/3 py-[5px] overflow-hidden text-ellipsis whitespace-nowrap">
+            <p className="text-lg mr-1 w-[26%] py-[5px] overflow-hidden text-ellipsis whitespace-nowrap">
               {username}
             </p>
             {activeBtnFollow ? (
