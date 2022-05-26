@@ -17,6 +17,8 @@ function Post({ photoObj, isProfile }) {
     dateCreated,
     userPhotoUrl,
     location,
+    photoId,
+    userId,
   } = photoObj;
   // console.log(docId);
   const commentInput = useRef(null);
@@ -33,8 +35,10 @@ function Post({ photoObj, isProfile }) {
         <Header
           isProfile={isProfile}
           docId={docId}
+          photoId={photoId}
           postUsername={username}
           userPhotoUrl={userPhotoUrl}
+          userId={userId}
         />
         <img src={imageSrc} alt={caption} className="w-full" />
         <Actions
@@ -73,6 +77,8 @@ Post.propTypes = {
     dateCreated: PropTypes.number.isRequired,
     userPhotoUrl: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
+    photoId: PropTypes.string,
+    userId: PropTypes.string,
   }),
   isProfile: PropTypes.bool,
 };

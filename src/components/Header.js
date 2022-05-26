@@ -143,13 +143,11 @@ function Header() {
       const storage = getStorage();
       const storageRef = ref(
         storage,
-        `userPhotos/${displayName}/${
-          images[0].file.name || images[0].imageName
-        }`
+        `userPhotos/${uid}/${images[0].file.name || images[0].imageName}`
       );
       const urlStorageRef = ref(
         storage,
-        `gs://instagram-d02c0.appspot.com/userPhotos/${displayName}/${
+        `gs://instagram-d02c0.appspot.com/userPhotos/${uid}/${
           images[0].file.name || images[0].imageName
         }`
       );

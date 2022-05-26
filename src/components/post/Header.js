@@ -13,9 +13,17 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Button from '@mui/material/Button';
 
 import { doc, deleteDoc } from 'firebase/firestore';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 import { db } from '../../lib/firebase';
 
-function Header({ isProfile, postUsername, userPhotoUrl, docId }) {
+function Header({
+  isProfile,
+  postUsername,
+  userPhotoUrl,
+  docId,
+  photoId,
+  userId,
+}) {
   const [open, setOpen] = useState(false);
 
   const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
@@ -39,12 +47,21 @@ function Header({ isProfile, postUsername, userPhotoUrl, docId }) {
     const filteredPhotos = postPhotos.filter(photo => photo.docId !== docId);
     setPostPhotos(filteredPhotos);
     setOpen(false);
-    await deleteDoc(doc(db, 'photos', docId));
 
     const filteredOriginalPhotos = originalPhotos.filter(
       photo => photo.docId !== docId
     );
     setOriginalPhotos(filteredOriginalPhotos);
+
+    await deleteDoc(doc(db, 'photos', docId));
+
+    const storage = getStorage();
+
+    const postPhotoRef = ref(storage, `userPhotos/${userId}/${photoId}`);
+
+    deleteObject(postPhotoRef).catch(error => {
+      console.log(error);
+    });
   };
 
   return (
@@ -102,4 +119,6 @@ Header.propTypes = {
   postUsername: PropTypes.string.isRequired,
   userPhotoUrl: PropTypes.string.isRequired,
   docId: PropTypes.string.isRequired,
+  photoId: PropTypes.string,
+  userId: PropTypes.string,
 };
