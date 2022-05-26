@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { memo } from 'react';
 
 function Photo({ photo, handlePostOpen, index }) {
-  console.log(photo.docId);
   const handlePhotoClick = () => {
     handlePostOpen(index);
   };

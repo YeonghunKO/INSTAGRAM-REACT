@@ -47,8 +47,6 @@ function Header({
     introduction: profileIntroduction,
   },
 }) {
-  console.log('Header');
-
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
 
   const { setUserFollowing } = useContext(UserFollowingContext);
@@ -126,7 +124,6 @@ function Header({
     setIsLoading(true);
     let editedPhotoURL;
     if (profileImg[0].file) {
-      console.log('photo url changed');
       const storage = getStorage();
       const storageRef = ref(storage, `userProfilePicture/${username}`);
       const urlStorageRef = ref(

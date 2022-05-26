@@ -8,7 +8,6 @@ function useAuthListner() {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem('authUser'))
   );
-  console.log('useAthListener');
   useEffect(() => {
     const auth = getAuth();
     const listener = onAuthStateChanged(auth, currentUser => {

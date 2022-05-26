@@ -9,8 +9,6 @@ import loggedInContext from '../../context/loggedInUser';
 import originalPhotosContext from '../../context/originalPost';
 
 function UserProfile({ profileUser }) {
-  console.log('UserProfile');
-
   const { activeUser = {} } = useContext(loggedInContext);
 
   const { originalPhotos } = useContext(originalPhotosContext);

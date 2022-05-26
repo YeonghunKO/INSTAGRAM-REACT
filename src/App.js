@@ -26,7 +26,6 @@ const Profile = lazy(() => import('./pages/Profile'));
 
 function App() {
   const { user } = useAuthListner();
-  console.log('APP user', user);
   const [isProfileEdited, setIsProfileEdited] = useState(false);
 
   const { activeUser = {} } = useUser(user?.uid, isProfileEdited);
@@ -37,7 +36,6 @@ function App() {
   const [userFollowing, setUserFollowing] = useState([]);
   const { photos } = usePhotos(userId, userFollowing);
 
-  console.log('app');
   useEffect(() => {
     setOriginalPhotos(photos);
     setPostPhotos(photos);
