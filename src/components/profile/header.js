@@ -122,8 +122,6 @@ function Header({
     }
   };
 
-  const updateProfileInfoOnly = async photo => {};
-
   const handleEditProfileConfirm = async () => {
     setIsLoading(true);
     let editedPhotoURL;
@@ -200,7 +198,7 @@ function Header({
       <div className="container flex justify-center items-center lg:ml-[3rem]">
         {profileUsername ? (
           <img
-            className="rounded-full h-[9rem] lg:h-48 w-[9rem] lg:w-48 flex cursor-pointer"
+            className="rounded-full h-[9rem] lg:h-48 w-[9rem] lg:w-48"
             src={photoURL}
             onError={e => {
               e.target.src = DEFAULT_IMAGE_PATH;
@@ -227,7 +225,9 @@ function Header({
       ) : (
         <div className="flex items-center justify-center flex-col col-span-1 mt-3 xs:text-xs">
           <div className="container flex items-center">
-            <p className="text-lg mr-4">{profileUsername}</p>
+            <p className="text-lg mr-1 w-1/3 py-[5px] overflow-hidden text-ellipsis whitespace-nowrap">
+              {username}
+            </p>
             {activeBtnFollow ? (
               <button
                 className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
@@ -243,7 +243,7 @@ function Header({
               </button>
             ) : (
               <button
-                className="bg-blue-medium font-bold text-sm rounded text-white w-28 h-10"
+                className="bg-blue-medium font-bold text-sm rounded text-white w-21 px-3 h-10 lg:w-28"
                 type="button"
                 onClick={handleEditProfileOpen}
                 onKeyDown={e => {
