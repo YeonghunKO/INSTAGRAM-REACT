@@ -7,14 +7,12 @@ function Sidebar() {
   const {
     activeUser: { username, fullName, photoURL, userId, docId = '' } = {},
   } = useContext(loggedInContext);
-  console.log('sidebar');
   const asideRef = useRef();
 
   useEffect(() => {
     let mounted = true;
     const moveAside = () => {
       if (window.pageYOffset <= 64) {
-        console.log(mounted);
         asideRef.current.style.transform = `translateY(-${window.pageYOffset}px)`;
       }
     };
