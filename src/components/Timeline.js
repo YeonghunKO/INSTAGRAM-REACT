@@ -36,7 +36,10 @@ function Timeline() {
   }, [postPhotos]);
 
   return (
-    <section ref={sectionEle} className="col-span-3 lg:col-span-2">
+    <section
+      ref={sectionEle}
+      className="col-span-3 lg:col-start-2 lg:col-end-4"
+    >
       {!photos && !userFollowing ? (
         Array.from({ length: 4 }, () => 0).map((_, ind) => (
           <Instagram key={ind} />

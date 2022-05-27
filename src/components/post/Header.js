@@ -65,7 +65,7 @@ function Header({
   };
 
   return (
-    <div className="flex justify-between items-center border-b border-gray-primary h-4 p-4 py-8">
+    <header className="flex justify-between items-center border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex items-center">
         <Link
           to={`${isProfile ? '' : `p/${postUsername}`}`}
@@ -108,7 +108,7 @@ function Header({
           <Button onClick={handleDelete}>Yes</Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </header>
   );
 }
 

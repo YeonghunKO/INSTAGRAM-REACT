@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import User from './User';
 import Suggestion from './Suggestion';
 
@@ -7,8 +7,30 @@ function Sidebar() {
   const {
     activeUser: { username, fullName, photoURL, userId, docId = '' } = {},
   } = useContext(loggedInContext);
+  console.log('sidebar');
+  const asideRef = useRef();
+
+  useEffect(() => {
+    let mounted = true;
+    const moveAside = () => {
+      if (window.pageYOffset <= 64) {
+        console.log(mounted);
+        asideRef.current.style.transform = `translateY(-${window.pageYOffset}px)`;
+      }
+    };
+
+    if (mounted) {
+      window.addEventListener('scroll', moveAside);
+    }
+
+    return () => {
+      mounted = false;
+      window.removeEventListener('scroll', moveAside);
+    };
+  }, []);
+
   return (
-    <section className="xs:px-4 col-span-3 lg:col-span-1">
+    <aside ref={asideRef} className="xs:px-4 col-span-3 lg:fixed">
       {fullName ? (
         <>
           <User username={username} fullName={fullName} photoURL={photoURL} />
@@ -18,7 +40,7 @@ function Sidebar() {
           <Suggestion loggedInUserId={userId} loggedInUserDocId={docId} />
         </>
       ) : null}
-    </section>
+    </aside>
   );
 }
 
