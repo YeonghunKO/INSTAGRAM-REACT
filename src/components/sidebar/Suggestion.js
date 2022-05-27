@@ -45,19 +45,21 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   ) : (
     profiles.length > 0 && (
       <div className="rounded flex flex-col">
-        <div className="text-sm flex items-center justify-between mb-2">
-          <div className="mt-4 grid gap-5 w-full">
+        <div className="text-sm flex items-center h-[15rem] justify-between mb-2 mt-2 lg:w-[125%]">
+          <div className=" w-full h-full overflow-y-scroll pr-2 scrollbar ">
             {profiles.slice(0, profilesSlice).map(profile => (
-              <SuggestedProfile
-                key={profile.docId}
-                profileDocId={profile.docId}
-                username={profile.username}
-                profileId={profile.userId}
-                photoURL={profile.photoURL}
-                userId={loggedInUserId}
-                loggedInUserDocId={loggedInUserDocId}
-                setUserFollowing={setUserFollowing}
-              />
+              <>
+                <SuggestedProfile
+                  key={profile.docId}
+                  profileDocId={profile.docId}
+                  username={profile.username}
+                  profileId={profile.userId}
+                  photoURL={profile.photoURL}
+                  userId={loggedInUserId}
+                  loggedInUserDocId={loggedInUserDocId}
+                  setUserFollowing={setUserFollowing}
+                />
+              </>
             ))}
           </div>
         </div>

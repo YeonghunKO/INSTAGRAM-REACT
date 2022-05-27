@@ -12,7 +12,7 @@ function Sidebar() {
   useEffect(() => {
     let mounted = true;
     const moveAside = () => {
-      if (window.pageYOffset <= 64 && window.innerWidth >= 1080) {
+      if (window.pageYOffset <= 84 && window.innerWidth >= 1080) {
         asideRef.current.style.transform = `translateY(-${window.pageYOffset}px)`;
       }
     };
