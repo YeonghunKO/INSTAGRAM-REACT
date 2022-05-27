@@ -100,7 +100,9 @@ function InputField({ allUsers }) {
           </InputAdornment>
         }
       />
-      <div className={`rounded xs:w-[47%] w-[25rem] absolute top-13 bg-white `}>
+      <div
+        className={`rounded xs:w-[47%] w-[25rem] absolute top-13 bg-white z-10`}
+      >
         {suggestedUsers.length > 0 &&
           suggestedUsers.map((userInfo, index) => (
             <SuggestedUsers
