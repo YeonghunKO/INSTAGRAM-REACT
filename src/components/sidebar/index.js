@@ -8,7 +8,7 @@ function Sidebar() {
     activeUser: { username, fullName, photoURL, userId, docId = '' } = {},
   } = useContext(loggedInContext);
   return (
-    <section className="p-4 hidden lg:block">
+    <section className="xs:px-4 col-span-3 lg:col-span-1">
       {fullName ? (
         <>
           <User username={username} fullName={fullName} photoURL={photoURL} />

@@ -15,7 +15,7 @@ function User({ username, fullName, photoURL }) {
   ) : (
     <Link
       to={`/p/${username}`}
-      className="grid grid-cols-4 gpa-4 mb-6 items-center"
+      className="grid xs:hidden grid-cols-4 gap-4 mb-6 items-center"
     >
       <div className="flex items-center justify-center col-span-1">
         <img

@@ -6,9 +6,18 @@ import SuggestedProfile from './SuggestedProfile';
 
 import UserFollowingContext from '../../context/userFollowing';
 
+import Button from '@mui/material/Button';
+
 function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   const [profiles, setProfiles] = useState(null);
+  const [profilesSlice, setProfilesSlice] = useState(3);
   const { userFollowing, setUserFollowing } = useContext(UserFollowingContext);
+
+  const handleMoreSuggestionsBtn = () => {
+    if (profilesSlice < profiles.length) {
+      setProfilesSlice(prevSlice => prevSlice + 3);
+    }
+  };
 
   useEffect(() => {
     async function setSuggestedProfile() {
@@ -27,9 +36,9 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   return !profiles ? (
     <>
       {Array.from({ length: profiles?.length || 3 }, () => 0).map((_, i) => (
-        <ContentLoader viewBox="0 0 380 70" key={i}>
-          <circle cx="30" cy="30" r="30" />
-          <rect x="80" y="17" rx="4" ry="4" width="130" height="13" />
+        <ContentLoader className="mt-2" viewBox="0 0 380 70" key={i}>
+          <circle cx="30" cy="30" r="20" />
+          <rect x="320" y="17" rx="4" ry="4" width="60" height="23" />
         </ContentLoader>
       ))}
     </>
@@ -38,7 +47,7 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
       <div className="rounded flex flex-col">
         <div className="text-sm flex items-center justify-between mb-2">
           <div className="mt-4 grid gap-5 w-full">
-            {profiles.map(profile => (
+            {profiles.slice(0, profilesSlice).map(profile => (
               <SuggestedProfile
                 key={profile.docId}
                 profileDocId={profile.docId}
@@ -52,6 +61,14 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
             ))}
           </div>
         </div>
+        <Button
+          onClick={handleMoreSuggestionsBtn}
+          className="text-xs"
+          size="small"
+          color="primary"
+        >
+          view more suggestions
+        </Button>
       </div>
     )
   );
