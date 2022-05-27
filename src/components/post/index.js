@@ -20,7 +20,7 @@ function Post({ photoObj, isProfile }) {
     photoId,
     userId,
   } = photoObj;
-  // console.log(docId);
+  console.log(photoId);
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
   return (
@@ -29,7 +29,9 @@ function Post({ photoObj, isProfile }) {
         isProfile && 'overflow-y-scroll'
       } rounded border ${isProfile && 'h-full'} w-full ${
         isProfile ? 'lg:w-full' : 'lg:w-10/12'
-      } bg-white border-gray-primary lg:ml-[5rem] mb-12 scrollbar z-[2000]`}
+      } bg-white border-gray-primary ${
+        !isProfile && 'lg:ml-[5rem]'
+      } mb-12 scrollbar z-[2000]`}
     >
       <div>
         <Header
@@ -77,7 +79,7 @@ Post.propTypes = {
     dateCreated: PropTypes.number.isRequired,
     userPhotoUrl: PropTypes.string.isRequired,
     location: PropTypes.string.isRequired,
-    photoId: PropTypes.string,
+    photoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     userId: PropTypes.string,
   }),
   isProfile: PropTypes.bool,

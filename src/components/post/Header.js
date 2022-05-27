@@ -119,6 +119,6 @@ Header.propTypes = {
   postUsername: PropTypes.string.isRequired,
   userPhotoUrl: PropTypes.string.isRequired,
   docId: PropTypes.string.isRequired,
-  photoId: PropTypes.string,
+  photoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   userId: PropTypes.string,
 };
