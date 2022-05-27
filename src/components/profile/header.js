@@ -125,10 +125,10 @@ function Header({
     let editedPhotoURL;
     if (profileImg[0].file) {
       const storage = getStorage();
-      const storageRef = ref(storage, `userProfilePicture/${username}`);
+      const storageRef = ref(storage, `userProfilePicture/${profileUserId}`);
       const urlStorageRef = ref(
         storage,
-        `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
+        `gs://instagram-d02c0.appspot.com/userProfilePicture/${profileUserId}`
       );
       await uploadBytes(storageRef, profileImg[0].file);
 

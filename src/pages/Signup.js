@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as ROUTES from '../constants/routes';
+
+import IsProfileEditedContext from '../context/isProfileEdited';
+
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -28,6 +31,8 @@ function Signup() {
   const [profileFile, setProfileFile] = useState({ name: '' });
   const [isLoading, setIsLoading] = useState(false);
 
+  const { setIsProfileEdited } = useContext(IsProfileEditedContext);
+
   const isInvalid =
     username === '' ||
     fullName === '' ||
@@ -44,17 +49,6 @@ function Signup() {
       try {
         setIsLoading(true);
         let photoURL;
-        if (profileFile.name) {
-          const storage = getStorage();
-          const storageRef = ref(storage, `userProfilePicture/${username}`);
-          const urlStorageRef = ref(
-            storage,
-            `gs://instagram-d02c0.appspot.com/userProfilePicture/${username}`
-          );
-          await uploadBytes(storageRef, profileFile);
-
-          photoURL = await getDownloadURL(urlStorageRef);
-        }
 
         const auth = getAuth();
         const createdUserResult = await createUserWithEmailAndPassword(
@@ -62,6 +56,22 @@ function Signup() {
           emailAddress.trim(''),
           password.trim('')
         );
+
+        if (profileFile.name) {
+          const storage = getStorage();
+          const storageRef = ref(
+            storage,
+            `userProfilePicture/${createdUserResult.user.uid}`
+          );
+          const urlStorageRef = ref(
+            storage,
+            `gs://instagram-d02c0.appspot.com/userProfilePicture/${createdUserResult.user.uid}`
+          );
+          await uploadBytes(storageRef, profileFile);
+
+          photoURL = await getDownloadURL(urlStorageRef);
+        }
+
         await updateProfile(auth.currentUser, {
           displayName: username,
           photoURL: profileFile.name ? photoURL : '',
@@ -81,7 +91,7 @@ function Signup() {
 
         const userRef = doc(collection(db, 'users'));
         await setDoc(userRef, newUsersData);
-
+        setIsProfileEdited(prevEdited => !prevEdited);
         navigate(ROUTES.DASHBOARD);
       } catch (error) {
         setIsLoading(false);
