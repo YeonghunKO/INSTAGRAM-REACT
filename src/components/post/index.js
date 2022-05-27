@@ -20,7 +20,6 @@ function Post({ photoObj, isProfile }) {
     photoId,
     userId,
   } = photoObj;
-  console.log(photoId);
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
   return (

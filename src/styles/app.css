@@ -617,6 +617,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-12 {
   margin-bottom: 3rem !important;
 }
+.mt-7 {
+  margin-top: 1.75rem !important;
+}
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+.mt-4 {
+  margin-top: 1rem !important;
+}
 .block {
   display: block !important;
 }
@@ -788,6 +797,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .gap-4 {
   gap: 1rem !important;
+}
+.gap-5 {
+  gap: 1.25rem !important;
 }
 .overflow-hidden {
   overflow: hidden !important;
@@ -970,6 +982,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-4xl {
   font-size: 2.25rem !important;
   line-height: 2.5rem !important;
+}
+.text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+.text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
 }
 .font-bold {
   font-weight: 700 !important;

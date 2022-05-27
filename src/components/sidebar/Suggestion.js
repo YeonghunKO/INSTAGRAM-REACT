@@ -12,9 +12,9 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   const [profiles, setProfiles] = useState(null);
   const [profilesSlice, setProfilesSlice] = useState(3);
   const { userFollowing, setUserFollowing } = useContext(UserFollowingContext);
-
+  const profilesNotEnd = profilesSlice < profiles?.length;
   const handleMoreSuggestionsBtn = () => {
-    if (profilesSlice < profiles.length) {
+    if (profilesNotEnd) {
       setProfilesSlice(prevSlice => prevSlice + 3);
     }
   };
@@ -36,9 +36,9 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
   return !profiles ? (
     <>
       {Array.from({ length: profiles?.length || 3 }, () => 0).map((_, i) => (
-        <ContentLoader className="mt-2" viewBox="0 0 380 70" key={i}>
+        <ContentLoader className="mt-1" viewBox="0 0 380 50" key={i}>
           <circle cx="30" cy="30" r="20" />
-          <rect x="320" y="17" rx="4" ry="4" width="60" height="23" />
+          <rect x="320" y="12" rx="4" ry="4" width="60" height="23" />
         </ContentLoader>
       ))}
     </>
@@ -66,8 +66,9 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
           className="text-xs"
           size="small"
           color="primary"
+          disabled={!profilesNotEnd}
         >
-          view more suggestions
+          {profilesNotEnd ? 'view more suggestions' : 'no more suggestions'}
         </Button>
       </div>
     )
