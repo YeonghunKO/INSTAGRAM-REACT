@@ -227,7 +227,7 @@ function Header({
             </p>
             {activeBtnFollow ? (
               <button
-                className="bg-blue-medium font-bold text-sm rounded text-white w-20 h-8"
+                className="bg-blue-medium font-bold text-sm rounded text-white w-[6.5rem] ml-3 px-3 h-10"
                 type="button"
                 onClick={handelToggleFollow}
                 onKeyDown={e => {
@@ -240,7 +240,7 @@ function Header({
               </button>
             ) : (
               <button
-                className="bg-blue-medium font-bold text-sm rounded text-white w-21 px-3 h-10 lg:w-28"
+                className="bg-blue-medium font-bold text-sm rounded text-white w-[6.5rem] ml-3 px-3 h-10"
                 type="button"
                 onClick={handleEditProfileOpen}
                 onKeyDown={e => {
