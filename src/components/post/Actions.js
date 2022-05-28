@@ -7,14 +7,12 @@ import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 
 import UserContext from '../../context/currentUser';
 import originalPhotosContext from '../../context/originalPost';
-import PostPhotosContext from '../../context/postPhotos';
 
 function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
   const { user: { uid: userId } = {} } = useContext(UserContext);
   const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
-  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
 
   const { db } = useContext(FirebaseContext);
 

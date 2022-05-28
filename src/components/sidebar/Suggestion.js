@@ -48,18 +48,16 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
         <div className="text-sm flex items-center h-[15rem] justify-between mb-2 mt-2 lg:w-[125%]">
           <div className=" w-full h-full overflow-y-scroll pr-2 scrollbar ">
             {profiles.slice(0, profilesSlice).map(profile => (
-              <>
-                <SuggestedProfile
-                  key={profile.docId}
-                  profileDocId={profile.docId}
-                  username={profile.username}
-                  profileId={profile.userId}
-                  photoURL={profile.photoURL}
-                  userId={loggedInUserId}
-                  loggedInUserDocId={loggedInUserDocId}
-                  setUserFollowing={setUserFollowing}
-                />
-              </>
+              <SuggestedProfile
+                key={profile.docId}
+                profileDocId={profile.docId}
+                username={profile.username}
+                profileId={profile.userId}
+                photoURL={profile.photoURL}
+                userId={loggedInUserId}
+                loggedInUserDocId={loggedInUserDocId}
+                setUserFollowing={setUserFollowing}
+              />
             ))}
           </div>
         </div>
