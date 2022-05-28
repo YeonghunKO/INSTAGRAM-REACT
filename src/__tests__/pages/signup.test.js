@@ -1,8 +1,8 @@
 import { render, fireEvent, waitFor, act } from '@testing-library/react';
 
-import userEvent from '@testing-library/user-event';
+import IsProfileEditedContext from '../../context/isProfileEdited';
 
-import { BrowserRouter, useNavigate } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import SignUp from '../../pages/Signup';
 import * as ROUTES from '../../constants/routes';
 
@@ -13,7 +13,7 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, collection } from 'firebase/firestore';
 
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
@@ -43,7 +43,7 @@ describe('sign up', () => {
     getStorage.mockImplementation(() => ({
       storage: 'storage',
     }));
-    ref.mockImplementation(() => ({ ref: 'ref' }));
+    ref.mockImplementation(() => () => {});
     uploadBytes.mockImplementation(() =>
       Promise.resolve('successfully uploadBytes')
     );
@@ -65,13 +65,19 @@ describe('sign up', () => {
 
     setDoc.mockImplementation(() => Promise.resolve('successfully doc set'));
 
-    const { getByTestId, getByPlaceholderText, queryByTestId } = render(
+    collection.mockImplementation(() => 'collection');
+
+    const { getByTestId, getByPlaceholderText, queryByTestId, debug } = render(
       <BrowserRouter>
-        <SignUp />
+        <IsProfileEditedContext.Provider
+          value={{ setIsProfileEdited: () => {} }}
+        >
+          <SignUp />
+        </IsProfileEditedContext.Provider>
       </BrowserRouter>
     );
 
-    doesUsernameExist.mockImplementation(() => Promise.resolve(false));
+    doesUsernameExist.mockImplementation(ds => Promise.resolve(false));
 
     await act(async () => {
       await fireEvent.change(getByPlaceholderText('username'), {
@@ -86,11 +92,12 @@ describe('sign up', () => {
       await fireEvent.change(getByPlaceholderText('Email password'), {
         target: { value: 'password' },
       });
-
+      await fireEvent.change(getByPlaceholderText('your introduction'), {
+        target: { value: 'hello:)' },
+      });
       const inputFileEle = getByTestId('profile-picture');
-
       await fireEvent.change(inputFileEle, {
-        target: { files: [{ profile: 'profile.png' }] },
+        target: { files: [{ profile: 'profile.png', name: 'my_profile' }] },
       });
 
       fireEvent.submit(getByTestId('sign-up'));
@@ -103,7 +110,13 @@ describe('sign up', () => {
           {
             storage: 'storage',
           },
-          'userProfilePicture/Sinkyo'
+          'gs://instagram-d02c0.appspot.com/userProfilePicture/uid'
+        );
+        expect(ref).toHaveBeenCalledWith(
+          {
+            storage: 'storage',
+          },
+          'userProfilePicture/uid'
         );
         expect(ref).toHaveBeenCalled();
 
@@ -117,14 +130,17 @@ describe('sign up', () => {
           'password'
         );
 
-        expect(inputFileEle.files[0]).toEqual({ profile: 'profile.png' });
+        expect(inputFileEle.files[0]).toEqual({
+          profile: 'profile.png',
+          name: 'my_profile',
+        });
 
         expect(updateProfile).toHaveBeenCalledWith(
           { username: 'YEONGHUN KO' },
           { displayName: 'Sinkyo', photoURL: { url: 'url.com' } }
         );
 
-        expect(doc).toHaveBeenCalledWith({ db: 'db' }, 'users', 'Sinkyo');
+        expect(doc).toHaveBeenCalledWith('collection');
         expect(setDoc).toHaveBeenCalled();
         expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.DASHBOARD);
 
