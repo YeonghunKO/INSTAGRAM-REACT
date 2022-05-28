@@ -59,7 +59,12 @@
       "html",
       "text"
     ],
-    "watchPathIgnorePatterns": []
+    "watchPathIgnorePatterns": [
+      "/src/__tests__/pages/dashboard.test.js",
+      "/src/__tests__/pages/login.test.js",
+      "/src/__tests__/pages/profile.test.js",
+      "/src/__tests__/pages/signup.test.js"
+    ]
   },
   "browserslist": {
     "production": [
