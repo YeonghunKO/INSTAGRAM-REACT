@@ -11,7 +11,7 @@ function useUser(userId, isProfileEdited) {
         setActiveUser(user);
       } catch (error) {
         console.log(error);
-        setActiveUser([]);
+        setActiveUser({});
       }
     }
 
