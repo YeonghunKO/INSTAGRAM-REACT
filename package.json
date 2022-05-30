@@ -60,10 +60,10 @@
       "text"
     ],
     "watchPathIgnorePatterns": [
-      "/src/__tests__/pages/dashboard.test.js",
       "/src/__tests__/pages/login.test.js",
       "/src/__tests__/pages/profile.test.js",
-      "/src/__tests__/pages/signup.test.js"
+      "/src/__tests__/pages/signup.test.js",
+      "/src/__tests__/pages/notfound.test.js"
     ]
   },
   "browserslist": {

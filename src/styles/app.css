@@ -554,6 +554,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-12 {
   margin-bottom: 3rem !important;
 }
+.ml-3 {
+  margin-left: 0.75rem !important;
+}
 .mt-4 {
   margin-top: 1rem !important;
 }
@@ -661,6 +664,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .w-\[26\%\] {
   width: 26% !important;
+}
+.w-\[6\.5rem\] {
+  width: 6.5rem !important;
 }
 .w-12 {
   width: 3rem !important;
@@ -1137,10 +1143,6 @@ body {
 
   .lg\:w-48 {
     width: 12rem !important;
-  }
-
-  .lg\:w-28 {
-    width: 7rem !important;
   }
 
   .lg\:w-4\/12 {

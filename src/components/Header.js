@@ -235,6 +235,7 @@ function Header() {
                 {!username && (
                   <>
                     <AddToPhotosOutlinedIcon
+                      data-testid="upload-photo"
                       onClick={handleDialogOpen}
                       className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 w-6 lg:w-8 h-8 xs:mr-2"
                     />
@@ -337,6 +338,7 @@ function Header() {
                           )}
                         </ReactImageUploading>
                         <TextField
+                          data-testid="upload-photo-description"
                           margin="dense"
                           id="description"
                           label="Picture Description"
@@ -350,6 +352,7 @@ function Header() {
                       <DialogActions>
                         <Stack direction="row" spacing={1}>
                           <Button
+                            data-testid=""
                             onClick={handleDialogClose}
                             variant="contained"
                             color="error"
@@ -357,10 +360,11 @@ function Header() {
                             Cancel
                           </Button>
                           <Button
+                            data-testid=""
                             onClick={handlePost}
                             variant="contained"
                             style={{ marginRight: '.3rem' }}
-                            disabled={!images || !description}
+                            disabled={!description}
                           >
                             Post
                           </Button>

@@ -38,6 +38,8 @@ export default [
     dateCreated: 1612227788343,
     docId: '494LKmaF03bUcYZ4xhNu',
     userLikedPhoto: true,
+    location: 'ulsan',
+    photoId: 'ptId',
   },
   {
     userPhotoUrl: 'photo.com',
@@ -62,6 +64,8 @@ export default [
     likes: ['NvPY9M9MzFTARQ6M816YAzDJxZ72'],
     docId: 'D3wcgiCD00R52qeXicb0',
     userLikedPhoto: true,
+    location: 'ulsan',
+    photoId: 'ptId',
   },
   {
     userPhotoUrl: 'photo.com',
@@ -86,6 +90,8 @@ export default [
     dateCreated: 1612227788343,
     docId: 'IE02ZQBloLtTeGAgwURO',
     userLikedPhoto: true,
+    location: 'ulsan',
+    photoId: 'ptId',
   },
   {
     userPhotoUrl: 'photo.com',
@@ -110,6 +116,8 @@ export default [
     userId: '2',
     docId: 'MYv4fLT7DZpuFAkcZB3P',
     userLikedPhoto: false,
+    location: 'ulsan',
+    photoId: 'ptId',
   },
   {
     userPhotoUrl: 'photo.com',
@@ -134,5 +142,7 @@ export default [
     caption: 'Saint George and the Dragon',
     docId: 'nJMT1l8msuNZ8tH3zvVI',
     userLikedPhoto: false,
+    location: 'ulsan',
+    photoId: 'ptId',
   },
 ];
