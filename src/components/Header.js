@@ -52,14 +52,14 @@ function Header() {
   const { username } = useParams();
   const navigate = useNavigate();
 
-  const { user: loggedInUser } = useContext(UserContext);
+  const {
+    user: { uid, displayName, photoURL },
+  } = useContext(UserContext);
 
   const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
   const { setPostPhotos } = useContext(PostPhotosContext);
-
-  const { uid, displayName, photoURL } = loggedInUser;
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -230,7 +230,7 @@ function Header() {
           {!username && <InputField allUsers={allUsers} />}
 
           <div className="text-gray-700 text-center flex items-center">
-            {loggedInUser ? (
+            {uid ? (
               <>
                 {!username && (
                   <>
@@ -439,15 +439,13 @@ function Header() {
                     />
                   </svg>
                 </button>
-                {loggedInUser && (
+                {uid && (
                   <div className="flex items-center cursor-pointer">
-                    <Link to={`/p/${loggedInUser?.displayName}`}>
+                    <Link to={`/p/${displayName}`}>
                       <img
                         className=" rounded-full h-8 w-8 xs:h-7 xs:w-7 flex"
-                        src={
-                          loggedInUser?.photoURL ? loggedInUser?.photoURL : ''
-                        }
-                        alt={`${loggedInUser?.displayName} profile`}
+                        src={photoURL ? photoURL : ''}
+                        alt={`${displayName} profile`}
                         onError={evt => {
                           evt.target.src = DEFAULT_IMAGE_PATH;
                         }}
