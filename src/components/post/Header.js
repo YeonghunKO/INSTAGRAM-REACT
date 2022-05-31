@@ -55,13 +55,15 @@ function Header({
 
     await deleteDoc(doc(db, 'photos', docId));
 
-    const storage = getStorage();
+    if (photoId !== 'no photo id') {
+      const storage = getStorage();
 
-    const postPhotoRef = ref(storage, `userPhotos/${userId}/${photoId}`);
+      const postPhotoRef = ref(storage, `userPhotos/${userId}/${photoId}`);
 
-    deleteObject(postPhotoRef).catch(error => {
-      console.log(error);
-    });
+      deleteObject(postPhotoRef).catch(error => {
+        console.log(error);
+      });
+    }
   };
 
   return (
