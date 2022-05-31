@@ -166,7 +166,7 @@ describe('dashboard', () => {
     expect(viewMore).toBeFalsy();
   });
 
-  it.only('renders the dashboard and upload a photo', async () => {
+  it('renders the dashboard and upload a photo', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -228,24 +228,38 @@ describe('dashboard', () => {
     );
 
     await waitFor(async () => {
-      const uploadBtn = getByTestId('upload-photo');
-
-      // const postBtn = getByText('Post');
-      const cancelBtn = getByText('Cancel');
+      const uploadBtn = getByTestId('start-upload-photo');
 
       fireEvent.click(uploadBtn);
-      // fireEvent.change(uploadDescriptionInput, {
-      //   target: { value: 'good day sir!' },
-      // });
-      // fireEvent.click(cancelBtn);
-      // fireEvent.click(uploadBtn);
-      debug();
+      const uploadDescriptionInput = getByTestId(
+        'upload-photo-description'
+      ).childNodes[1].querySelector('input');
+
+      const postBtn = getByTestId('post-upload-photo');
+      const cancelBtn = getByTestId('cancel-upload-photo');
+
+      fireEvent.change(uploadDescriptionInput, {
+        target: { value: 'good day sir!' },
+      });
+      fireEvent.click(cancelBtn);
+      fireEvent.click(uploadBtn);
+
+      // test saved post question modal
+
+      waitFor(() => {
+        const confirmModal = getByTestId('saved-question-upload-photo');
+        expect(confirmModal).toBeTruthy();
+
+        const savedPostYesBtn = getByText('Yes');
+        fireEvent.click(savedPostYesBtn);
+
+        fireEvent.click(postBtn);
+        const uploadedPost = getByText('good day sir!');
+        expect(uploadedPost).toBeTruthy();
+      });
     });
 
-    await waitFor(() => {
-      const uploadDescriptionInput = getByTestId('upload-photo-description');
-      console.log(uploadDescriptionInput);
-    });
+    // await waitFor(() => {});
   });
 
   it('renders the dashboard with a undefined user to trigger fallback', async () => {

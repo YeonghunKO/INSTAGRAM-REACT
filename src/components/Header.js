@@ -17,7 +17,11 @@ import originalPhotosContext from '../context/originalPost';
 import PostPhotosContext from '../context/postPhotos';
 
 import * as ROUTES from '../constants/routes';
-import { DEFAULT_IMAGE_PATH, INSTAGRAM_LOGO } from '../constants/path';
+import {
+  DEFAULT_IMAGE_PATH,
+  INSTAGRAM_LOGO,
+  DEFAULT_POST_IMAGE_PATH,
+} from '../constants/path';
 
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -139,7 +143,8 @@ function Header() {
 
   const handlePost = async () => {
     setIsLoading(true);
-    if (images) {
+    let imageSrc;
+    if (images[0]?.file) {
       const storage = getStorage();
       const storageRef = ref(
         storage,
@@ -154,41 +159,44 @@ function Header() {
 
       await uploadString(storageRef, images[0].data_url, 'data_url');
 
-      const imageSrc = await getDownloadURL(urlStorageRef);
-      const { latitude, longitude, location } = await getLocation();
-
-      let newPhotoObj = {
-        caption: description,
-        comments: [],
-        dateCreated: Date.now(),
-        imageSrc,
-        likes: [],
-        photoId: images[0]?.imageName,
-        userId: uid,
-        userLatitude: latitude,
-        userLongitude: longitude,
-        location,
-      };
-
-      const { id } = await addDoc(collection(db, 'photos'), newPhotoObj);
-
-      newPhotoObj = {
-        ...newPhotoObj,
-        docId: id,
-        username: displayName,
-        userLikedPhoto: false,
-        userPhotoUrl: photoURL,
-      };
-
-      setpostSnackBarOpen(true);
-      setImages([]);
-      setDescription('');
-      setDialogType('');
-      removeItem('post-description');
-      removeItem('instagram-picture');
-      setOriginalPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
-      setPostPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
+      imageSrc = await getDownloadURL(urlStorageRef);
     }
+    const { latitude, longitude, location } = await getLocation();
+
+    let newPhotoObj = {
+      caption: description,
+      comments: [],
+      dateCreated: Date.now(),
+      imageSrc: imageSrc ? imageSrc : DEFAULT_POST_IMAGE_PATH,
+      likes: [],
+      photoId: images[0] ? images[0].imageName : 'no photo id',
+      userId: uid,
+      userLatitude: latitude,
+      userLongitude: longitude,
+      location,
+    };
+
+    console.log(newPhotoObj);
+
+    const { id } = await addDoc(collection(db, 'photos'), newPhotoObj);
+
+    newPhotoObj = {
+      ...newPhotoObj,
+      docId: id,
+      username: displayName,
+      userLikedPhoto: false,
+      userPhotoUrl: photoURL,
+    };
+
+    setpostSnackBarOpen(true);
+    setImages([]);
+    setDescription('');
+    setDialogType('');
+    removeItem('post-description');
+    removeItem('instagram-picture');
+    setOriginalPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
+    setPostPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
+
     setIsLoading(false);
   };
 
@@ -235,7 +243,7 @@ function Header() {
                 {!username && (
                   <>
                     <AddToPhotosOutlinedIcon
-                      data-testid="upload-photo"
+                      data-testid="start-upload-photo"
                       onClick={handleDialogOpen}
                       className="mr-5 mt-[2px] text-black-light cursor-pointer hover:opacity-60 w-6 lg:w-8 h-8 xs:mr-2"
                     />
@@ -246,7 +254,10 @@ function Header() {
                       aria-describedby="alert-dialog-description"
                     >
                       <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
+                        <DialogContentText
+                          data-testid="saved-question-upload-photo"
+                          id="alert-dialog-description"
+                        >
                           You already have saved post. Do you want to continue
                           with it?
                         </DialogContentText>
@@ -352,7 +363,7 @@ function Header() {
                       <DialogActions>
                         <Stack direction="row" spacing={1}>
                           <Button
-                            data-testid=""
+                            data-testid="cancel-upload-photo"
                             onClick={handleDialogClose}
                             variant="contained"
                             color="error"
@@ -360,7 +371,7 @@ function Header() {
                             Cancel
                           </Button>
                           <Button
-                            data-testid=""
+                            data-testid="post-upload-photo"
                             onClick={handlePost}
                             variant="contained"
                             style={{ marginRight: '.3rem' }}
