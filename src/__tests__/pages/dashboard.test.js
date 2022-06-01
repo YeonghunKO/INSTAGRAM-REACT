@@ -1,4 +1,10 @@
-import { render, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  fireEvent,
+  screen,
+  act,
+} from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Dashboard from '../../pages/Dashboard';
@@ -43,6 +49,105 @@ jest.mock('firebase/firestore');
 describe('dashboard', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('render the dashboard and search users and select', async () => {
+    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
+    usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
+    getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
+
+    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
+    updateFollowedFollowers.mockImplementation(() => jest.fn());
+    updateDoc.mockImplementation(() => jest.fn());
+
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+    arrayUnion.mockImplementation(() => jest.fn());
+    arrayRemove.mockImplementation(() => jest.fn());
+
+    await waitFor(() => {
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{ db: {} }}>
+            <UserContext.Provider
+              value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+            >
+              <loggedInContext.Provider value={{ activeUser: userFixtures }}>
+                <PostPhotosContext.Provider
+                  value={{
+                    postPhotos: photosFixtures,
+                    setPostPhotos: jest.fn(),
+                  }}
+                >
+                  <originalPhotosContext.Provider
+                    value={{
+                      originalPhotos: photosFixtures,
+                      setOriginalPhotos: jest.fn(),
+                    }}
+                  >
+                    <UserFollowingContext.Provider
+                      value={{
+                        userFollowing: [1, 2, 3, 4, 5],
+                        setUserFollowing: jest.fn(),
+                      }}
+                    >
+                      <IsProfileEditedContext.Provider
+                        value={{
+                          isProfileEdited: false,
+                          setIsProfileEdited: jest.fn(),
+                        }}
+                      >
+                        <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
+                      </IsProfileEditedContext.Provider>
+                    </UserFollowingContext.Provider>
+                  </originalPhotosContext.Provider>
+                </PostPhotosContext.Provider>
+              </loggedInContext.Provider>
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+    });
+
+    const searchUserResultContainer = screen.getByTestId(
+      'search-users-results-container'
+    );
+
+    const searchUserInput = screen.getByPlaceholderText('search user here');
+    await waitFor(() => {
+      fireEvent.change(searchUserInput, { target: { value: 'r' } });
+    });
+
+    await waitFor(() => {
+      const searchUserResults = screen.getByTestId('search-users-results');
+      expect(searchUserResults.childElementCount).toBe(2);
+    });
+
+    // select user using 'Enter' Key
+    await waitFor(() => {
+      fireEvent.keyUp(searchUserResultContainer, { key: 'ArrowDown' });
+      fireEvent.keyUp(searchUserResultContainer, { key: 'ArrowUp' });
+      fireEvent.keyUp(searchUserResultContainer, { key: 'ArrowDown' });
+    });
+
+    act(() => {
+      const searchUserResults = screen.getByTestId('search-users-results');
+      fireEvent.keyUp(searchUserResults, { key: 'Enter' });
+      const orwellPosts = screen.getAllByText('orwell');
+      expect(orwellPosts).toBeTruthy();
+    });
+
+    // select user by clicking user
+    fireEvent.change(searchUserInput, { target: { value: 'r' } });
+    const orwellUser = screen.getByTestId('user-click-4');
+
+    fireEvent.click(orwellUser);
+    const orwellPosts = screen.getAllByText('orwell');
+
+    act(() => {
+      expect(orwellPosts).toBeTruthy();
+    });
   });
 
   it('renders the dashboard with a user profile and follows a user from the suggested profile', async () => {
@@ -166,7 +271,7 @@ describe('dashboard', () => {
     expect(viewMore).toBeFalsy();
   });
 
-  it('renders the dashboard and upload a photo', async () => {
+  it.only('renders the dashboard and upload a post and delete a post', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -181,14 +286,7 @@ describe('dashboard', () => {
     arrayUnion.mockImplementation(() => jest.fn());
     arrayRemove.mockImplementation(() => jest.fn());
 
-    const {
-      container,
-      getByText,
-      getAllByText,
-      getAllByAltText,
-      getByTestId,
-      debug,
-    } = render(
+    const { getByText, getByTestId } = render(
       <Router>
         <FirebaseContext.Provider value={{ db: {} }}>
           <UserContext.Provider
@@ -245,21 +343,92 @@ describe('dashboard', () => {
       fireEvent.click(uploadBtn);
 
       // test saved post question modal
-
       waitFor(() => {
         const confirmModal = getByTestId('saved-question-upload-photo');
         expect(confirmModal).toBeTruthy();
 
         const savedPostYesBtn = getByText('Yes');
         fireEvent.click(savedPostYesBtn);
-
+        console.log(postBtn);
         fireEvent.click(postBtn);
         const uploadedPost = getByText('good day sir!');
         expect(uploadedPost).toBeTruthy();
       });
     });
+  });
 
-    // await waitFor(() => {});
+  it('renders the dashboard and follow users', async () => {
+    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
+    usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
+    getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
+
+    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
+    updateFollowedFollowers.mockImplementation(() => jest.fn());
+    updateDoc.mockImplementation(() => jest.fn());
+
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+    arrayUnion.mockImplementation(() => jest.fn());
+    arrayRemove.mockImplementation(() => jest.fn());
+
+    await waitFor(() => {
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{ db: {} }}>
+            <UserContext.Provider
+              value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+            >
+              <loggedInContext.Provider value={{ activeUser: userFixtures }}>
+                <PostPhotosContext.Provider
+                  value={{
+                    postPhotos: photosFixtures,
+                    setPostPhotos: jest.fn(),
+                  }}
+                >
+                  <originalPhotosContext.Provider
+                    value={{
+                      originalPhotos: photosFixtures,
+                      setOriginalPhotos: jest.fn(),
+                    }}
+                  >
+                    <UserFollowingContext.Provider
+                      value={{
+                        userFollowing: [1, 2, 3, 4, 5],
+                        setUserFollowing: jest.fn(),
+                      }}
+                    >
+                      <IsProfileEditedContext.Provider
+                        value={{
+                          isProfileEdited: false,
+                          setIsProfileEdited: jest.fn(),
+                        }}
+                      >
+                        <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
+                      </IsProfileEditedContext.Provider>
+                    </UserFollowingContext.Provider>
+                  </originalPhotosContext.Provider>
+                </PostPhotosContext.Provider>
+              </loggedInContext.Provider>
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+    });
+
+    await waitFor(() => {
+      const suggestedUserDaliFollowBtn = screen.getByTestId(
+        'suggested-profile-utH4EadD3gBUbQkdG6Da'
+      );
+      fireEvent.click(suggestedUserDaliFollowBtn);
+      const suggestedUserContainer = screen.getByTestId(
+        'suggested-users-container'
+      );
+
+      act(() => {
+        expect(suggestedUserContainer.childElementCount).toBe(0);
+      });
+    });
   });
 
   it('renders the dashboard with a undefined user to trigger fallback', async () => {

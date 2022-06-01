@@ -46,7 +46,10 @@ function Suggestions({ loggedInUserId, loggedInUserDocId }) {
     profiles.length > 0 && (
       <div className="rounded flex flex-col">
         <div className="text-sm flex items-center h-[15rem] justify-between mb-2 mt-2 lg:w-[125%]">
-          <div className=" w-full h-full overflow-y-scroll pr-2 scrollbar ">
+          <div
+            data-testid="suggested-users-container"
+            className=" w-full h-full overflow-y-scroll pr-2 scrollbar "
+          >
             {profiles.slice(0, profilesSlice).map(profile => (
               <SuggestedProfile
                 key={profile.docId}
