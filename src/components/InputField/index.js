@@ -44,14 +44,14 @@ function InputField({ allUsers }) {
   };
 
   const filterPostbyUserId = (
-    selectedUserId = suggestedUsers[cursorPos].userId
+    selectedUserId = suggestedUsers[cursorPos]?.userId
   ) => {
     const filteredPost = originalPhotos.filter(
-      photo => photo.userId === selectedUserId
+      photo => photo.userId === String(selectedUserId)
     );
-    resetSuggestedUser();
 
-    setPostPhotos(filteredPost);
+    resetSuggestedUser();
+    setPostPhotos(filteredPost[0]);
   };
 
   const handelSuggestedUserSelect = async ({ key }) => {
@@ -79,6 +79,7 @@ function InputField({ allUsers }) {
 
   return (
     <div
+      data-testid="search-users-results-container"
       onKeyUp={handelSuggestedUserSelect}
       className={`xs:w-3/6 w-[25rem] mr-3 lg:mr-0`}
     >
@@ -101,6 +102,7 @@ function InputField({ allUsers }) {
         }
       />
       <div
+        data-testid="search-users-results"
         className={`rounded xs:w-[47%] w-[25rem] absolute top-13 bg-white z-10`}
       >
         {suggestedUsers.length > 0 &&

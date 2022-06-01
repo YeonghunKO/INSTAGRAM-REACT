@@ -10,6 +10,7 @@ function SuggestedUsers({
 }) {
   return (
     <div
+      data-testid={`user-click-${userId}`}
       className={`rounded flex p-2 flex-row items-center justify-between ${
         userPos === cursorPos && 'bg-gray-primary'
       } hover:bg-gray-primary hover:cursor-pointer`}

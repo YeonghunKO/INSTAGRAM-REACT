@@ -1,7 +1,7 @@
 export default [
   {
     userPhotoUrl: 'photo.com',
-    username: 'raphael',
+    username: 'orwell',
     photoId: 3,
     comments: [
       {
@@ -34,7 +34,7 @@ export default [
     caption: 'Saint George and the Dragon',
     userLongitude: '74.0060°',
     likes: ['NvPY9M9MzFTARQ6M816YAzDJxZ72'],
-    userId: '2',
+    userId: '4',
     dateCreated: 1612227788343,
     docId: '494LKmaF03bUcYZ4xhNu',
     userLikedPhoto: true,
