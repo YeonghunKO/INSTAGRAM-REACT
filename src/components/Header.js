@@ -176,8 +176,6 @@ function Header() {
       location,
     };
 
-    console.log(newPhotoObj);
-
     const { id } = await addDoc(collection(db, 'photos'), newPhotoObj);
 
     newPhotoObj = {
@@ -207,7 +205,7 @@ function Header() {
     setpostSnackBarOpen(false);
   };
 
-  const onClickHeaderHandle = () => {
+  const onClickSignOutHandle = () => {
     const auth = getAuth();
     signOut(auth);
     navigate(ROUTES.LOGIN);
@@ -432,10 +430,10 @@ function Header() {
                   data-testid="sign-out"
                   type="button"
                   title="Sign out"
-                  onClick={onClickHeaderHandle}
+                  onClick={onClickSignOutHandle}
                   onKeyDown={evt => {
                     if (evt.key === 'Enter') {
-                      onClickHeaderHandle();
+                      onClickSignOutHandle();
                     }
                   }}
                 >
