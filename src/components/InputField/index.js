@@ -49,9 +49,8 @@ function InputField({ allUsers }) {
     const filteredPost = originalPhotos.filter(
       photo => photo.userId === String(selectedUserId)
     );
-
     resetSuggestedUser();
-    setPostPhotos(filteredPost[0]);
+    setPostPhotos(filteredPost);
   };
 
   const handelSuggestedUserSelect = async ({ key }) => {
