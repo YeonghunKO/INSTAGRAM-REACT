@@ -264,7 +264,11 @@ function Header() {
                         <Button onClick={notContinueWithSaveDescription}>
                           No
                         </Button>
-                        <Button onClick={continueWithSaveDescription} autoFocus>
+                        <Button
+                          data-testid="use-saved-post-yes"
+                          onClick={continueWithSaveDescription}
+                          autoFocus
+                        >
                           Yes
                         </Button>
                       </DialogActions>

@@ -27,6 +27,7 @@ import {
   arrayRemove,
   collection,
   getDocs,
+  addDoc,
 } from 'firebase/firestore';
 
 import {
@@ -40,18 +41,21 @@ import photosFixtures from '../../fixtures/timeline-photos';
 import suggestedProfilesFixtures from '../../fixtures/suggested-profiles';
 import allUsersFixtures from '../../fixtures/users-for-inputField';
 
+import { getLocation } from '../../helpers/getGeoLocation';
+
 jest.mock('../../hooks/useUser');
 jest.mock('../../hooks/usePhotos');
 jest.mock('../../services/firebase');
 
 jest.mock('firebase/firestore');
+jest.mock('../../helpers/getGeoLocation');
 
 describe('dashboard', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('render the dashboard and search users and select', async () => {
+  it.only('render the dashboard and search users and select', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -271,7 +275,7 @@ describe('dashboard', () => {
     expect(viewMore).toBeFalsy();
   });
 
-  it.only('renders the dashboard and upload a post and delete a post', async () => {
+  it('renders the dashboard and upload and delete a post and sign out', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -283,97 +287,20 @@ describe('dashboard', () => {
     doc.mockImplementation(() => ({}));
     collection.mockImplementation(() => 'collection');
     getDocs.mockImplementation(() => allUsersFixtures);
+    addDoc.mockImplementation(() => Promise.resolve({ id: 'docId' }));
     arrayUnion.mockImplementation(() => jest.fn());
     arrayRemove.mockImplementation(() => jest.fn());
 
-    const { getByText, getByTestId } = render(
-      <Router>
-        <FirebaseContext.Provider value={{ db: {} }}>
-          <UserContext.Provider
-            value={{ user: { uid: 1, displayName: 'sinkyo' } }}
-          >
-            <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-              <PostPhotosContext.Provider
-                value={{ postPhotos: photosFixtures, setPostPhotos: jest.fn() }}
-              >
-                <originalPhotosContext.Provider
-                  value={{
-                    originalPhotos: photosFixtures,
-                    setOriginalPhotos: jest.fn(),
-                  }}
-                >
-                  <UserFollowingContext.Provider
-                    value={{
-                      userFollowing: [1, 2, 3, 4, 5],
-                      setUserFollowing: jest.fn(),
-                    }}
-                  >
-                    <IsProfileEditedContext.Provider
-                      value={{
-                        isProfileEdited: false,
-                        setIsProfileEdited: jest.fn(),
-                      }}
-                    >
-                      <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
-                    </IsProfileEditedContext.Provider>
-                  </UserFollowingContext.Provider>
-                </originalPhotosContext.Provider>
-              </PostPhotosContext.Provider>
-            </loggedInContext.Provider>
-          </UserContext.Provider>
-        </FirebaseContext.Provider>
-      </Router>
+    getLocation.mockImplementation(() =>
+      Promise.resolve({
+        latitude: '7.7.7',
+        longitude: '7.7.7',
+        location: 'ulsan',
+      })
     );
 
     await waitFor(async () => {
-      const uploadBtn = getByTestId('start-upload-photo');
-
-      fireEvent.click(uploadBtn);
-      const uploadDescriptionInput = getByTestId(
-        'upload-photo-description'
-      ).childNodes[1].querySelector('input');
-
-      const postBtn = getByTestId('post-upload-photo');
-      const cancelBtn = getByTestId('cancel-upload-photo');
-
-      fireEvent.change(uploadDescriptionInput, {
-        target: { value: 'good day sir!' },
-      });
-      fireEvent.click(cancelBtn);
-      fireEvent.click(uploadBtn);
-
-      // test saved post question modal
-      waitFor(() => {
-        const confirmModal = getByTestId('saved-question-upload-photo');
-        expect(confirmModal).toBeTruthy();
-
-        const savedPostYesBtn = getByText('Yes');
-        fireEvent.click(savedPostYesBtn);
-        console.log(postBtn);
-        fireEvent.click(postBtn);
-        const uploadedPost = getByText('good day sir!');
-        expect(uploadedPost).toBeTruthy();
-      });
-    });
-  });
-
-  it('renders the dashboard and follow users', async () => {
-    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
-    usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
-    getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
-
-    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
-    updateFollowedFollowers.mockImplementation(() => jest.fn());
-    updateDoc.mockImplementation(() => jest.fn());
-
-    doc.mockImplementation(() => ({}));
-    collection.mockImplementation(() => 'collection');
-    getDocs.mockImplementation(() => allUsersFixtures);
-    arrayUnion.mockImplementation(() => jest.fn());
-    arrayRemove.mockImplementation(() => jest.fn());
-
-    await waitFor(() => {
-      render(
+      const { getByText, getByTestId } = render(
         <Router>
           <FirebaseContext.Provider value={{ db: {} }}>
             <UserContext.Provider
@@ -416,19 +343,63 @@ describe('dashboard', () => {
       );
     });
 
-    await waitFor(() => {
-      const suggestedUserDaliFollowBtn = screen.getByTestId(
-        'suggested-profile-utH4EadD3gBUbQkdG6Da'
-      );
-      fireEvent.click(suggestedUserDaliFollowBtn);
-      const suggestedUserContainer = screen.getByTestId(
-        'suggested-users-container'
-      );
+    await waitFor(async () => {
+      const uploadBtn = screen.getByTestId('start-upload-photo');
 
-      act(() => {
-        expect(suggestedUserContainer.childElementCount).toBe(0);
+      fireEvent.click(uploadBtn);
+
+      const uploadDescriptionInput = screen
+        .getByTestId('upload-photo-description')
+        .childNodes[1].querySelector('input');
+
+      const cancelBtn = screen.getByTestId('cancel-upload-photo');
+
+      fireEvent.change(uploadDescriptionInput, {
+        target: { value: 'good day sir!' },
       });
+
+      fireEvent.click(cancelBtn);
     });
+
+    // test saved post question modal
+    await waitFor(async () => {
+      const uploadBtn = screen.getByTestId('start-upload-photo');
+      fireEvent.click(uploadBtn);
+      const confirmModal = screen.getByTestId('saved-question-upload-photo');
+      expect(confirmModal).toBeTruthy();
+    });
+
+    await waitFor(() => {
+      const savedPostYesBtn = screen.getByTestId('use-saved-post-yes');
+      fireEvent.click(savedPostYesBtn);
+      const postBtn = screen.getByTestId('post-upload-photo');
+      fireEvent.click(postBtn);
+    });
+
+    await waitFor(() => {
+      const signOut = screen.getByTestId('sign-out');
+      fireEvent.keyDown(signOut, { key: 'Enter' });
+    });
+
+    await waitFor(() => {
+      screen.debug();
+
+      const signUpBtn = screen.getByTestId('sign-up');
+      console.log(signUpBtn);
+    });
+    // await waitFor(() => {
+
+    //   const uploadedPost = screen.getByText('good day sir!');
+    //   expect(uploadedPost).toBeTruthy();
+    // })
+    // await waitFor(() => {
+    // });
+
+    // screen.debug();
+
+    // await waitFor(() => {
+
+    // });
   });
 
   it('renders the dashboard with a undefined user to trigger fallback', async () => {
