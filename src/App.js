@@ -35,7 +35,6 @@ function App() {
   const [originalPhotos, setOriginalPhotos] = useState([]);
   const [userFollowing, setUserFollowing] = useState([]);
   const { photos } = usePhotos(userId, userFollowing);
-
   useEffect(() => {
     setOriginalPhotos(photos);
     setPostPhotos(photos);

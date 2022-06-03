@@ -52,7 +52,6 @@ function Header({
       photo => photo.docId !== docId
     );
     setOriginalPhotos(filteredOriginalPhotos);
-
     await deleteDoc(doc(db, 'photos', docId));
 
     if (photoId !== 'no photo id') {
@@ -79,6 +78,7 @@ function Header({
       </div>
       <div className={`${postUsername !== username && 'hidden'}`}>
         <svg
+          data-testid={`delete-post-btn-${docId}`}
           onClick={handleClickOpen}
           className="h-6 w-6 cursor-pointer hover:text-red-primary"
           xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +107,12 @@ function Header({
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>No</Button>
-          <Button onClick={handleDelete}>Yes</Button>
+          <Button
+            data-testid={`handle-post-delete-yes-${docId}`}
+            onClick={handleDelete}
+          >
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </header>

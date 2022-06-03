@@ -63,7 +63,7 @@ function Header() {
   const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
-  const { setPostPhotos } = useContext(PostPhotosContext);
+  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -192,6 +192,7 @@ function Header() {
     setDialogType('');
     removeItem('post-description');
     removeItem('instagram-picture');
+
     setOriginalPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
     setPostPhotos(prevPhotos => [newPhotoObj, ...prevPhotos]);
 

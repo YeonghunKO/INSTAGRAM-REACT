@@ -31,7 +31,7 @@ export default [
     ],
     userLatitude: '40.7128°',
     imageSrc: '/images/users/raphael/3.jpg',
-    caption: 'Saint George and the Dragon',
+    caption: 'this post will be deleted',
     userLongitude: '74.0060°',
     likes: ['NvPY9M9MzFTARQ6M816YAzDJxZ72'],
     userId: '4',

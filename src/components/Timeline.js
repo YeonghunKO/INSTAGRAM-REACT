@@ -30,7 +30,6 @@ function Timeline() {
       }, 300);
     }
   }
-
   useEffect(() => {
     setPhotos(postPhotos);
   }, [postPhotos]);

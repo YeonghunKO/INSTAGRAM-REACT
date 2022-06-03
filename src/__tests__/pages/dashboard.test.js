@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   render,
   waitFor,
@@ -5,6 +7,9 @@ import {
   screen,
   act,
 } from '@testing-library/react';
+
+import { renderHook } from '@testing-library/react-hooks';
+
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import Dashboard from '../../pages/Dashboard';
@@ -55,7 +60,7 @@ describe('dashboard', () => {
     jest.clearAllMocks();
   });
 
-  it.only('render the dashboard and search users and select', async () => {
+  it('render the dashboard and search users and select', async () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     usePhotos.mockImplementation(() => ({ photos: photosFixtures }));
     getSuggestedProfiles.mockImplementation(() => suggestedProfilesFixtures);
@@ -169,51 +174,48 @@ describe('dashboard', () => {
     arrayUnion.mockImplementation(() => jest.fn());
     arrayRemove.mockImplementation(() => jest.fn());
 
-    const {
-      container,
-      getByText,
-      getAllByText,
-      getAllByAltText,
-      getByTestId,
-      debug,
-    } = render(
-      <Router>
-        <FirebaseContext.Provider value={{ db: {} }}>
-          <UserContext.Provider
-            value={{ user: { uid: 1, displayName: 'sinkyo' } }}
-          >
-            <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-              <PostPhotosContext.Provider
-                value={{ postPhotos: photosFixtures, setPostPhotos: jest.fn() }}
-              >
-                <originalPhotosContext.Provider
+    const { container, getByText, getAllByText, getAllByAltText, getByTestId } =
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{ db: {} }}>
+            <UserContext.Provider
+              value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+            >
+              <loggedInContext.Provider value={{ activeUser: userFixtures }}>
+                <PostPhotosContext.Provider
                   value={{
-                    originalPhotos: photosFixtures,
-                    setOriginalPhotos: jest.fn(),
+                    postPhotos: photosFixtures,
+                    setPostPhotos: jest.fn(),
                   }}
                 >
-                  <UserFollowingContext.Provider
+                  <originalPhotosContext.Provider
                     value={{
-                      userFollowing: [1, 2, 3, 4, 5],
-                      setUserFollowing: jest.fn(),
+                      originalPhotos: photosFixtures,
+                      setOriginalPhotos: jest.fn(),
                     }}
                   >
-                    <IsProfileEditedContext.Provider
+                    <UserFollowingContext.Provider
                       value={{
-                        isProfileEdited: false,
-                        setIsProfileEdited: jest.fn(),
+                        userFollowing: [1, 2, 3, 4, 5],
+                        setUserFollowing: jest.fn(),
                       }}
                     >
-                      <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
-                    </IsProfileEditedContext.Provider>
-                  </UserFollowingContext.Provider>
-                </originalPhotosContext.Provider>
-              </PostPhotosContext.Provider>
-            </loggedInContext.Provider>
-          </UserContext.Provider>
-        </FirebaseContext.Provider>
-      </Router>
-    );
+                      <IsProfileEditedContext.Provider
+                        value={{
+                          isProfileEdited: false,
+                          setIsProfileEdited: jest.fn(),
+                        }}
+                      >
+                        <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
+                      </IsProfileEditedContext.Provider>
+                    </UserFollowingContext.Provider>
+                  </originalPhotosContext.Provider>
+                </PostPhotosContext.Provider>
+              </loggedInContext.Provider>
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
 
     await waitFor(() => {
       const heartSvg = getByTestId('like-photo-494LKmaF03bUcYZ4xhNu');
@@ -298,9 +300,13 @@ describe('dashboard', () => {
         location: 'ulsan',
       })
     );
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
 
+      return { photos, setPhotos };
+    });
     await waitFor(async () => {
-      const { getByText, getByTestId } = render(
+      render(
         <Router>
           <FirebaseContext.Provider value={{ db: {} }}>
             <UserContext.Provider
@@ -309,14 +315,14 @@ describe('dashboard', () => {
               <loggedInContext.Provider value={{ activeUser: userFixtures }}>
                 <PostPhotosContext.Provider
                   value={{
-                    postPhotos: photosFixtures,
-                    setPostPhotos: jest.fn(),
+                    postPhotos: result.current.photos,
+                    setPostPhotos: result.current.setPhotos,
                   }}
                 >
                   <originalPhotosContext.Provider
                     value={{
-                      originalPhotos: photosFixtures,
-                      setOriginalPhotos: jest.fn(),
+                      originalPhotos: result.current.photos,
+                      setOriginalPhotos: result.current.setPhotos,
                     }}
                   >
                     <UserFollowingContext.Provider
@@ -325,14 +331,7 @@ describe('dashboard', () => {
                         setUserFollowing: jest.fn(),
                       }}
                     >
-                      <IsProfileEditedContext.Provider
-                        value={{
-                          isProfileEdited: false,
-                          setIsProfileEdited: jest.fn(),
-                        }}
-                      >
-                        <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
-                      </IsProfileEditedContext.Provider>
+                      <Dashboard user={{ uid: 1, displayName: 'sinkyo' }} />
                     </UserFollowingContext.Provider>
                   </originalPhotosContext.Provider>
                 </PostPhotosContext.Provider>
@@ -362,44 +361,32 @@ describe('dashboard', () => {
     });
 
     // test saved post question modal
-    await waitFor(async () => {
+    await waitFor(() => {
       const uploadBtn = screen.getByTestId('start-upload-photo');
+
       fireEvent.click(uploadBtn);
       const confirmModal = screen.getByTestId('saved-question-upload-photo');
       expect(confirmModal).toBeTruthy();
-    });
-
-    await waitFor(() => {
       const savedPostYesBtn = screen.getByTestId('use-saved-post-yes');
       fireEvent.click(savedPostYesBtn);
       const postBtn = screen.getByTestId('post-upload-photo');
       fireEvent.click(postBtn);
-    });
 
-    await waitFor(() => {
+      // delete post
+      const deleteBtn = screen.getByTestId(
+        'delete-post-btn-494LKmaF03bUcYZ4xhNu'
+      );
+      fireEvent.click(deleteBtn);
+
+      const deleteBtnYes = screen.getByTestId(
+        'handle-post-delete-yes-494LKmaF03bUcYZ4xhNu'
+      );
+      fireEvent.click(deleteBtnYes);
+
+      // sign out
       const signOut = screen.getByTestId('sign-out');
       fireEvent.keyDown(signOut, { key: 'Enter' });
     });
-
-    await waitFor(() => {
-      screen.debug();
-
-      const signUpBtn = screen.getByTestId('sign-up');
-      console.log(signUpBtn);
-    });
-    // await waitFor(() => {
-
-    //   const uploadedPost = screen.getByText('good day sir!');
-    //   expect(uploadedPost).toBeTruthy();
-    // })
-    // await waitFor(() => {
-    // });
-
-    // screen.debug();
-
-    // await waitFor(() => {
-
-    // });
   });
 
   it('renders the dashboard with a undefined user to trigger fallback', async () => {
@@ -431,12 +418,10 @@ describe('dashboard', () => {
       </Router>
     );
 
-    await waitFor(() => {
-      const logInEle = getByText('Log In');
-      const signUpEle = getByText('Sign Up');
-      expect(logInEle).toBeTruthy();
-      expect(signUpEle).toBeTruthy();
-    });
+    const logInEle = getByText('Log In');
+    const signUpEle = getByText('Sign Up');
+    expect(logInEle).toBeTruthy();
+    expect(signUpEle).toBeTruthy();
   });
 
   it('renders the dashboard with a user but does not have suggested profiles', async () => {
@@ -460,11 +445,9 @@ describe('dashboard', () => {
       </Router>
     );
 
-    await waitFor(() => {
-      const suggestedProfileFollowBtn = container.querySelector(
-        '[data-testid="suggested-profile-utH4EadD3gBUbQkdG6Da"]'
-      );
-      expect(suggestedProfileFollowBtn).toBeFalsy();
-    });
+    const suggestedProfileFollowBtn = container.querySelector(
+      '[data-testid="suggested-profile-utH4EadD3gBUbQkdG6Da"]'
+    );
+    expect(suggestedProfileFollowBtn).toBeFalsy();
   });
 });
