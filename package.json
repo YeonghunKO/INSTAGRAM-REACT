@@ -34,7 +34,7 @@
     "start": "run-p watch:css react-scripts:start",
     "e2e": "cypress open",
     "build": "run-s build:css react-scripts:dist",
-    "test": "react-scripts test --coverage --watchAll",
+    "test": "react-scripts test --coverage --watchAll  --detectOpenHandles",
     "eject": "react-scripts eject"
   },
   "jest": {
@@ -49,22 +49,17 @@
     ],
     "coverageThreshold": {
       "global": {
-        "branches": 90,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
       }
     },
     "coverageReporters": [
       "html",
       "text"
     ],
-    "watchPathIgnorePatterns": [
-      "/src/__tests__/pages/login.test.js",
-      "/src/__tests__/pages/profile.test.js",
-      "/src/__tests__/pages/signup.test.js",
-      "/src/__tests__/pages/notfound.test.js"
-    ]
+    "watchPathIgnorePatterns": []
   },
   "browserslist": {
     "production": [
@@ -79,6 +74,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react-hooks": "^8.0.0",
     "autoprefixer": "^10.4.4",
     "cypress": "^6.4.0",
     "eslint": "^8.12.0",

@@ -148,17 +148,20 @@ function Photos({ photos }) {
               className={`absolute text-white outline-none top-7 h-[92%] xs:left-[12%] lg:left-[35%] xs:w-9/12 lg:w-4/12 m-0`}
             >
               <CloseIcon
+                data-testid="closePostBtn"
                 className={`absolute cursor-pointer -top-5 -right-11`}
                 onClick={handlePostClose}
               />
 
               <ArrowCircleLeftOutlinedIcon
+                data-testid="prevPostBtn"
                 onClick={prevPost}
                 className={`${
                   photos.length <= 1 && 'hidden'
                 } absolute cursor-pointer top-[50%] -left-11`}
               />
               <ArrowCircleRightOutlinedIcon
+                data-testid="nextPostBtn"
                 onClick={nextPost}
                 className={`${
                   photos.length <= 1 && 'hidden'

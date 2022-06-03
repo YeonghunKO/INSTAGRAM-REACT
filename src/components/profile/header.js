@@ -123,7 +123,7 @@ function Header({
   const handleEditProfileConfirm = async () => {
     setIsLoading(true);
     let editedPhotoURL;
-    if (profileImg[0].file) {
+    if (profileImg[0]?.file) {
       const storage = getStorage();
       const storageRef = ref(storage, `userProfilePicture/${profileUserId}`);
       const urlStorageRef = ref(
@@ -240,6 +240,7 @@ function Header({
               </button>
             ) : (
               <button
+                data-testid="edit-profile-btn"
                 className="bg-blue-medium font-bold text-sm rounded text-white w-[6.5rem] ml-3 px-3 h-10"
                 type="button"
                 onClick={handleEditProfileOpen}
@@ -323,7 +324,7 @@ function Header({
                 {imageList.map((image, index) => (
                   <div key={index} className="image-item">
                     <img
-                      src={`${image.data_url ? image.data_url : profileImg}`}
+                      src={`${image?.data_url ? image.data_url : profileImg}`}
                       alt=""
                       className="w-full"
                     />
@@ -352,6 +353,7 @@ function Header({
             )}
           </ReactImageUploading>
           <TextField
+            data-testid="edit-profile-username"
             margin="dense"
             id="username"
             label="edit your username"
@@ -362,6 +364,7 @@ function Header({
             value={username}
           />
           <TextField
+            data-testid="edit-profile-fullName"
             margin="dense"
             id="fullName"
             label="edit your fullName"
@@ -372,6 +375,7 @@ function Header({
             value={fullName}
           />
           <TextField
+            data-testid="edit-profile-introduction"
             margin="dense"
             id="introduction"
             label="edit your introduction"
@@ -392,6 +396,7 @@ function Header({
               Cancel
             </Button>
             <Button
+              data-testid="edit-profile-confirm"
               onClick={handleEditProfileConfirm}
               variant="contained"
               style={{ marginRight: '.3rem' }}

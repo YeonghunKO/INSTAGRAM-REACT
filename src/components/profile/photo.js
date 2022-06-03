@@ -9,7 +9,7 @@ function Photo({ photo, handlePostOpen, index }) {
     <>
       <div
         onClick={handlePhotoClick}
-        data-testid={`photo`}
+        data-testid={`photo-${index}`}
         key={photo.docId}
         className="h-9/12 mb-3 cursor-pointer relative group"
       >

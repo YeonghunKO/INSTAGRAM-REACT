@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   render,
   waitFor,
@@ -7,26 +9,37 @@ import {
 } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { renderHook } from '@testing-library/react-hooks';
+
 import Profile from '../../pages/Profile';
 
-import loggedInContext from '../../context/loggedInUser';
 import UserContext from '../../context/currentUser';
+import loggedInContext from '../../context/loggedInUser';
+import PostPhotosContext from '../../context/postPhotos';
+import originalPhotosContext from '../../context/originalPost';
+import UserFollowingContext from '../../context/userFollowing';
+import IsProfileEditedContext from '../../context/isProfileEdited';
+import FirebaseContext from '../../context/firebase';
 
 import useUser from '../../hooks/useUser';
 
 import {
   getUserByUsername,
-  getUserPhotosByUserId,
   isUserFollowingProfile,
   toggleFollow,
+  updateLoggedInUserFollowing,
+  updateFollowedFollowers,
 } from '../../services/firebase';
 
-import { getAuth, signOut } from 'firebase/auth';
+import { doc, updateDoc, collection, getDocs } from 'firebase/firestore';
+
+import { getAuth, signOut, updateProfile } from 'firebase/auth';
 
 import userFixtures from '../../fixtures/logged-in-user';
 import profileThatIsFollowedByLoggedInUserFixture from '../../fixtures/profile-followed-by-loggedin-user';
 import profileThatIsNotFollowedByLoggedInUserFixture from '../../fixtures/profile-not-followed-by-loggedin-user';
 import photosFixtures from '../../fixtures/profile-photos';
+import allUsersFixtures from '../../fixtures/users-for-inputField';
 
 import * as ROUTES from '../../constants/routes';
 
@@ -34,7 +47,7 @@ const mockUseNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockUseNavigate,
-  useParams: () => ({ username: 'orwell' }),
+  useParams: () => ({ username: 'raphael' }),
 }));
 
 jest.mock('firebase/firestore');
@@ -48,36 +61,74 @@ describe('profile', () => {
     getUserByUsername.mockImplementation(() => [
       profileThatIsNotFollowedByLoggedInUserFixture,
     ]);
-    getUserPhotosByUserId.mockImplementation(() => photosFixtures);
 
-    // didn't follow orwell
     isUserFollowingProfile.mockImplementation(() => false);
     toggleFollow.mockImplementation(() => jest.fn());
 
     getAuth.mockImplementation(() => ({ user: 'sinkyo' }));
     signOut.mockImplementation(() => jest.fn());
 
-    const { getAllByTestId, getByText, getByTitle, debug } = render(
+    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
+    updateFollowedFollowers.mockImplementation(() => jest.fn());
+    updateDoc.mockImplementation(() => jest.fn());
+
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
+
+      return { photos, setPhotos };
+    });
+
+    const { getByTestId, getByText, getByTitle } = render(
       <Router>
         <UserContext.Provider
           value={{ user: { uid: 1, displayName: 'sinkyo' } }}
         >
           <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-            <Profile />
+            <PostPhotosContext.Provider
+              value={{
+                postPhotos: result.current.photos,
+                setPostPhotos: result.current.setPhotos,
+              }}
+            >
+              <originalPhotosContext.Provider
+                value={{
+                  originalPhotos: result.current.photos,
+                  setOriginalPhotos: result.current.setPhotos,
+                }}
+              >
+                <UserFollowingContext.Provider
+                  value={{
+                    userFollowing: [1, 2, 3, 4, 5],
+                    setUserFollowing: jest.fn(),
+                  }}
+                >
+                  <IsProfileEditedContext.Provider
+                    value={{
+                      isProfileEdited: false,
+                      setIsProfileEdited: jest.fn(),
+                    }}
+                  >
+                    <Profile />
+                  </IsProfileEditedContext.Provider>
+                </UserFollowingContext.Provider>
+              </originalPhotosContext.Provider>
+            </PostPhotosContext.Provider>
           </loggedInContext.Provider>
         </UserContext.Provider>
       </Router>
     );
 
-    // debug();
     await act(async () => {
       await waitFor(async () => {
         // 5photos, 3followers, 1following testing
-        const profilePhotosEle = getAllByTestId('photo');
-        expect(mockUseNavigate).not.toHaveBeenCalled();
-        expect(getUserByUsername).toHaveBeenCalledWith('orwell');
-        expect(getByText('orwell')).toBeTruthy();
-        expect(getByText('George Orwell')).toBeTruthy();
+        const profilePhotosEle = getByTestId('photos');
+        expect(getUserByUsername).toHaveBeenCalledWith('raphael');
+        expect(getByText('raphael')).toBeTruthy();
+        expect(getByText('santonio raphael')).toBeTruthy();
         expect(profilePhotosEle).toBeTruthy();
 
         screen.getByText((content, node) => {
@@ -121,17 +172,54 @@ describe('profile', () => {
     getUserByUsername.mockImplementation(() => [
       profileThatIsFollowedByLoggedInUserFixture,
     ]);
-    getUserPhotosByUserId.mockImplementation(() => photosFixtures);
     isUserFollowingProfile.mockImplementation(() => true);
     toggleFollow.mockImplementation(() => jest.fn());
 
-    const { getAllByTestId, getByText, getByTitle, debug } = render(
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
+
+      return { photos, setPhotos };
+    });
+
+    const { getByText } = render(
       <Router>
         <UserContext.Provider
           value={{ user: { uid: 1, displayName: 'sinkyo' } }}
         >
           <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-            <Profile />
+            <PostPhotosContext.Provider
+              value={{
+                postPhotos: result.current.photos,
+                setPostPhotos: result.current.setPhotos,
+              }}
+            >
+              <originalPhotosContext.Provider
+                value={{
+                  originalPhotos: result.current.photos,
+                  setOriginalPhotos: result.current.setPhotos,
+                }}
+              >
+                <UserFollowingContext.Provider
+                  value={{
+                    userFollowing: [1, 2, 3, 4, 5],
+                    setUserFollowing: jest.fn(),
+                  }}
+                >
+                  <IsProfileEditedContext.Provider
+                    value={{
+                      isProfileEdited: false,
+                      setIsProfileEdited: jest.fn(),
+                    }}
+                  >
+                    <Profile />
+                  </IsProfileEditedContext.Provider>
+                </UserFollowingContext.Provider>
+              </originalPhotosContext.Provider>
+            </PostPhotosContext.Provider>
           </loggedInContext.Provider>
         </UserContext.Provider>
       </Router>
@@ -140,13 +228,6 @@ describe('profile', () => {
     // debug();
     await act(async () => {
       await waitFor(async () => {
-        const profilePhotosEle = getAllByTestId('photo');
-        expect(mockUseNavigate).not.toHaveBeenCalled();
-        expect(getUserByUsername).toHaveBeenCalledWith('orwell');
-        expect(getByText('orwell')).toBeTruthy();
-        expect(getByText('George Orwell')).toBeTruthy();
-        expect(profilePhotosEle).toBeTruthy();
-
         fireEvent.keyDown(getByText('Unfollow'), { key: 'Enter' });
         expect(getByText('Follow')).toBeTruthy();
       });
@@ -157,20 +238,251 @@ describe('profile', () => {
     useUser.mockImplementation(() => ({ activeUser: userFixtures }));
     getUserByUsername.mockImplementation(() => [undefined]);
 
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
+
+      return { photos, setPhotos };
+    });
     render(
       <Router>
         <UserContext.Provider
           value={{ user: { uid: 1, displayName: 'sinkyo' } }}
         >
           <loggedInContext.Provider value={{ activeUser: userFixtures }}>
-            <Profile />
+            <PostPhotosContext.Provider
+              value={{
+                postPhotos: result.current.photos,
+                setPostPhotos: result.current.setPhotos,
+              }}
+            >
+              <originalPhotosContext.Provider
+                value={{
+                  originalPhotos: result.current.photos,
+                  setOriginalPhotos: result.current.setPhotos,
+                }}
+              >
+                <UserFollowingContext.Provider
+                  value={{
+                    userFollowing: [1, 2, 3, 4, 5],
+                    setUserFollowing: jest.fn(),
+                  }}
+                >
+                  <IsProfileEditedContext.Provider
+                    value={{
+                      isProfileEdited: false,
+                      setIsProfileEdited: jest.fn(),
+                    }}
+                  >
+                    <Profile />
+                  </IsProfileEditedContext.Provider>
+                </UserFollowingContext.Provider>
+              </originalPhotosContext.Provider>
+            </PostPhotosContext.Provider>
           </loggedInContext.Provider>
         </UserContext.Provider>
       </Router>
     );
+
     await waitFor(async () => {
       expect(mockUseNavigate).toHaveBeenCalled();
       expect(mockUseNavigate).toHaveBeenCalledWith(ROUTES.NOT_FOUNT);
+    });
+  });
+
+  it('render the profile page and click photo and navigate it', async () => {
+    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
+    getUserByUsername.mockImplementation(() => [
+      profileThatIsNotFollowedByLoggedInUserFixture,
+    ]);
+
+    isUserFollowingProfile.mockImplementation(() => false);
+    toggleFollow.mockImplementation(() => jest.fn());
+
+    getAuth.mockImplementation(() => ({ user: 'sinkyo' }));
+    signOut.mockImplementation(() => jest.fn());
+
+    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
+    updateFollowedFollowers.mockImplementation(() => jest.fn());
+    updateDoc.mockImplementation(() => jest.fn());
+
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
+
+      return { photos, setPhotos };
+    });
+
+    await waitFor(() => {
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{ db: {} }}>
+            <UserContext.Provider
+              value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+            >
+              <loggedInContext.Provider value={{ activeUser: userFixtures }}>
+                <PostPhotosContext.Provider
+                  value={{
+                    postPhotos: result.current.photos,
+                    setPostPhotos: result.current.setPhotos,
+                  }}
+                >
+                  <originalPhotosContext.Provider
+                    value={{
+                      originalPhotos: result.current.photos,
+                      setOriginalPhotos: result.current.setPhotos,
+                    }}
+                  >
+                    <UserFollowingContext.Provider
+                      value={{
+                        userFollowing: [1, 2, 3, 4, 5],
+                        setUserFollowing: jest.fn(),
+                      }}
+                    >
+                      <IsProfileEditedContext.Provider
+                        value={{
+                          isProfileEdited: false,
+                          setIsProfileEdited: jest.fn(),
+                        }}
+                      >
+                        <Profile />
+                      </IsProfileEditedContext.Provider>
+                    </UserFollowingContext.Provider>
+                  </originalPhotosContext.Provider>
+                </PostPhotosContext.Provider>
+              </loggedInContext.Provider>
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+    });
+
+    await waitFor(() => {
+      const photo = screen.getByTestId('photo-0');
+      fireEvent.click(photo);
+    });
+
+    const prevPostBtn = screen.getByTestId('prevPostBtn');
+    const nextPostBtn = screen.getByTestId('nextPostBtn');
+    const closePostBtn = screen.getByTestId('closePostBtn');
+
+    fireEvent.click(prevPostBtn);
+    fireEvent.click(prevPostBtn);
+    fireEvent.click(nextPostBtn);
+    fireEvent.click(nextPostBtn);
+    fireEvent.click(nextPostBtn);
+    fireEvent.click(nextPostBtn);
+    fireEvent.click(nextPostBtn);
+    fireEvent.click(closePostBtn);
+  });
+
+  it('render the my profile page and edit profile information', async () => {
+    useUser.mockImplementation(() => ({ activeUser: userFixtures }));
+    getUserByUsername.mockImplementation(() => [
+      profileThatIsNotFollowedByLoggedInUserFixture,
+    ]);
+
+    isUserFollowingProfile.mockImplementation(() => false);
+    toggleFollow.mockImplementation(() => jest.fn());
+
+    getAuth.mockImplementation(() => ({ user: 'sinkyo' }));
+    signOut.mockImplementation(() => jest.fn());
+
+    updateLoggedInUserFollowing.mockImplementation(() => jest.fn());
+    updateFollowedFollowers.mockImplementation(() => jest.fn());
+    updateDoc.mockImplementation(() => jest.fn());
+    updateProfile.mockImplementation(() =>
+      Promise.resolve('succesfully updated')
+    );
+
+    doc.mockImplementation(() => ({}));
+    collection.mockImplementation(() => 'collection');
+    getDocs.mockImplementation(() => allUsersFixtures);
+
+    const { result } = renderHook(() => {
+      const [photos, setPhotos] = useState(photosFixtures);
+
+      return { photos, setPhotos };
+    });
+
+    await waitFor(() => {
+      render(
+        <Router>
+          <FirebaseContext.Provider value={{ db: {} }}>
+            <UserContext.Provider
+              value={{ user: { uid: 1, displayName: 'sinkyo' } }}
+            >
+              <loggedInContext.Provider
+                value={{ activeUser: { username: 'raphael', userId: 2 } }}
+              >
+                <PostPhotosContext.Provider
+                  value={{
+                    postPhotos: result.current.photos,
+                    setPostPhotos: result.current.setPhotos,
+                  }}
+                >
+                  <originalPhotosContext.Provider
+                    value={{
+                      originalPhotos: result.current.photos,
+                      setOriginalPhotos: result.current.setPhotos,
+                    }}
+                  >
+                    <UserFollowingContext.Provider
+                      value={{
+                        userFollowing: [1, 2, 3, 4, 5],
+                        setUserFollowing: jest.fn(),
+                      }}
+                    >
+                      <IsProfileEditedContext.Provider
+                        value={{
+                          isProfileEdited: false,
+                          setIsProfileEdited: jest.fn(),
+                        }}
+                      >
+                        <Profile />
+                      </IsProfileEditedContext.Provider>
+                    </UserFollowingContext.Provider>
+                  </originalPhotosContext.Provider>
+                </PostPhotosContext.Provider>
+              </loggedInContext.Provider>
+            </UserContext.Provider>
+          </FirebaseContext.Provider>
+        </Router>
+      );
+    });
+
+    await waitFor(() => {
+      const editProfileBtn = screen.getByTestId('edit-profile-btn');
+      fireEvent.click(editProfileBtn);
+
+      const usernameEditInput = screen
+        .getByTestId('edit-profile-username')
+        .childNodes[1].querySelector('input');
+      const fullNameEditInput = screen
+        .getByTestId('edit-profile-fullName')
+        .childNodes[1].querySelector('input');
+      const introductionEditInput = screen
+        .getByTestId('edit-profile-introduction')
+        .childNodes[1].querySelector('input');
+      const editProfileConfirmBtn = screen.getByTestId('edit-profile-confirm');
+
+      act(() => {
+        fireEvent.change(usernameEditInput, { target: { value: 'harry' } });
+        fireEvent.change(fullNameEditInput, {
+          target: { value: 'Harry Potter' },
+        });
+        fireEvent.change(introductionEditInput, {
+          target: { value: "I'm Harry. Nice to meet you" },
+        });
+
+        fireEvent.click(editProfileConfirmBtn);
+      });
     });
   });
 });
