@@ -342,7 +342,7 @@ describe('dashboard', () => {
       );
     });
 
-    await waitFor(async () => {
+    const typingUploadPost = () => {
       const uploadBtn = screen.getByTestId('start-upload-photo');
 
       fireEvent.click(uploadBtn);
@@ -351,22 +351,39 @@ describe('dashboard', () => {
         .getByTestId('upload-photo-description')
         .childNodes[1].querySelector('input');
 
-      const cancelBtn = screen.getByTestId('cancel-upload-photo');
-
       fireEvent.change(uploadDescriptionInput, {
         target: { value: 'good day sir!' },
       });
+    };
 
+    await waitFor(async () => {
+      typingUploadPost();
+      const cancelBtn = screen.getByTestId('cancel-upload-photo');
       fireEvent.click(cancelBtn);
     });
 
-    // test saved post question modal
+    // test saved post question modal no button
+    await waitFor(() => {
+      const uploadBtn = screen.getByTestId('start-upload-photo');
+      fireEvent.click(uploadBtn);
+      const savedPostNoBtn = screen.getByTestId('use-saved-post-no');
+      fireEvent.click(savedPostNoBtn);
+    });
+
+    await waitFor(async () => {
+      typingUploadPost();
+      const cancelBtn = screen.getByTestId('cancel-upload-photo');
+      fireEvent.click(cancelBtn);
+    });
+
+    // test saved post question modal yes button and upload the post
     await waitFor(() => {
       const uploadBtn = screen.getByTestId('start-upload-photo');
 
       fireEvent.click(uploadBtn);
       const confirmModal = screen.getByTestId('saved-question-upload-photo');
       expect(confirmModal).toBeTruthy();
+
       const savedPostYesBtn = screen.getByTestId('use-saved-post-yes');
       fireEvent.click(savedPostYesBtn);
       const postBtn = screen.getByTestId('post-upload-photo');

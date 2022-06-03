@@ -262,7 +262,10 @@ function Header() {
                         </DialogContentText>
                       </DialogContent>
                       <DialogActions>
-                        <Button onClick={notContinueWithSaveDescription}>
+                        <Button
+                          data-testid="use-saved-post-no"
+                          onClick={notContinueWithSaveDescription}
+                        >
                           No
                         </Button>
                         <Button
