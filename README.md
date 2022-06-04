@@ -1,70 +1,165 @@
-# Getting Started with Create React App
+# 📷Instagramcoolike
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+    <img width="
+250px" alt="surf_logo" src="https://user-images.githubusercontent.com/65995664/171987349-988dd2c8-007e-4666-bcdf-38e356080ecf.jpg">
+</p>
 
-## Available Scripts
 
-In the project directory, you can run:
+<br>
 
-### `npm start`
+<p align="center">
+친구들과 사진을 공유해보자
+    </p>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### ✏️ 이 프로젝트를 시작하게 된 동기
 
-### `npm test`
+리액트 기술 수준을 심화하고 싶어서 시작하게 되었다. 그러다가 `Karl Hadwen`의 인스타 클론을 발견하게 되었고, 이를 토대로 나만의 기능을 여러개 추가해서 사진 공유 앱을 완성하였다. 게다가 기술 구현뿐 아니라 테스트 까지 배우고 싶어서 시작하게 된 프로젝트이다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+출처:[karl hadwen의 인스타 프로젝트](https://www.youtube.com/watch?v=AKeaaa8yAAk) 
 
-### `npm run build`
+### 📃 프로젝트 진행 과정
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 강의를 보고 그대로 따라하기 보다는 일단 결과물을 보고 내 스스로 코드를 직접 짜보기.
+- 하루정도 고민해도 모를경우 강의를 보지말고 깃헙에 올려진 코드를 보고 로직을 파악하기.
+- 파악한 로직을 토대로 코드를 다시 짜보기.
+- 새롭게 배운 로직, 기술을 문서로 정리하기.
+- 내가 짰던 코드에서 부족했던 점 문서로 정리하기.
+- 그리고 새롭게 추가하고 싶은 기능을 생각하고 추가하기.
+- 기능을 완료했으면 테스트 코드 짜기
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<br>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🤖기술 스택
 
-### `npm run eject`
+### 📚&nbsp;&nbsp;Frameworkes & Libraries
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- react
+- tailwind
+- mui
+- react-images-uploading
+- react-content-loader
+- firebase
+- prop-types
+- vercel
+- jest
+- react-testing-library
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🗣 배포
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<a href="https://instagram-react.vercel.app/">프로젝트 보러가기 👈🏻</a>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 👁‍🗨 데모
 
-## Learn More
+|   Dashboard - upload post   |   Dashboard - save post     |  Dashboard - search user    |  Dashboard - infinite scroll |  
+| :-------------------------: |  :-------------------------: | :-------------------------: |  :-------------------------: | 
+| ![Dashboard - upload post](https://user-images.githubusercontent.com/65995664/171991129-e09deb1d-229a-4c13-865b-afec621ed705.gif)| ![Dashboard - save post]() | ![New Palette - Edit box]() | ![New Palette - Edit box]() | 
+|  설명을 적으면 저장 됨       | 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+|  Dashboard - follow user   |  Dashboard - delete post   |  Dashboard - like and leave comment |
+|  :-----------------------: |  :-----------------------: |:----------------------------------: |
+| ![New Palette - Edit box]()|  ![New Palette - Edit box]()| ![New Palette - Edit box]()|
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+| profile - edit profile    |  profile - navigate photo  |  responsive  |
+| :-----------------------: | :------------------------: |:-----------: |
+| ![**Edit and Delete Platte**  ]()) |  ![Change background]() |  ![Change background]() |
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 📂 디렉토리 구조
 
-### Advanced Configuration
+```
+src                                             
+├─ __tests__                                    
+│  └─ pages                                     
+│     ├─ dashboard.test.js                      
+│     ├─ login.test.js                          
+│     ├─ notfound.test.js                       
+│     ├─ profile.test.js                        
+│     └─ signup.test.js                         
+├─ components                                   
+│  ├─ InputField                                
+│  │  ├─ SuggestedUsers.js                      
+│  │  └─ index.js                               
+│  ├─ post                                      
+│  │  ├─ Actions.js                             
+│  │  ├─ AddComments.js                         
+│  │  ├─ Comments.js                            
+│  │  ├─ Footer.js                              
+│  │  ├─ Header.js                              
+│  │  └─ index.js                               
+│  ├─ profile                                   
+│  │  ├─ header.js                              
+│  │  ├─ index.js                               
+│  │  ├─ photo.js                               
+│  │  └─ photos.js                              
+│  ├─ sidebar                                   
+│  │  ├─ SuggestedProfile.js                    
+│  │  ├─ Suggestion.js                          
+│  │  ├─ User.js                                
+│  │  └─ index.js                               
+│  ├─ Header.js                                 
+│  ├─ Loader.js                                 
+│  └─ Timeline.js                               
+├─ constants                                    
+│  ├─ path.js                                   
+│  └─ routes.js                                 
+├─ context                                      
+│  ├─ currentUser.js                            
+│  ├─ firebase.js                               
+│  ├─ isProfileEdited.js                        
+│  ├─ loggedInUser.js                           
+│  ├─ originalPost.js                           
+│  ├─ postPhotos.js                             
+│  └─ userFollowing.js                          
+├─ fixtures                                     
+│  ├─ logged-in-user.js                         
+│  ├─ profile-followed-by-loggedin-user.js      
+│  ├─ profile-not-followed-by-loggedin-user.js  
+│  ├─ profile-photos.js                         
+│  ├─ suggested-profiles.js                     
+│  ├─ timeline-photos.js                        
+│  └─ users-for-inputField.js                   
+├─ helpers                                      
+│  ├─ ProtectedRoute.js                         
+│  ├─ debounce.js                               
+│  ├─ getGeoLocation.js                         
+│  └─ storage.js                                
+├─ hooks                                        
+│  ├─ useAuthListener.js                        
+│  ├─ usePhotos.js                              
+│  ├─ useScroll.js                              
+│  ├─ useStateCallback.js                       
+│  └─ useUser.js                                
+├─ lib                                          
+│  └─ firebase.js                               
+├─ pages                                        
+│  ├─ Dashboard.js                              
+│  ├─ Login.js                                  
+│  ├─ NotFound.js                               
+│  ├─ Profile.js                                
+│  └─ Signup.js                                 
+├─ services                                     
+│  └─ firebase.js                               
+├─ styles                                       
+│  ├─ Alert.js                                  
+│  ├─ PostContainer.style.js                    
+│  ├─ app.css                                   
+│  └─ tailwind.css                              
+├─ App.js                                       
+├─ index.js                                     
+├─ seed.js                                      
+└─ setupTests.js                                
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### 🔻컴포넌트 위계
 
-### Deployment
+<a href="">컴포넌트 위계 보러가기 👈🏻</a>
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### 📖TIL와 회고 보러가기!
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<a href="">컴포넌트 위계 보러가기 👈🏻</a>
