@@ -54,19 +54,16 @@
 
 |   Dashboard - upload post   |   Dashboard - save post     |  Dashboard - search user    |  Dashboard - infinite scroll |  
 | :-------------------------: |  :-------------------------: | :-------------------------: |  :-------------------------: | 
-| ![Dashboard - upload post](https://user-images.githubusercontent.com/65995664/171991129-e09deb1d-229a-4c13-865b-afec621ed705.gif)| ![Dashboard - save post]() | ![New Palette - Edit box]() | ![New Palette - Edit box]() | 
+| ![Dashboard - upload post](https://user-images.githubusercontent.com/65995664/171991129-e09deb1d-229a-4c13-865b-afec621ed705.gif)| ![Dashboard - save post](https://user-images.githubusercontent.com/65995664/172078062-0124e2ae-7b13-485e-8fd8-70ce5f2e9764.gif) | ![dashboard - search user](https://user-images.githubusercontent.com/65995664/172078069-6aa1e0a0-3e4f-4d7d-8794-ccc74ad6372a.gif) | ![dashboard - infinite scroll](https://user-images.githubusercontent.com/65995664/172078073-c326a274-66c6-4663-90c0-1bbc909c3d39.gif) | 
 |  설명을 적으면 저장 됨       | 
 
 |  Dashboard - follow user   |  Dashboard - delete post   |  Dashboard - like and leave comment |
 |  :-----------------------: |  :-----------------------: |:----------------------------------: |
-| ![New Palette - Edit box]()|  ![New Palette - Edit box]()| ![New Palette - Edit box]()|
+| ![dashboard - follow user](https://user-images.githubusercontent.com/65995664/172078081-00fd9728-a813-45ee-a36b-ca361068bd47.gif)| ![dashboard - delete post](https://user-images.githubusercontent.com/65995664/172078078-795ce565-a870-49d9-aaec-087856f8edc2.gif)| ![dashboard - like and leave comment](https://user-images.githubusercontent.com/65995664/172078084-116af0a0-6781-4037-849f-2ff81d77f344.gif)|
 
 | profile - edit profile    |  profile - navigate photo  |  responsive  |
 | :-----------------------: | :------------------------: |:-----------: |
-| ![**Edit and Delete Platte**  ]()) |  ![Change background]() |  ![Change background]() |
-
-
-
+| ![profile - edit profile](https://user-images.githubusercontent.com/65995664/172078070-04216c21-de49-43e0-b50e-ad530d402c0f.gif) |![profile - navigate photo](https://user-images.githubusercontent.com/65995664/172078344-562828a3-5496-4507-af14-330216638dec.gif) | ![responsive](https://user-images.githubusercontent.com/65995664/172079393-b84a898c-5b80-441b-889b-60752d5e665e.gif) |
 
 
 
