@@ -155,8 +155,8 @@ src
 
 ### 🔻컴포넌트 위계
 
-<a href="">컴포넌트 위계 보러가기 👈🏻</a>
+<a href="https://www.figma.com/file/EGIcM6r5Bh8aipBJEHt46D/instacoolike---UML?node-id=0%3A1">컴포넌트 위계 보러가기 👈🏻</a>
 
-### 📖TIL와 회고 보러가기!
+### 📖TIL와 회고
 
-<a href="">컴포넌트 위계 보러가기 👈🏻</a>
+<a href="https://velog.io/@yhko1992/1l7xushf">TIL와 회고 👈🏻</a>
