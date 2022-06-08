@@ -52,10 +52,14 @@
 
 ## 👁‍🗨 데모
 
-|   Dashboard - upload post   |   Dashboard - save post     |  Dashboard - search user    |  Dashboard - infinite scroll |  
-| :-------------------------: |  :-------------------------: | :-------------------------: |  :-------------------------: | 
-| ![Dashboard - upload post](https://user-images.githubusercontent.com/65995664/171991129-e09deb1d-229a-4c13-865b-afec621ed705.gif)| ![Dashboard - save post](https://user-images.githubusercontent.com/65995664/172078062-0124e2ae-7b13-485e-8fd8-70ce5f2e9764.gif) | ![dashboard - search user](https://user-images.githubusercontent.com/65995664/172078069-6aa1e0a0-3e4f-4d7d-8794-ccc74ad6372a.gif) | ![dashboard - infinite scroll](https://user-images.githubusercontent.com/65995664/172078073-c326a274-66c6-4663-90c0-1bbc909c3d39.gif) | 
+|   Dashboard - upload post   |   Dashboard - save post     | 
+| :-------------------------: |  :-------------------------: | 
+| ![Dashboard - upload post](https://user-images.githubusercontent.com/65995664/171991129-e09deb1d-229a-4c13-865b-afec621ed705.gif)| ![Dashboard - save post](https://user-images.githubusercontent.com/65995664/172078062-0124e2ae-7b13-485e-8fd8-70ce5f2e9764.gif) |
 |  설명을 적으면 저장 됨       | 
+
+| Dashboard - search user    |  Dashboard - infinite scroll |  
+| :-------------------------: |  :-------------------------: | 
+| ![dashboard - search user](https://user-images.githubusercontent.com/65995664/172078069-6aa1e0a0-3e4f-4d7d-8794-ccc74ad6372a.gif) | ![dashboard - infinite scroll](https://user-images.githubusercontent.com/65995664/172078073-c326a274-66c6-4663-90c0-1bbc909c3d39.gif) |
 
 |  Dashboard - follow user   |  Dashboard - delete post   |  Dashboard - like and leave comment |
 |  :-----------------------: |  :-----------------------: |:----------------------------------: |
