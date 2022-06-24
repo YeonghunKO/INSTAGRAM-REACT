@@ -63,7 +63,7 @@ function Header() {
   const { originalPhotos, setOriginalPhotos } = useContext(
     originalPhotosContext
   );
-  const { postPhotos, setPostPhotos } = useContext(PostPhotosContext);
+  const { setPostPhotos } = useContext(PostPhotosContext);
 
   const [isLoading, setIsLoading] = useState(false);
 

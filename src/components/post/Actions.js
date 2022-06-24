@@ -47,7 +47,6 @@ function Actions({ docId, totalLikes, likedPhoto, handleFocus }) {
       return photo;
     });
     setOriginalPhotos(toggledOriginalPhotos);
-    // setPostPhotos(toggledOriginalPhotos);
   };
   return (
     <div className="flex justify-between p-4">
