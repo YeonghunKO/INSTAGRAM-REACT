@@ -5,7 +5,7 @@ import Sidebar from '../components/sidebar';
 
 function Dashboard() {
   useEffect(() => {
-    document.title = 'Instagram';
+    document.title = 'Instagramcoolike';
   }, []);
   return (
     <div className="bg-gray-background">
